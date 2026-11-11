@@ -1,7 +1,7 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://xqhhopmrk38n"]
 
-[ext_resource type="Script" path="res://scripts/workshop.gd" id="1_workshop"]
-[ext_resource type="Script" path="res://ui/overlays.gd" id="2_overlays"]
+[ext_resource type="Script" uid="uid://dhbpvmocck7s5" path="res://scripts/workshop.gd" id="1_workshop"]
+[ext_resource type="Script" uid="uid://j84wo4klgryh" path="res://ui/overlays.gd" id="2_overlays"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1
@@ -12,24 +12,6 @@ ambient_light_energy = 0.6
 
 [sub_resource type="StandardMaterial3D" id="Mat_desk"]
 albedo_color = Color(0.82, 0.81, 0.77, 1)
-roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="Mat_obj"]
-albedo_color = Color(0.74, 0.73, 0.69, 1)
-roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="Mat_obj2"]
-albedo_color = Color(0.66, 0.65, 0.61, 1)
-roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="Mat_dark"]
-albedo_color = Color(0.36, 0.37, 0.39, 1)
-roughness = 1.0
-
-[sub_resource type="StandardMaterial3D" id="Mat_slot"]
-transparency = 1
-albedo_color = Color(0.55, 0.56, 0.58, 0.25)
-roughness = 1.0
 
 [sub_resource type="BoxMesh" id="Box_deskTop"]
 material = SubResource("Mat_desk")
@@ -39,17 +21,22 @@ size = Vector3(3.3, 0.08, 1.4)
 material = SubResource("Mat_desk")
 size = Vector3(0.07, 0.7, 0.07)
 
+[sub_resource type="StandardMaterial3D" id="Mat_obj"]
+albedo_color = Color(0.74, 0.73, 0.69, 1)
+
 [sub_resource type="BoxMesh" id="Box_pcBody"]
 material = SubResource("Mat_obj")
 size = Vector3(0.26, 0.52, 0.52)
+
+[sub_resource type="StandardMaterial3D" id="Mat_obj2"]
+albedo_color = Color(0.66, 0.65, 0.61, 1)
 
 [sub_resource type="BoxMesh" id="Box_pcBay"]
 material = SubResource("Mat_obj2")
 size = Vector3(0.18, 0.05, 0.01)
 
-[sub_resource type="BoxMesh" id="Box_pcPanel"]
-material = SubResource("Mat_obj2")
-size = Vector3(0.2, 0.2, 0.005)
+[sub_resource type="StandardMaterial3D" id="Mat_dark"]
+albedo_color = Color(0.36, 0.37, 0.39, 1)
 
 [sub_resource type="CylinderMesh" id="Cyl_button"]
 material = SubResource("Mat_dark")
@@ -57,6 +44,10 @@ top_radius = 0.02
 bottom_radius = 0.02
 height = 0.012
 radial_segments = 10
+
+[sub_resource type="BoxMesh" id="Box_pcPanel"]
+material = SubResource("Mat_obj2")
+size = Vector3(0.2, 0.2, 0.005)
 
 [sub_resource type="BoxMesh" id="Box_carBody"]
 material = SubResource("Mat_obj")
@@ -95,190 +86,194 @@ radial_segments = 8
 material = SubResource("Mat_obj2")
 size = Vector3(0.95, 0.012, 0.95)
 
+[sub_resource type="StandardMaterial3D" id="Mat_slot"]
+transparency = 1
+albedo_color = Color(0.55, 0.56, 0.58, 0.25)
+
 [sub_resource type="BoxMesh" id="Box_slot"]
 material = SubResource("Mat_slot")
 size = Vector3(0.42, 0.055, 0.3)
 
-[node name="Workshop" type="Node3D"]
+[node name="Workshop" type="Node3D" unique_id=537786365]
 script = ExtResource("1_workshop")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1520669499]
 environment = SubResource("Env")
 
-[node name="Sun" type="DirectionalLight3D" parent="."]
-rotation = Vector3(-0.9, 0.5, 0)
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=78312555]
+transform = Transform3D(0.87758255, -0.37554693, 0.2980157, 0, 0.62161, 0.7833269, -0.47942555, -0.687434, 0.54551405, 0, 0, 0)
 light_energy = 0.8
 
-[node name="Camera" type="Camera3D" parent="."]
-position = Vector3(0, 1.95, 2.7)
+[node name="Camera" type="Camera3D" parent="." unique_id=267508448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.95, 2.7)
 fov = 40.0
 
-[node name="Desk" type="Node3D" parent="."]
+[node name="Desk" type="Node3D" parent="." unique_id=626502078]
 
-[node name="Top" type="MeshInstance3D" parent="Desk"]
-position = Vector3(0, 0.71, 0)
+[node name="Top" type="MeshInstance3D" parent="Desk" unique_id=628586537]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.71, 0)
 mesh = SubResource("Box_deskTop")
 
-[node name="LegFrontLeft" type="MeshInstance3D" parent="Desk"]
-position = Vector3(-1.55, 0.35, 0.6)
+[node name="LegFrontLeft" type="MeshInstance3D" parent="Desk" unique_id=980853298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55, 0.35, 0.6)
 mesh = SubResource("Box_leg")
 
-[node name="LegFrontRight" type="MeshInstance3D" parent="Desk"]
-position = Vector3(1.55, 0.35, 0.6)
+[node name="LegFrontRight" type="MeshInstance3D" parent="Desk" unique_id=691365131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 0.35, 0.6)
 mesh = SubResource("Box_leg")
 
-[node name="LegBackLeft" type="MeshInstance3D" parent="Desk"]
-position = Vector3(-1.55, 0.35, -0.6)
+[node name="LegBackLeft" type="MeshInstance3D" parent="Desk" unique_id=1250932240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.55, 0.35, -0.6)
 mesh = SubResource("Box_leg")
 
-[node name="LegBackRight" type="MeshInstance3D" parent="Desk"]
-position = Vector3(1.55, 0.35, -0.6)
+[node name="LegBackRight" type="MeshInstance3D" parent="Desk" unique_id=1000305555]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.55, 0.35, -0.6)
 mesh = SubResource("Box_leg")
 
-[node name="PC" type="Node3D" parent="."]
-position = Vector3(-1.1, 0.75, 0)
+[node name="PC" type="Node3D" parent="." unique_id=635631161]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 0.75, 0)
 
-[node name="Body" type="MeshInstance3D" parent="PC"]
-position = Vector3(0, 0.26, 0)
+[node name="Body" type="MeshInstance3D" parent="PC" unique_id=1209850272]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.26, 0)
 mesh = SubResource("Box_pcBody")
 
-[node name="DriveBay" type="MeshInstance3D" parent="PC"]
-position = Vector3(0, 0.44, 0.265)
+[node name="DriveBay" type="MeshInstance3D" parent="PC" unique_id=1890947700]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0.265)
 mesh = SubResource("Box_pcBay")
 
-[node name="PowerButton" type="MeshInstance3D" parent="PC"]
+[node name="PowerButton" type="MeshInstance3D" parent="PC" unique_id=1574375675]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.37, 0.265)
 mesh = SubResource("Cyl_button")
 
-[node name="FrontPanel" type="MeshInstance3D" parent="PC"]
-position = Vector3(0, 0.15, 0.262)
+[node name="FrontPanel" type="MeshInstance3D" parent="PC" unique_id=445281262]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 0.262)
 mesh = SubResource("Box_pcPanel")
 
-[node name="Label" type="Label3D" parent="PC"]
-position = Vector3(0, 0.6, 0)
+[node name="Label" type="Label3D" parent="PC" unique_id=1326341801]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.6, 0)
+pixel_size = 0.0012
 billboard = 1
 no_depth_test = true
-pixel_size = 0.0012
-font_size = 40
-outline_size = 10
 modulate = Color(0.2, 0.21, 0.23, 1)
 outline_modulate = Color(0.97, 0.97, 0.95, 1)
 text = "self-built PC"
+font_size = 40
+outline_size = 10
 
-[node name="CarUnit" type="Node3D" parent="."]
-position = Vector3(-0.35, 0.75, 0)
+[node name="CarUnit" type="Node3D" parent="." unique_id=2142674347]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.35, 0.75, 0)
 
-[node name="Body" type="MeshInstance3D" parent="CarUnit"]
-position = Vector3(0, 0.12, 0)
+[node name="Body" type="MeshInstance3D" parent="CarUnit" unique_id=1814112816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
 mesh = SubResource("Box_carBody")
 
-[node name="Screen" type="MeshInstance3D" parent="CarUnit"]
-position = Vector3(-0.04, 0.13, 0.112)
+[node name="Screen" type="MeshInstance3D" parent="CarUnit" unique_id=1756035400]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.04, 0.13, 0.112)
 mesh = SubResource("Box_carScreen")
 
-[node name="KnobTop" type="MeshInstance3D" parent="CarUnit"]
+[node name="KnobTop" type="MeshInstance3D" parent="CarUnit" unique_id=1260479250]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.19, 0.17, 0.115)
 mesh = SubResource("Cyl_knob")
 
-[node name="KnobBottom" type="MeshInstance3D" parent="CarUnit"]
+[node name="KnobBottom" type="MeshInstance3D" parent="CarUnit" unique_id=1228492886]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.19, 0.08, 0.115)
 mesh = SubResource("Cyl_knob")
 
-[node name="Label" type="Label3D" parent="CarUnit"]
-position = Vector3(0, 0.3, 0)
+[node name="Label" type="Label3D" parent="CarUnit" unique_id=734299725]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+pixel_size = 0.0012
 billboard = 1
 no_depth_test = true
-pixel_size = 0.0012
-font_size = 40
-outline_size = 10
 modulate = Color(0.2, 0.21, 0.23, 1)
 outline_modulate = Color(0.97, 0.97, 0.95, 1)
 text = "car unit"
+font_size = 40
+outline_size = 10
 
-[node name="Plug" type="Node3D" parent="."]
-position = Vector3(0.25, 0.75, 0)
+[node name="Plug" type="Node3D" parent="." unique_id=251338566]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.25, 0.75, 0)
 
-[node name="Body" type="MeshInstance3D" parent="Plug"]
-position = Vector3(0, 0.075, 0)
+[node name="Body" type="MeshInstance3D" parent="Plug" unique_id=1569037507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.075, 0)
 mesh = SubResource("Box_plugBody")
 
-[node name="Face" type="MeshInstance3D" parent="Plug"]
+[node name="Face" type="MeshInstance3D" parent="Plug" unique_id=138790763]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0, 0.075, 0.055)
 mesh = SubResource("Cyl_plugFace")
 
-[node name="PinLeft" type="MeshInstance3D" parent="Plug"]
+[node name="PinLeft" type="MeshInstance3D" parent="Plug" unique_id=98320970]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, -0.03, 0.075, -0.07)
 mesh = SubResource("Cyl_pin")
 
-[node name="PinRight" type="MeshInstance3D" parent="Plug"]
+[node name="PinRight" type="MeshInstance3D" parent="Plug" unique_id=638133995]
 transform = Transform3D(1, 0, 0, 0, 0, 1, 0, -1, 0, 0.03, 0.075, -0.07)
 mesh = SubResource("Cyl_pin")
 
-[node name="Label" type="Label3D" parent="Plug"]
-position = Vector3(0, 0.19, 0)
+[node name="Label" type="Label3D" parent="Plug" unique_id=174432636]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.19, 0)
+pixel_size = 0.0012
 billboard = 1
 no_depth_test = true
-pixel_size = 0.0012
-font_size = 40
-outline_size = 10
 modulate = Color(0.2, 0.21, 0.23, 1)
 outline_modulate = Color(0.97, 0.97, 0.95, 1)
 text = "smart plug"
-
-[node name="GoalLab" type="Node3D" parent="."]
-position = Vector3(1.05, 0.75, 0)
-
-[node name="Mat" type="MeshInstance3D" parent="GoalLab"]
-position = Vector3(0, 0.006, 0)
-mesh = SubResource("Box_mat")
-
-[node name="Slots" type="Node3D" parent="GoalLab"]
-
-[node name="Slot1" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.06, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Slot2" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.135, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Slot3" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.21, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Slot4" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.285, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Slot5" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.36, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Slot6" type="MeshInstance3D" parent="GoalLab/Slots"]
-position = Vector3(0, 0.435, 0)
-mesh = SubResource("Box_slot")
-
-[node name="Label" type="Label3D" parent="GoalLab"]
-position = Vector3(0, 0.55, 0)
-billboard = 1
-no_depth_test = true
-pixel_size = 0.0012
 font_size = 40
 outline_size = 10
+
+[node name="GoalLab" type="Node3D" parent="." unique_id=2135938266]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.05, 0.75, 0)
+
+[node name="Mat" type="MeshInstance3D" parent="GoalLab" unique_id=752529023]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.006, 0)
+mesh = SubResource("Box_mat")
+
+[node name="Slots" type="Node3D" parent="GoalLab" unique_id=671582400]
+
+[node name="Slot1" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=1531803968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.06, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Slot2" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=269389096]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.135, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Slot3" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=2108400656]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.21, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Slot4" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=400021597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.285, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Slot5" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=395599084]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.36, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Slot6" type="MeshInstance3D" parent="GoalLab/Slots" unique_id=170583506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.435, 0)
+mesh = SubResource("Box_slot")
+
+[node name="Label" type="Label3D" parent="GoalLab" unique_id=2129700997]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, 0)
+pixel_size = 0.0012
+billboard = 1
+no_depth_test = true
 modulate = Color(0.2, 0.21, 0.23, 1)
 outline_modulate = Color(0.97, 0.97, 0.95, 1)
 text = "goal lab · your mini ACE OS"
+font_size = 40
+outline_size = 10
 
-[node name="Pointer" type="Label3D" parent="."]
+[node name="Pointer" type="Label3D" parent="." unique_id=670924083]
 visible = false
+pixel_size = 0.0012
 billboard = 1
 no_depth_test = true
-pixel_size = 0.0012
-font_size = 56
-outline_size = 10
 modulate = Color(0.2, 0.21, 0.23, 1)
 outline_modulate = Color(0.97, 0.97, 0.95, 1)
 text = "▼"
+font_size = 56
+outline_size = 10
 
-[node name="UI" type="CanvasLayer" parent="."]
+[node name="UI" type="CanvasLayer" parent="." unique_id=296612888]
 script = ExtResource("2_overlays")
