@@ -9,7 +9,7 @@ Godot's own docs ask games to also ship its third-party notices (COPYRIGHT.txt);
 
 ## Assets
 
-None yet. Every shape in the workshop is built from simple primitives in the scene file — no downloaded models, textures or sounds, and no generative AI.
+None yet. The AI-made graybox in [ai-learning/graybox](ai-learning/graybox) builds every shape from simple primitives in its scene file — no downloaded models, textures or sounds, and no generative-AI art.
 
 ## Licences of this project
 

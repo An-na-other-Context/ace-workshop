@@ -1,8 +1,11 @@
 extends CanvasLayer
+## AI-made (Claude, 11.11.2026). Part of ai-learning/graybox, not part of the game.
 ## Calm 2D overlays around the 3D workshop: dialogue line, book, assist, settings,
 ## first-visit onboarding and the "?" tool. Built in code for the graybox — turning
 ## pieces of it into editor scenes is a good first Godot exercise.
 
+# Loaded by path, because scripts in ai-learning have no class_name.
+const Workshop = preload("res://ai-learning/graybox/workshop.gd")
 const SETTINGS_PATH := "user://ace_settings.cfg"
 const CHAPTERS := [
 	"1 · Intro: the concept", "2 · Breaking", "3 · Hardware + electronics",

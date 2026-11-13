@@ -1,5 +1,6 @@
-class_name Workshop
 extends Node3D
+## AI-made (Claude, 11.11.2026). Part of ai-learning/graybox, not part of the game.
+## No class_name, by the ai-learning rule: overlays.gd loads this script by its path.
 ## The gray workshop: one fixed camera view per dialogue step, plus optional turning
 ## of the object in focus. Graybox only — shapes, placement and flow, no real content.
 

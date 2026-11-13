@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://xqhhopmrk38n"]
 
-[ext_resource type="Script" uid="uid://dhbpvmocck7s5" path="res://scripts/workshop.gd" id="1_workshop"]
-[ext_resource type="Script" uid="uid://j84wo4klgryh" path="res://ui/overlays.gd" id="2_overlays"]
+[ext_resource type="Script" uid="uid://dhbpvmocck7s5" path="res://ai-learning/graybox/workshop.gd" id="1_workshop"]
+[ext_resource type="Script" uid="uid://j84wo4klgryh" path="res://ai-learning/graybox/overlays.gd" id="2_overlays"]
 
 [sub_resource type="Environment" id="Env"]
 background_mode = 1

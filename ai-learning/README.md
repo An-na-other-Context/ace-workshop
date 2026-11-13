@@ -13,6 +13,7 @@ AI-made learning material for building ACE Workshop: notes, small code examples 
 
 ## What goes here
 
+- `graybox/`: the first 3D workshop graybox (a desk, three machines, the goal lab, camera views, overlays), made by AI on 11.11.2026. Open `workshop.tscn` and press F6 to play it.
 - notes, for example on OOP (object-oriented programming)
 - small code examples to open and change in the Godot editor
 - goals for learning the editor

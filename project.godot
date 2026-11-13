@@ -16,7 +16,6 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 config/name="ACE Workshop"
 config/description="A learning environment for ACE OS: take machines apart layer by layer. Graybox."
-run/main_scene="res://scenes/workshop.tscn"
 config/features=PackedStringArray("4.7")
 
 [display]
