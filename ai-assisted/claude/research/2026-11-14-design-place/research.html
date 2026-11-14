@@ -1,0 +1,523 @@
+<title>Design place, round 2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Research page (skill research-page). Summary on top, sections folded, every finding numbered
+   so Anna can pick by number. Calm colours, no red or orange. Source status: green read,
+   ochre summary only, slate blocked. Fit grid uses the same three colours with square corners. */
+:root {
+  --bg: #f1f3f1; --surface: #fbfcfb; --fg: #1d2226; --muted: #586069; --line: #d3d9d6;
+  --accent: #2f6fa6; --soft: #e7ece8;
+  --s-review: #1d5e96; --s-study: #1f7a4d; --s-lived: #8a3d8f; --s-example: #10756f; --s-guide: #5d6470; --s-docs: #34607a; --s-opinion: #7a6a2a; --s-mine: #6c3fb0;
+  --c-q1: #2a5fb0; --c-q2: #8a3d8f; --c-q3: #10756f; --c-gap: #217a45; --c-meta: #5d6470;
+  --st-read: #1f7a4d; --st-sum: #7a5c00; --st-block: #4a525c;
+  --font-body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+    --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-docs: #9cc3dc; --s-opinion: #d9c98a; --s-mine: #b597ec;
+    --c-q1: #86aef0; --c-q2: #e0a3e4; --c-q3: #6fd0c7; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+    --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+  --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-docs: #9cc3dc; --s-opinion: #d9c98a; --s-mine: #b597ec;
+  --c-q1: #86aef0; --c-q2: #e0a3e4; --c-q3: #6fd0c7; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+  --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.7; letter-spacing: 0.01em; word-spacing: 0.06em; }
+.page { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 2.1rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.08rem; color: var(--c); }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.lede { font-size: 1.15rem; }
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; line-height: 1.3; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; text-decoration: none; white-space: nowrap; vertical-align: 0.1em; }
+.src.review { color: var(--s-review); } .src.study { color: var(--s-study); } .src.lived { color: var(--s-lived); } .src.example { color: var(--s-example); } .src.guide { color: var(--s-guide); } .src.docs { color: var(--s-docs); } .src.opinion { color: var(--s-opinion); }
+.src.mine { color: var(--s-mine); border-style: dashed; }
+.thin { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.9rem; color: var(--muted); }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.points { display: grid; gap: 12px; }
+.point { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 12px; align-items: start; }
+.point .mark { width: 2.2em; height: 2.2em; border-radius: 8px; display: grid; place-items: center; background: var(--soft); color: var(--accent); }
+.point b { display: block; }
+details.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.sec > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 16px 20px; }
+details.sec > summary::-webkit-details-marker { display: none; }
+.tag { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: var(--surface); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; }
+.sum-text { flex: 1 1 260px; min-width: 0; } .sum-text b { color: var(--c); }
+.chev { color: var(--muted); } details.sec[open] .chev { transform: rotate(90deg); }
+.body { border-top: 1px solid var(--line); padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+ol.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+ol.findings > li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 10px; align-items: start; }
+.fid { font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; color: var(--c); border: 1.5px solid var(--c); border-radius: 6px; text-align: center; padding: 1px 0; }
+.ftext { min-width: 0; }
+.ftext b { color: var(--fg); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+dl.gloss { display: grid; grid-template-columns: minmax(8em, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.gloss dt { font-weight: 700; } dl.gloss dd { margin: 0; max-width: 68ch; }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.box { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--bg); min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.box ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.box.do { border: 2px solid var(--st-read); } .box.do h3 { color: var(--st-read); }
+.box.dont { border: 2px solid var(--st-block); } .box.dont h3 { color: var(--st-block); }
+.box.idea { border: 2px dashed var(--s-mine); } .box.idea h3 { color: var(--s-mine); }
+/* Fit grid */
+.fit { display: inline-flex; align-items: center; gap: 4px; font-size: 0.8rem; font-weight: 700; line-height: 1.3; padding: 2px 8px; border-radius: 4px; color: var(--surface); white-space: nowrap; }
+.fit.y { background: var(--st-read); } .fit.m { background: var(--st-sum); } .fit.n { background: var(--st-block); }
+td small { display: block; color: var(--muted); font-size: 0.82rem; line-height: 1.4; margin-top: 2px; }
+td.tool { font-weight: 700; white-space: nowrap; }
+/* Source status */
+.st { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; font-style: normal; line-height: 1.3; padding: 1px 8px; border-radius: 999px; color: var(--surface); background: var(--st); white-space: nowrap; vertical-align: 0.1em; }
+.read { --st: var(--st-read); } .sum { --st: var(--st-sum); } .block { --st: var(--st-block); }
+.counts { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sgroup { display: flex; flex-direction: column; gap: 10px; }
+.body .sgroup > h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fg); }
+.sgroup > p { color: var(--muted); font-size: 0.92rem; }
+ul.slist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.slist > li { border-left: 4px solid var(--st); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.s-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.88rem; }
+.used { font-family: var(--font-code); font-size: 0.78rem; font-weight: 700; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.unused { font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); }
+details.inner { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.inner > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.inner > ol { margin: 0; padding: 0 14px 14px 2.6em; display: grid; gap: 4px; font-size: 0.92rem; overflow-wrap: anywhere; }
+footer { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+footer b { color: var(--fg); }
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  dl.gloss { grid-template-columns: minmax(0, 1fr); gap: 2px 0; } dl.gloss dd { margin-bottom: 8px; }
+  details.sec > summary, .body, .summary { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M9 3h6l-1 6 4 4H6l4-4zM12 13v8"/></symbol>
+  <symbol id="i-wifi" viewBox="0 0 24 24"><path d="M2 8.5a15 15 0 0 1 20 0M5 12a10 10 0 0 1 14 0M8.5 15.5a5 5 0 0 1 7 0M12 19h.01M3 3l18 18"/></symbol>
+  <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></symbol>
+  <symbol id="i-open" viewBox="0 0 24 24"><path d="M8 11V7a4 4 0 0 1 8 0"/><rect x="5" y="11" width="14" height="10" rx="2"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20a6 6 0 0 1 12 0M14 20a4.5 4.5 0 0 1 7.5-3.4"/></symbol>
+  <symbol id="i-tools" viewBox="0 0 24 24"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="5" rx="1.5"/><rect x="13" y="10" width="8" height="11" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/></symbol>
+  <symbol id="i-list" viewBox="0 0 24 24"><path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+  <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.7-2.5 2-2.5 4M12 17.5v.01"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-abc" viewBox="0 0 24 24"><path d="M3 17l3.5-10L10 17M4.2 13.5h4.6M13 7v10h3.5a2.5 2.5 0 0 0 0-5H13h3a2.5 2.5 0 0 0 0-5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="eyebrow">ACE Workshop · research, depth 2: what others tried</span>
+    <h1>Design place, round 2</h1>
+    <p class="lede">Visual pinboard tools that work offline and can hold voice or video notes, plus what research with neurodivergent adults says about visual boards. Findings are numbered, so you can pick them by number.</p>
+    <p class="thin">Repo copy, 14.11.2026: written for the learner profile <a href="../learner-profiles/annaothercrow.md">annaothercrow</a>. Wording that said "you" about that learner now points to the profile; findings, sources and numbers are unchanged.</p>
+    <div class="legend">
+      <span class="src docs">Docs</span><span class="src study">Study</span><span class="src review">Review</span><span class="src lived">Lived</span><span class="src example">Example</span><span class="src guide">Guideline</span><span class="src opinion">Opinion</span><span class="src mine">AI idea</span>
+    </div>
+    <div class="legend counts">
+      <span class="st read"><svg class="icon"><use href="#i-ok"/></svg>read</span><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="st block"><svg class="icon"><use href="#i-block"/></svg>blocked</span>
+      <span class="thin">= what the helper got from a source. Findings without a mark were read. Full list under <a href="#sources">Sources</a>.</span>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>In short</h2>
+    <div class="points">
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-pin"/></svg></span><div><b>No tool ticks both must-haves for sure.</b>Offline is easy to find. Voice and video on the board is the hard part: in most tools it isn't confirmed for the offline version.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-tools"/></svg></span><div><b>Closest pinboard: tldraw offline (F1).</b>Free, no account, works offline on Windows; sticky notes, frames, images, drawing. Video clips probably work, there's no audio-only note, and it isn't open source.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-mic"/></svg></span><div><b>Recording your voice inside the app, offline:</b>Xournal++ (F4) links audio to what you draw, but it's a notebook, not a free board. OneNote (F8) records audio and video, but whether it works without an account is unclear. Otherwise: record in another app and drop the file on the board.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-open"/></svg></span><div><b>Open-source boards: AFFiNE (F2) and Logseq whiteboards (F6).</b>Both are local and free. Whether audio and video play on them isn't confirmed.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-people"/></svg></span><div><b>Research: people differ a lot (F12–F21).</b>No single "neurodivergent preference". What repeats: choose text, voice or picture per note; keep the board calm; have a starting structure you can change or ignore.</div></div>
+    </div>
+  </section>
+
+  <details class="sec" style="--c: var(--c-q1)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-tools"/></svg>Q1 · Tools</span><span class="sum-text"><b>Which tools fit the profile's must-haves.</b> Fit grid, F1–F11, dropped tools</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="legend counts"><span class="fit y">yes</span><span class="fit m">unclear / partly</span><span class="fit n">no</span><span class="thin">must-haves first, then nice-to-haves</span></div>
+      <div class="scroll"><table>
+        <thead><tr><th>Tool</th><th>Offline, no account <span class="thin">(must)</span></th><th>Voice / video on the board <span class="thin">(must)</span></th><th>Open files <span class="thin">(nice)</span></th><th>Open source <span class="thin">(nice)</span></th><th>Cost</th></tr></thead>
+        <tbody>
+          <tr><td class="tool">tldraw offline <span class="thin">F1</span></td><td><span class="fit y">yes</span></td><td><span class="fit m">video probably</span><small>no audio-only note; test it (E1)</small></td><td><span class="fit m">one .tldraw file</span><small>layout not documented</small></td><td><span class="fit n">no</span></td><td>free</td></tr>
+          <tr><td class="tool">AFFiNE <span class="thin">F2</span></td><td><span class="fit y">yes</span></td><td><span class="fit m">not confirmed</span><small>files can sit on the board; test it (E2)</small></td><td><span class="fit n">own storage</span><small>Markdown files planned</small></td><td><span class="fit y">MIT</span></td><td>free locally</td></tr>
+          <tr><td class="tool">Noteey <span class="thin">F3</span></td><td><span class="fit y">yes</span></td><td><span class="fit y">audio + video files</span><small>no recording in the app found</small></td><td><span class="fit m">not stated</span></td><td><span class="fit n">no</span></td><td>free tier small; $99 once</td></tr>
+          <tr><td class="tool">Xournal++ <span class="thin">F4</span></td><td><span class="fit y">yes</span></td><td><span class="fit y">records voice</span><small>no video; notebook pages, not a board</small></td><td><span class="fit m">.xopp, compressed text</span></td><td><span class="fit y">GPL-2.0</span></td><td>free</td></tr>
+          <tr><td class="tool">OpenBoard <span class="thin">F5</span></td><td><span class="fit y">yes</span></td><td><span class="fit m">yes, with known bugs</span></td><td><span class="fit m">.ubz, zipped pages</span></td><td><span class="fit y">GPL-3.0</span></td><td>free</td></tr>
+          <tr><td class="tool">Logseq whiteboards <span class="thin">F6</span></td><td><span class="fit y">yes</span></td><td><span class="fit m">video yes, audio shaky</span></td><td><span class="fit y">text files</span></td><td><span class="fit y">AGPL-3.0</span></td><td>free <span class="thin">(memory, not checked)</span></td></tr>
+          <tr><td class="tool">Excalidraw <span class="thin">F7</span></td><td><span class="fit y">yes</span><small>saves in the browser</small></td><td><span class="fit n">no</span></td><td><span class="fit y">JSON file</span></td><td><span class="fit y">MIT</span></td><td>free</td></tr>
+          <tr><td class="tool">OneNote desktop <span class="thin">F8</span></td><td><span class="fit m">unclear</span><small>sources conflict</small></td><td><span class="fit y">records audio + video</span></td><td><span class="fit n">closed .one</span></td><td><span class="fit n">no</span></td><td>free</td></tr>
+          <tr><td class="tool">Kinopio <span class="thin">F9</span></td><td><span class="fit n">no</span></td><td><span class="fit y">audio + video files</span></td><td><span class="fit m">JSON export</span></td><td><span class="fit m">not stated</span></td><td>free 100 cards</td></tr>
+          <tr><td class="tool">Milanote <span class="thin">F10</span></td><td><span class="fit n">no</span></td><td><span class="fit y">audio + video upload</span></td><td><span class="fit n">cloud</span></td><td><span class="fit n">no</span></td><td>not on help page</td></tr>
+        </tbody>
+      </table></div>
+
+      <ol class="findings">
+        <li><span class="fid">F1</span><span class="ftext"><b>tldraw offline:</b> a free desktop app with "no accounts and no server"; Windows installers. Sticky notes, frames, images, freehand drawing, arrows. Video clips (mp4, webm, mov) are the toolkit's default, but the offline app's docs don't confirm them; there is no audio-only note. Everything sits in one .tldraw file; it doesn't merge changes made elsewhere, so edit it in one place at a time. Not open source ("All rights reserved"). The toolkit has reduce motion, keyboard moves and dark mode. Latest release 12.11.2026. <a class="src docs" href="https://tldraw.dev/blog/tldraw-offline">Docs</a> <a class="src docs" href="https://github.com/tldraw/tldraw-offline">Docs</a></span></li>
+        <li><span class="fid">F2</span><span class="ftext"><b>AFFiNE:</b> open source (MIT). Local workspaces need no login and are free without limit. Its "edgeless" whiteboard mode has sticky notes, shapes, text, web embeds and templates (vision board, ADHD planner and more). Files can sit on the board; whether audio or video play there isn't confirmed. Voice recording is macOS only. Data stays in AFFiNE's own storage; plain Markdown files are only planned. The newest builds are test versions. Frames: <span class="thin">memory, not checked</span>. <a class="src docs" href="https://github.com/toeverything/AFFiNE">Docs</a> <a class="src docs" href="https://docs.affine.pro/core-concepts/elements-of-affine/workspaces">Docs</a></span></li>
+        <li><span class="fid">F3</span><span class="ftext"><b>Noteey:</b> works offline; an account is needed only for paid plans. Audio and video files can go on the board, with time-stamped notes on them; also images, sticky notes, sketches, links, PDFs, mind maps. The free plan is small: 3 projects, 100 cards, 3 audio/video notes. Desktop Pro costs $99 once. Closed source; the file format isn't stated. <a class="src docs" href="https://www.noteey.com">Docs</a> <a class="src docs" href="https://www.noteey.com/pricing">Docs</a></span></li>
+        <li><span class="fid">F4</span><span class="ftext"><b>Xournal++:</b> free and open source (GPL-2.0), for Windows. It records audio while you write; tap a stroke to hear that moment again. Pages like a notebook, not a free board; no video. Files are .xopp (compressed text). Latest release 26.09.2026. <a class="src docs" href="https://xournalpp.github.io/">Docs</a> <a class="src docs" href="https://github.com/xournalpp/xournalpp">Docs</a></span></li>
+        <li><span class="fid">F5</span><span class="ftext"><b>OpenBoard:</b> a free teaching whiteboard (GPL-3.0), no registration, Windows 10 and up. Local audio and video work, with known bugs. Page and slide based. Files are .ubz (zipped pages). <a class="src docs" href="https://github.com/OpenBoard-org/OpenBoard">Docs</a> <a class="src docs" href="https://openboard.ch/">Docs</a></span></li>
+        <li><span class="fid">F6</span><span class="ftext"><b>Logseq whiteboards (the older "OG" version):</b> AGPL-3.0, local. Boards are text files in a folder, which suits git. Video works; audio is unreliable in forum reports <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. The OG version now only gets security fixes, and whiteboards may be missing from the new version <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. <a class="src docs" href="https://raw.githubusercontent.com/logseq/docs/master/pages/Whiteboard.md">Docs</a> <a class="src lived" href="https://discuss.logseq.com/t/embedding-audio-in-logseq/1398">Lived</a></span></li>
+        <li><span class="fid">F7</span><span class="ftext"><b>Excalidraw (again from round 1):</b> MIT, free; an installable web app that works offline and saves in the browser; .excalidraw files are JSON. Frames exist <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. No local audio or video; web embeds need internet. <a class="src docs" href="https://github.com/excalidraw/excalidraw">Docs</a> <a class="src docs" href="https://newreleases.io/project/github/excalidraw/excalidraw/release/v0.16.0">Docs</a></span></li>
+        <li><span class="fid">F8</span><span class="ftext"><b>OneNote desktop:</b> records audio and video straight into a page. Free. Using it without a Microsoft account worked in 2021 <a class="src opinion" href="https://onenotegem.com/a/faq/onenote/2021/1213/free-onenote-create-local-notebook.html">Opinion</a>; newer reports conflict <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. Closed .one format. Free placement and page templates: <span class="thin">memory, not checked</span>. <a class="src docs" href="https://support.microsoft.com/en-us/oneNote/onenote-help-and-learning/record-audio-or-video-notes">Docs</a></span></li>
+        <li><span class="fid">F9</span><span class="ftext"><b>Kinopio, fails offline:</b> its help page says it can't open without internet (its llms.txt file says the opposite). Holds audio and video files and cards. Free up to 100 cards, then $8 a month or $250 once. <a class="src docs" href="https://kinopio.club/help/offline-support">Docs</a> <a class="src docs" href="https://kinopio.club/llms.txt">Docs</a></span></li>
+        <li><span class="fid">F10</span><span class="ftext"><b>Milanote, fails offline:</b> the Windows app is a web app installed after login. Audio and video upload; game design document templates <a class="src opinion" href="https://milanote.com/guide/game-design-document">Opinion</a>. One developer rebuilt their design document in it and found the boards read "like chapters" <a class="src example" href="https://itch.io/devlog/801285/design-documentation.amp">Example</a>. <a class="src docs" href="https://help.milanote.com/en/articles/11659067-install-the-windows-desktop-app.md">Docs</a></span></li>
+        <li><span class="fid">F11</span><span class="ftext"><b>JSON Canvas,</b> an open (MIT) file format for boards: text, file, link and group items, 6 colour presets. Only Obsidian and Charkoal save in it directly, so it doesn't help without Obsidian. <a class="src docs" href="https://jsoncanvas.org/">Docs</a> <a class="src docs" href="https://jsoncanvas.org/docs/apps/">Docs</a></span></li>
+      </ol>
+
+      <div class="box">
+        <h3 style="--c: var(--c-meta)">Dropped, with the reason</h3>
+        <ul>
+          <li><b>Miro:</b> hosted online only <a class="src opinion" href="https://community.miro.com/ask-the-community-45/can-we-use-miro-without-internet-connection-10188">Opinion</a> · <b>FigJam:</b> no offline mode <a class="src docs" href="https://help.figma.com/hc/en-us/articles/360040328553">Docs</a></li>
+          <li><b>Heptabase:</b> no free plan, from $8.99 a month <a class="src docs" href="https://heptabase.com/pricing">Docs</a> · <b>Muse:</b> now "Allume", Apple devices only <a class="src docs" href="https://allume.com/">Docs</a> · <b>Kosmik:</b> shut down 31.05.2026 <a class="src docs" href="https://kosmik.app">Docs</a></li>
+          <li><b>Scrintal:</b> login, offline not stated <a class="src docs" href="https://scrintal.com">Docs</a> · <b>Napkin:</b> browser only <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · <b>Aviquill:</b> account, $9.99 a month <a class="src opinion" href="https://aviquill.net">Opinion</a></li>
+          <li><b>Penpot:</b> offline only by running your own server <a class="src docs" href="https://penpot.app/self-host">Docs</a> · <b>Anytype:</b> no board <a class="src opinion" href="https://community.anytype.io/t/whiteboards-canvas/1389?page=4">Opinion</a> · <b>Trilium:</b> its board is Excalidraw; audio and video not on the board <a class="src docs" href="https://docs.triliumnotes.org/user-guide/note-types/canvas">Docs</a></li>
+          <li><b>Microsoft Whiteboard:</b> sign-in at first start <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · <b>Xmind:</b> records audio notes, but it's a mind map, close to draw.io <a class="src docs" href="https://xmind.com/user-guide/audio-note-new">Docs</a></li>
+          <li><b>No audio or video:</b> Scapple <a class="src docs" href="https://www.literatureandlatte.com/scapple/overview">Docs</a>, PureRef <a class="src docs" href="https://www.pureref.com/">Docs</a>, BeeRef <a class="src docs" href="https://github.com/rbreu/beeref">Docs</a>, MilangaNote (made in Godot, no more updates) <a class="src example" href="https://github.com/dannygaray60/milanganote">Example</a>, Lorien and Rnote <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></li>
+          <li><b>Picture libraries, not boards:</b> Allusion <a class="src docs" href="https://allusion-app.github.io">Docs</a>, Eagle <a class="src docs" href="https://eagle.cool">Docs</a> · <b>Charkoal:</b> a code-editor add-on for developers <a class="src docs" href="https://charkoal.dev">Docs</a></li>
+        </ul>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q2)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-people"/></svg>Q2 · People like the profile</span><span class="sum-text"><b>What research and first-person accounts say about visual boards.</b> F12–F22</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F12</span><span class="ftext"><b>Autistic adults with a digital whiteboard (20 people):</b> it gave them something to point at, extra thinking time and control over the pace; it also cost effort (learning the tool, screen load, talking and drawing at once). It moves the mental load rather than lowering it. Advice: make the visual part optional, try the tool first, plan breaks, keep the structure adjustable. <a class="src study" href="https://academic.oup.com/iwc/advance-article/doi/10.1093/iwc/iwag026/8706669">Study</a></span></li>
+        <li><span class="fid">F13</span><span class="ftext"><b>Autistic students (12) preferred structured text to pictures:</b> a minimal, muted look and flat navigation; images only when they show what text can't; they wanted to choose for themselves and adjust how much is shown. <a class="src study" href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">Study</a></span></li>
+        <li><span class="fid">F14</span><span class="ftext"><b>Some autistic adults report thinking in pictures more often,</b> "some", not all. <a class="src study" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8297849/">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F15</span><span class="ftext"><b>Neurodivergent professionals (36):</b> bright colours and moving things distracted ADHD participants; several dyslexic participants preferred speaking to typing, one autistic participant the reverse. Needs clashed between people, so offering both ways matters. <a class="src study" href="https://maitraye.github.io/files/papers/ND_CSCW21.pdf">Study</a></span></li>
+        <li><span class="fid">F16</span><span class="ftext"><b>Dyslexic adults (11):</b> writing was the bigger barrier for 10 of them; several found black on white hard and suggested cream, red or yellow backgrounds; one wanted a "skeleton" to fill in instead of a blank page. <a class="src study" href="https://cdn.aaai.org/ojs/15004/15004-28-18523-1-2-20201228.pdf">Study</a></span></li>
+        <li><span class="fid">F17</span><span class="ftext"><b>Visual layouts that show how ideas connect</b> helped students with learning disabilities: 16 studies, 808 school students, moderate to large effects. Keywords and simple drawings beat long sentences. Children with teacher-made layouts, not adults on free boards. <a class="src review" href="https://simvilledev.ku.edu/sites/default/files/Articlles_Library/DE39Dexter.Graphic%20organizers%20and%20students%20learning%20disabilities.2011.pdf">Review</a></span></li>
+        <li><span class="fid">F18</span><span class="ftext"><b>ADHD adults:</b> problems come from tools that expect steady self-control and step-by-step time <a class="src study" href="https://arxiv.org/abs/2603.17258">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. Outside aids help, but no strategy works for everyone <a class="src review" href="https://bps.org.uk/research-digest/self-care-strategies-adhd">Review</a>.</span></li>
+        <li><span class="fid">F19</span><span class="ftext"><b>An ADHD whiteboard user:</b> a board on the wall beats a hidden planner ("out of sight, out of mind"); wiping it clean lowers shame; without structure it turns into "wall decor" or a dumping ground. <a class="src lived" href="https://www.prismaticgrowth.com/blog/whiteboards-for-adhd-productivity">Lived</a></span></li>
+        <li><span class="fid">F20</span><span class="ftext"><b>Clutter:</b> constant visual input is tiring, empty space rests the eyes, some stimulation is fine <a class="src lived" href="https://elisecarlson.com/2025/03/14/minimising-visual-sensory-overload-for-autistic-adhd-comfort/">Lived</a>. An AuDHD writer: "Without structure I get lost" <a class="src lived" href="https://zmikelstites.substack.com/p/audhd-and-creativity">Lived</a>.</span></li>
+        <li><span class="fid">F21</span><span class="ftext"><b>Much ADHD tech research</b> tries to reduce ADHD traits and rarely designs together with people who have ADHD, which supports designing your own board. <a class="src review" href="https://researchgate.net/profile/Katta-Spiel/publication/360330913_ADHD_and_Technology_Research_-_Investigated_by_Neurodivergent_Readers/links/6282c0e27a08f263d551e17c/ADHD-and-Technology-Research-Investigated-by-Neurodivergent-Readers.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F22</span><span class="ftext"><b>Visible piles work as reminders,</b> from an old office study of 10 workers. <span class="src study">Study</span> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q3)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-list"/></svg>Q3 · Setting it up</span><span class="sum-text"><b>Do and don't, from sources;</b> plus the helper's own ideas, marked.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="two">
+        <div class="box do">
+          <h3>Do</h3>
+          <ul>
+            <li>A starting structure (frames, a "skeleton"), kept optional and changeable (F12, F16, F19, F20).</li>
+            <li>A calm look: muted colours, empty space, nothing moving or flashing, motion you can switch off (F13, F15, F20) <a class="src guide" href="https://www.w3.org/TR/coga-usable/">Guideline</a>.</li>
+            <li>Each note as text, voice or picture, whatever fits that moment (F13, F15).</li>
+            <li>Images only when they carry information; text as keywords (F13, F17).</li>
+            <li>Your own background colour and font, e.g. dark (not black) text on a light (not white) background (F16) <a class="src guide" href="https://cdn.bdadyslexia.org.uk/uploads/documents/Advice/style-guide/BDA-Style-Guide-2023.pdf">Guideline</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>.</li>
+            <li>Easy undo and going back; nothing that relies on memory <a class="src guide" href="https://www.w3.org/TR/coga-usable/">Guideline</a>.</li>
+            <li>One page or area per topic; when something changes, replace the old version so only the current one shows <a class="src example" href="https://www.gamedeveloper.com/design/-the-goal-of-design-is-to-efficiently-communicate-ideas-">Example</a> <a class="src example" href="https://www.gamedeveloper.com/design/pushing-the-limits-in-simulating-a-city-one-page-at-a-time">Example</a>.</li>
+            <li>A short trial before moving everything in, with a fallback (F12).</li>
+          </ul>
+        </div>
+        <div class="box dont">
+          <h3>Don't</h3>
+          <ul>
+            <li>Expect one setup to work for everyone, or to keep working forever (F18).</li>
+            <li>Let notifications or sounds interrupt (F15).</li>
+          </ul>
+        </div>
+        <div class="box idea">
+          <h3>The helper's own ideas <span class="src mine">AI idea</span></h3>
+          <ul>
+            <li>One board per game area (core loop, learning goals, levels, characters, art mood, sound mood), plus a fixed "Start here" frame.</li>
+            <li>At most 4–6 colours, each with one fixed meaning.</li>
+            <li>Voice and video files named by date and topic, so they can be found outside the tool.</li>
+            <li>Media files in a project folder next to the board file.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-gap)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-gap"/></svg>Open questions</span><span class="sum-text"><b>Short tests that could settle what's unclear</b> (depth 3). 7, none chosen.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Suggested by the research helper from what the sources leave open. A menu, nothing decided.</p>
+      <ol class="findings">
+        <li><span class="fid">E1</span><span class="ftext">tldraw offline with the network off: drop in a video clip, an audio-only clip and a voice memo. Which ones play? (F1)</span></li>
+        <li><span class="fid">E2</span><span class="ftext">AFFiNE, local, no login: drop a video and a voice memo on the board. Do they play there? (F2)</span></li>
+        <li><span class="fid">E3</span><span class="ftext">Git readability: save a board in tldraw, Logseq and Xournal++, change one note, and see whether the change shows as readable text.</span></li>
+        <li><span class="fid">E4</span><span class="ftext">Noteey's free plan: do 100 cards cover one game area for a week? (F3)</span></li>
+        <li><span class="fid">E5</span><span class="ftext">Xournal++: talk through a level idea while sketching, then replay by tapping strokes. Does it feel like a board? (F4)</span></li>
+        <li><span class="fid">E6</span><span class="ftext">One board with fixed frames, one blank, for a week: which gets used? (F12, F16, F19)</span></li>
+        <li><span class="fid">E7</span><span class="ftext">Background: off-white canvas against dark mode, for reading comfort. (F16)</span></li>
+      </ol>
+      <p><b>Gaps:</b> no study of ADHD, autistic or dyslexic adults using digital pinboards for creative or design work; no first-person accounts of tldraw offline, AFFiNE or Noteey; Reddit searches gave nothing; accessibility details for Noteey, OpenBoard, AFFiNE and Logseq weren't found; the .tldraw file layout isn't documented.</p>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Disagreements</span><span class="sum-text"><b>Where sources point different ways.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Question</th><th>One side</th><th>Other side</th><th>How they fit</th></tr></thead>
+        <tbody>
+          <tr><td>Do autistic people think in pictures?</td><td>Some report it more often (F14)</td><td>Autistic students preferred structured text (F13)</td><td>Both can be true, for different people</td></tr>
+          <tr><td>Wall board or screen?</td><td>A board on the wall beats a hidden planner (F19)</td><td>Voice and video need a screen</td><td>Open</td></tr>
+          <tr><td>Kinopio offline?</td><td>Its llms.txt: works offline (F9)</td><td>Its help page: can't open offline (F9)</td><td>Treated as failing</td></tr>
+          <tr><td>OneNote without an account?</td><td>Worked in 2021 (F8)</td><td>Newer reports conflict (F8)</td><td>Unclear</td></tr>
+          <tr><td>Logseq whiteboards in the new version?</td><td>Reported removed (F6)</td><td>Not confirmed officially</td><td>Unclear</td></tr>
+          <tr><td>Mind maps for dyslexia?</td><td>Mostly claims by software makers</td><td>Only a children's meta-analysis (F17)</td><td>Little evidence for adults</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sources" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-link"/></svg>Sources</span><span class="sum-text"><b>Every source, and what the helper actually got from it.</b> 48 read · 19 summary only · 10 blocked</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Checked against the research helper's own records from 13.11.2026: every page it opened and every search it ran. Each source is listed once; a tool's own pages count as one source. <span class="used">F1</span> = the finding that uses it; "Dropped" = the dropped-tools box; "Do" = the Do list.</p>
+
+      <div class="sgroup read">
+        <h3><span class="st read"><svg class="icon"><use href="#i-ok"/></svg>Read</span> 48 sources</h3>
+        <p>The helper opened the linked page or PDF.</p>
+        <ul class="slist">
+          <li><span><b>tldraw</b> · offline app announcement, GitHub page, releases, toolkit docs (shapes, files, local videos, accessibility), media code</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F1</span><span class="used">In short</span><span class="used">E1</span><a href="https://tldraw.dev/blog/tldraw-offline">blog</a><a href="https://github.com/tldraw/tldraw-offline">GitHub</a><a href="https://github.com/tldraw/tldraw-offline/releases">releases</a><a href="https://tldraw.dev/sdk-features/default-shapes">shapes</a><a href="https://tldraw.dev/docs/shapes">shapes docs</a><a href="https://tldraw.dev/docs/assets">files docs</a><a href="https://tldraw.dev/examples/local-videos">local videos</a><a href="https://tldraw.dev/sdk-features/accessibility">accessibility</a><a href="https://cdn.jsdelivr.net/npm/@tldraw/utils@4.5.9/src/lib/media/media.ts">media code</a></span></li>
+          <li><span><b>AlternativeTo news, July 2026</b> · tldraw releases a free offline desktop app</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F1</span><a href="https://alternativeto.net/news/2026/7/tldraw-releases-free-offline-desktop-app-with-scripting-features/">alternativeto.net</a></span></li>
+          <li><span><b>AFFiNE</b> · GitHub page, pricing, workspace docs, update blogs, macOS meeting docs, "next chapter" blog, releases, local-first blog</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F2</span><span class="used">In short</span><span class="used">E2</span><a href="https://github.com/toeverything/AFFiNE">GitHub</a><a href="https://affine.pro/pricing">pricing</a><a href="https://docs.affine.pro/core-concepts/elements-of-affine/workspaces">workspaces</a><a href="https://affine.pro/blog/whats-new-feb-update">Feb update</a><a href="https://affine.pro/blog/whats-new-april-update">April update</a><a href="https://docs.affine.pro/features/meeting-macos">meetings</a><a href="https://affine.pro/blog/next-chapter-of-affine">next chapter</a><a href="https://github.com/toeverything/AFFiNE/releases">releases</a><a href="https://affine.pro/blog/local-first-privacy-focussed-affine-offline">local-first</a></span></li>
+          <li><span><b>Noteey</b> · website and pricing</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F3</span><span class="used">E4</span><a href="https://www.noteey.com">noteey.com</a><a href="https://www.noteey.com/pricing">pricing</a></span></li>
+          <li><span><b>Noteey blog</b> · its comparisons with Milanote and Heptabase</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F3</span><span class="used">Dropped</span><a href="https://www.noteey.com/blog/milanote-alternative">vs Milanote</a><a href="https://www.noteey.com/blog/heptabase-alternative">vs Heptabase</a><span class="note">written by the tool's maker</span></span></li>
+          <li><span><b>Xournal++</b> · website, GitHub page, releases</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F4</span><span class="used">In short</span><span class="used">E5</span><a href="https://xournalpp.github.io/">website</a><a href="https://github.com/xournalpp/xournalpp">GitHub</a><a href="https://github.com/xournalpp/xournalpp/releases">releases</a></span></li>
+          <li><span><b>OpenBoard</b> · GitHub page, releases, website, file-type page for .ubz</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F5</span><a href="https://github.com/OpenBoard-org/OpenBoard">GitHub</a><a href="https://github.com/OpenBoard-org/OpenBoard/releases">releases</a><a href="https://openboard.ch/">website</a><a href="https://fileinfo.com/extension/ubz">fileinfo.com</a></span></li>
+          <li><span><b>Logseq</b> · whiteboard docs, releases, GitHub page, blog post on the OG version</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F6</span><a href="https://raw.githubusercontent.com/logseq/docs/master/pages/Whiteboard.md">whiteboard docs</a><a href="https://github.com/logseq/logseq/releases">releases</a><a href="https://github.com/logseq/logseq">GitHub</a><a href="https://logseq.io/p/e3YDyX5AYr">blog post</a><span class="note">blog post: first part only</span></span></li>
+          <li><span><b>Excalidraw</b> · GitHub page, releases, Excalidraw+ blog "Excalidraw in 2024"</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F7</span><a href="https://github.com/excalidraw/excalidraw">GitHub</a><a href="https://github.com/excalidraw/excalidraw/releases">releases</a><a href="https://plus.excalidraw.com/blog/excalidraw-in-2024">blog</a></span></li>
+          <li><span><b>Microsoft support</b> · "Record audio or video notes" in OneNote</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F8</span><span class="used">In short</span><a href="https://support.microsoft.com/en-us/oneNote/onenote-help-and-learning/record-audio-or-video-notes">support.microsoft.com</a></span></li>
+          <li><span><b>OneNote local notebooks</b> · Office Watch 2022, OneNoteGem 2021</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F8</span><span class="used">Disagreements</span><a href="https://office-watch.com/2022/onenote-notebook-save-locally-not-cloud/">office-watch.com</a><a href="https://onenotegem.com/a/faq/onenote/2021/1213/free-onenote-create-local-notebook.html">onenotegem.com</a></span></li>
+          <li><span><b>Kinopio</b> · help page on offline use, llms.txt</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F9</span><span class="used">Disagreements</span><a href="https://kinopio.club/help/offline-support">help</a><a href="https://kinopio.club/llms.txt">llms.txt</a></span></li>
+          <li><span><b>Milanote help</b> · llms.txt, audio, Windows app, Pro plan cost</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F10</span><a href="https://help.milanote.com/llms.txt">llms.txt</a><a href="https://help.milanote.com/en/articles/10684339-audio.md">audio</a><a href="https://help.milanote.com/en/articles/11659067-install-the-windows-desktop-app.md">Windows app</a><a href="https://help.milanote.com/en/articles/3600861-how-much-does-a-pro-plan-cost.md">Pro cost</a></span></li>
+          <li><span><b>Milanote</b> · guide "Game design document"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F10</span><a href="https://milanote.com/guide/game-design-document">milanote.com</a><span class="note">written by the tool's maker</span></span></li>
+          <li><span><b>itch.io devlog</b> · design documentation rebuilt in Milanote</span><span class="s-meta"><span class="src example">Example</span><span class="used">F10</span><a href="https://itch.io/devlog/801285/design-documentation.amp">itch.io</a><span class="note">the normal address returned "not found"; this copy worked</span></span></li>
+          <li><span><b>JSON Canvas</b> · website, apps list, specification 1.0</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F11</span><a href="https://jsoncanvas.org/">website</a><a href="https://jsoncanvas.org/docs/apps/">apps</a><a href="https://jsoncanvas.org/spec/1.0/">spec</a></span></li>
+          <li><span><b>Heptabase</b> · download and pricing pages</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://heptabase.com/download">download</a><a href="https://heptabase.com/pricing">pricing</a></span></li>
+          <li><span><b>Allume</b> (formerly Muse)</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://allume.com/">allume.com</a><span class="note">museapp.com redirected here</span></span></li>
+          <li><span><b>Kosmik</b> · website</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://kosmik.app">kosmik.app</a></span></li>
+          <li><span><b>Scrintal</b> · website</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://scrintal.com">scrintal.com</a></span></li>
+          <li><span><b>Aviquill</b> · website and its blog on canvas apps for game developers</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Dropped</span><a href="https://aviquill.net">aviquill.net</a><a href="https://aviquill.net/blog/best-infinite-canvas-note-taking-apps-game-developers">blog</a><span class="note">written by the tool's maker</span></span></li>
+          <li><span><b>Penpot</b> · self-hosting page</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://penpot.app/self-host">penpot.app</a></span></li>
+          <li><span><b>Miro community</b> · can Miro work without internet?</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Dropped</span><a href="https://community.miro.com/ask-the-community-45/can-we-use-miro-without-internet-connection-10188">community.miro.com</a></span></li>
+          <li><span><b>Figma help</b> · what works offline</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://help.figma.com/hc/en-us/articles/360040328553">help.figma.com</a></span></li>
+          <li><span><b>Anytype community</b> · whiteboard request thread</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Dropped</span><a href="https://community.anytype.io/t/whiteboards-canvas/1389?page=4">community.anytype.io</a></span></li>
+          <li><span><b>Trilium docs</b> · canvas notes</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://docs.triliumnotes.org/user-guide/note-types/canvas">docs.triliumnotes.org</a></span></li>
+          <li><span><b>Xmind</b> · audio notes guide</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://xmind.com/user-guide/audio-note-new">xmind.com</a></span></li>
+          <li><span><b>Scapple</b> · overview</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://www.literatureandlatte.com/scapple/overview">literatureandlatte.com</a></span></li>
+          <li><span><b>PureRef</b> · website, download page, CG Channel news on version 2.1</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://www.pureref.com/">website</a><a href="https://pureref.com/download.php">download</a><a href="https://www.cgchannel.com/2026/02/pureref-2-1-is-out/">cgchannel.com</a></span></li>
+          <li><span><b>BeeRef</b> · GitHub page and releases</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://github.com/rbreu/beeref">GitHub</a><a href="https://github.com/rbreu/beeref/releases">releases</a></span></li>
+          <li><span><b>MilangaNote</b> · Godot asset library page and GitHub</span><span class="s-meta"><span class="src example">Example</span><span class="used">Dropped</span><a href="https://godotengine.org/asset-library/asset/2403">godotengine.org</a><a href="https://github.com/dannygaray60/milanganote">GitHub</a></span></li>
+          <li><span><b>Allusion</b> · website</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://allusion-app.github.io">allusion-app.github.io</a></span></li>
+          <li><span><b>Eagle</b> · website</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://eagle.cool">eagle.cool</a></span></li>
+          <li><span><b>Charkoal</b> · website</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://charkoal.dev">charkoal.dev</a></span></li>
+          <li><span><b>Lyhme, Wilson &amp; Barros Pena 2026</b> · "Collaborative visual thinking: a qualitative method for research with autistic adults", <i>Interacting with Computers</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F12</span><span class="used">Do</span><span class="used">E6</span><a href="https://academic.oup.com/iwc/advance-article/doi/10.1093/iwc/iwag026/8706669">academic.oup.com</a></span></li>
+          <li><span><b>Fabri &amp; Andrews 2016</b> · "Human-Centered Design with Autistic University Students: Interface, Interaction and Information Preferences"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F13</span><span class="used">Do</span><span class="used">Disagreements</span><a href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">eprints.leedsbeckett.ac.uk</a><span class="note">PDF read from a saved copy, all pages</span></span></li>
+          <li><span><b>Das et al. 2021</b> · neurodivergent professionals at work, CSCW conference</span><span class="s-meta"><span class="src study">Study</span><span class="used">F15</span><span class="used">Do</span><span class="used">Don't</span><a href="https://maitraye.github.io/files/papers/ND_CSCW21.pdf">maitraye.github.io</a><span class="note">PDF read from a saved copy, pages 1–4 and 7–14</span></span></li>
+          <li><span><b>Reynolds &amp; Wu 2018</b> · dyslexic adults writing on social media, ICWSM conference</span><span class="s-meta"><span class="src study">Study</span><span class="used">F16</span><span class="used">Do</span><span class="used">E7</span><a href="https://cdn.aaai.org/ojs/15004/15004-28-18523-1-2-20201228.pdf">cdn.aaai.org</a><span class="note">PDF read from a saved copy, pages 1–5</span></span></li>
+          <li><span><b>Dexter &amp; Hughes 2011</b> · graphic organizers and students with learning disabilities, meta-analysis, <i>Learning Disability Quarterly</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F17</span><span class="used">Do</span><span class="used">Disagreements</span><a href="https://simvilledev.ku.edu/sites/default/files/Articlles_Library/DE39Dexter.Graphic%20organizers%20and%20students%20learning%20disabilities.2011.pdf">simvilledev.ku.edu</a><span class="note">PDF read from a saved copy, pages 1–2 only</span></span></li>
+          <li><span><b>BPS Research Digest</b> · write-up of a 2023 review on self-care strategies in ADHD</span><span class="s-meta"><span class="src review">Review</span><span class="used">F18</span><span class="used">Don't</span><a href="https://bps.org.uk/research-digest/self-care-strategies-adhd">bps.org.uk</a><span class="note">second-hand: the review itself was seen as a summary only</span></span></li>
+          <li><span><b>Prismatic Growth</b> · whiteboards for ADHD productivity</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F19</span><span class="used">Do</span><a href="https://www.prismaticgrowth.com/blog/whiteboards-for-adhd-productivity">prismaticgrowth.com</a></span></li>
+          <li><span><b>Elise Carlson 2025</b> · minimising visual sensory overload for autistic and ADHD comfort</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F20</span><span class="used">Do</span><a href="https://elisecarlson.com/2025/03/14/minimising-visual-sensory-overload-for-autistic-adhd-comfort/">elisecarlson.com</a></span></li>
+          <li><span><b>Zmikel Stites</b> · AuDHD and creativity (Substack)</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F20</span><span class="used">Do</span><a href="https://zmikelstites.substack.com/p/audhd-and-creativity">zmikelstites.substack.com</a></span></li>
+          <li><span><b>Game Developer</b> · "The goal of design is to efficiently communicate ideas" and Stone Librande's one-page designs</span><span class="s-meta"><span class="src example">Example</span><span class="used">Do</span><a href="https://www.gamedeveloper.com/design/-the-goal-of-design-is-to-efficiently-communicate-ideas-">communicate ideas</a><a href="https://www.gamedeveloper.com/design/pushing-the-limits-in-simulating-a-city-one-page-at-a-time">one page at a time</a></span></li>
+          <li><span><b>W3C</b> · "Making Content Usable for People with Cognitive and Learning Disabilities" (COGA)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">Do</span><a href="https://www.w3.org/TR/coga-usable/">w3.org</a><span class="note">first fifth of the page read</span></span></li>
+          <li><span><b>Hank Quense</b> · Scrintal vs MindMup vs Padlet; boards vanished in a Scrintal test version</span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://hankquense.substack.com/p/scrintal-vs-mindmup-vs-padlet">hankquense.substack.com</a></span></li>
+          <li><span><b>Warren Web</b> · visual thinking with Obsidian Canvas</span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://blog.warrenweb.net/visual-thinking-with-obsidian-canvas/">blog.warrenweb.net</a></span></li>
+          <li><span><b>Wikipedia</b> · "Game design document"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://en.wikipedia.org/wiki/Game_design_document">wikipedia.org</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup sum">
+        <h3><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>Summary only</span> 19 sources</h3>
+        <p>The helper saw only an abstract or a search-result snippet, not the source itself. Findings that use them carry the same mark.</p>
+        <ul class="slist">
+          <li><span><b>Logseq forum</b> · threads on embedding audio</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F6</span><a href="https://discuss.logseq.com/t/embedding-audio-in-logseq/1398">discuss.logseq.com</a></span></li>
+          <li><span><b>A Japanese guide</b> saying the new Logseq version dropped whiteboards</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F6</span><span class="used">Disagreements</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>Excalidraw changelog copies</b> · frames in v0.16.0, web embeds</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">F7</span><a href="https://newreleases.io/project/github/excalidraw/excalidraw/release/v0.16.0">newreleases.io</a><a href="https://git.biohazardvfx.com/Nicholai/excalidraw/commit/b57b3b573da874f7527589c10632ec936c1962d2">web embeds commit</a></span></li>
+          <li><span><b>Newer OneNote reports</b> on local notebooks without an account</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F8</span><span class="used">Disagreements</span><a href="https://www.wps.com/office-quick-solution/office-app-problems/how-to-store-onenote-notebooks-locally-on-windows/">wps.com</a><a href="https://learn.microsoft.com/en-us/answers/questions/5277989/my-windows-11-version-of-onenote-on-my-desktop-com">Microsoft Q&amp;A</a></span></li>
+          <li><span><b>Softpedia</b> · Noteey listing (version 1.60.1)</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F3</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>Third-party copies</b> saying AFFiNE stores data in an SQLite database</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F2</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>Napkin support</b> · browser only</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://intercom.help/napkin-support/en/collections/6552999-napkin-desktop-prototype">intercom.help</a><span class="note">the article itself returned "not found"</span></span></li>
+          <li><span><b>Microsoft Whiteboard</b> · guides on its sign-in at first start</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Dropped</span><a href="https://inthecloud247.com/microsoft-whiteboard-we-couldnt-sign-you-in/">inthecloud247.com</a></span></li>
+          <li><span><b>Lorien and Rnote</b> · listings</span><span class="s-meta"><span class="src docs">Docs</span><span class="used">Dropped</span><a href="https://alternativeto.net/software/lorien/">alternativeto.net</a></span></li>
+          <li><span><b>AlternativeTo</b> · Allusion marked discontinued</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Dropped</span><a href="https://alternativeto.net/software/allusion/about">alternativeto.net</a></span></li>
+          <li><span><b>Prices</b> · Eagle $34.95, Scapple $20.99, Xmind</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://blinkio.literatureandlatte.com/store/scapple">Scapple store</a></span></li>
+          <li><span><b>Bled et al. 2021</b> · thinking in pictures in everyday life among autistic adults, <i>PLoS ONE</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F14</span><span class="used">Disagreements</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8297849/">pmc.ncbi.nlm.nih.gov</a><a href="https://europepmc.org/article/PMC/PMC8297849">europepmc.org</a><a href="https://hal.archives-ouvertes.fr/hal-03327355">hal.archives-ouvertes.fr</a><span class="note">every copy was blocked: a bot check, a refusal (403) and bot protection</span></span></li>
+          <li><span><b>Chen, Meng &amp; Nie 2026</b> · ADHD adults and everyday tools, CSCW, arXiv</span><span class="s-meta"><span class="src study">Study</span><span class="used">F18</span><a href="https://arxiv.org/abs/2603.17258">arxiv.org</a><span class="note">page opened, but it holds the abstract only</span></span></li>
+          <li><span><b>Rudberg Selin et al. 2026</b> · CHI paper, arXiv</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://arxiv.org/abs/2603.22609">arxiv.org</a><span class="note">page opened, but it holds the abstract only</span></span></li>
+          <li><span><b>Spiel et al. 2022</b> · "ADHD and Technology Research – Investigated by Neurodivergent Readers", CHI</span><span class="s-meta"><span class="src review">Review</span><span class="used">F21</span><a href="https://researchgate.net/profile/Katta-Spiel/publication/360330913_ADHD_and_Technology_Research_-_Investigated_by_Neurodivergent_Readers/links/6282c0e27a08f263d551e17c/ADHD-and-Technology-Research-Investigated-by-Neurodivergent-Readers.pdf">researchgate.net</a></span></li>
+          <li><span><b>Kysow et al. 2017</b> · Springer journal article</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://link.springer.com/10.1007/s12402-016-0205-6">link.springer.com</a><span class="note">the page sent the helper to a login</span></span></li>
+          <li><span><b>Malone 1983</b> · "How do people organize their desks?", office study with 10 workers</span><span class="s-meta"><span class="src study">Study</span><span class="used">F22</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>British Dyslexia Association</b> · Dyslexia Style Guide 2023</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">Do</span><a href="https://cdn.bdadyslexia.org.uk/uploads/documents/Advice/style-guide/BDA-Style-Guide-2023.pdf">bdadyslexia.org.uk</a><span class="note">the PDF itself was refused (403); its advice came via other sites</span></span></li>
+          <li><span><b>MatchWare</b> · dyslexia white paper on mind mapping</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Disagreements</span><a href="https://www.matchware.com/wp/wp-content/uploads/mindview-dyslexia-white-paper.pdf">matchware.com</a><span class="note">written by a software maker</span></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup block">
+        <h3><span class="st block"><svg class="icon"><use href="#i-block"/></svg>Blocked</span> 10 pages</h3>
+        <p>The page did not load; nothing from it is used.</p>
+        <ul class="slist">
+          <li><span><b>tldraw offline user manual</b> on Notion</span><span class="s-meta"><span class="note">empty page (it needs JavaScript)</span><a href="https://tldraw.notion.site/User-manual-tldraw-offline-39a3e4c324c080e7b2eacc5afd078e85">tldraw.notion.site</a></span></li>
+          <li><span><b>Milanote help</b> · "Can I use Milanote offline?"</span><span class="s-meta"><span class="note">not found (404); the helper guessed this address</span><a href="https://help.milanote.com/en/articles/2090413-can-i-use-milanote-offline">help.milanote.com</a></span></li>
+          <li><span><b>Napkin support</b> · "Is there a Napkin app for desktop?"</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://intercom.help/napkin-support/en/articles/6046088-is-there-a-napkin-app-for-desktop">intercom.help</a></span></li>
+          <li><span><b>Eagle</b> · pricing page</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://eagle.cool/pricing">eagle.cool</a></span></li>
+          <li><span><b>OpenBoard</b> · English start page</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://openboard.ch/index.en.html">openboard.ch</a></span></li>
+          <li><span><b>itch.io devlog</b>, normal address (the other copy was read, see F10)</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://itch.io/devlog/801285/design-documentation">itch.io</a></span></li>
+          <li><span><b>A blog post</b> on Kinopio for creative work</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://kellsandthecodex.blogspot.com/2025/07/kinopio-spatial-glyphboard-of-creative.html">kellsandthecodex.blogspot.com</a></span></li>
+          <li><span><b>Noteey</b> · changelog</span><span class="s-meta"><span class="note">server error (500)</span><a href="https://www.noteey.com/changelog">noteey.com</a></span></li>
+          <li><span><b>"My Autism Whiteboard"</b> · Medium post</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://medium.com/the-unexpected-autistic-life/my-autism-whiteboard-2772a74e0f29">medium.com</a></span></li>
+          <li><span><b>MY.GAMES</b> · game design documentation article on Medium</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://medium.com/my-games-company/game-design-documentation-what-it-is-and-how-it-keeps-games-together-f7c988dbfb0c">medium.com</a></span></li>
+        </ul>
+      </div>
+
+      <details class="inner">
+        <summary><svg class="icon"><use href="#i-search"/></svg>Searches the helper typed (73)</summary>
+        <ol>
+          <li>AFFiNE desktop app offline local-first edgeless mode audio video embed</li>
+          <li>tldraw offline desktop app .tldr file local</li>
+          <li>Kosmik app offline Windows audio video local files pricing</li>
+          <li>Milanote offline mode desktop app internet required</li>
+          <li>tldraw accepted video mime types mp4 webm audio not supported shape</li>
+          <li>Milanote help &quot;offline&quot; use Milanote without internet connection</li>
+          <li>site:help.milanote.com offline</li>
+          <li>AFFiNE audio attachment block play audio recording edgeless video attachment docs.affine.pro</li>
+          <li>Heptabase offline mode without internet account required desktop Windows</li>
+          <li>Muse app museapp Windows local-first 2025 2026 open source</li>
+          <li>Kinopio offline use without account local-first</li>
+          <li>Heptabase wiki offline mode &quot;Heptabase&quot; works offline local data</li>
+          <li>site:wiki.heptabase.com offline</li>
+          <li>Logseq whiteboards local video audio embed file format edn offline</li>
+          <li>Anytype canvas whiteboard feature 2026 audio video blocks offline local-only</li>
+          <li>Logseq DB version whiteboards not supported removed &quot;whiteboards&quot; 2.0</li>
+          <li>PureRef 2 video support pricing download account required</li>
+          <li>Xournal++ audio recording notes feature Windows</li>
+          <li>Excalidraw embed local video file mp4 audio support issue</li>
+          <li>excalidraw &quot;web embed&quot; embeddable youtube vimeo allowed sites frame tool</li>
+          <li>Miro offline mode desktop app work without internet official help</li>
+          <li>FigJam offline Figma desktop app work without internet help center</li>
+          <li>&quot;What can I do offline in Figma&quot; help.figma.com</li>
+          <li>Scrintal offline desktop app account pricing</li>
+          <li>Napkin app napkin.one offline platforms Windows</li>
+          <li>Eagle app eagle.cool price video audio files support offline</li>
+          <li>Allusion image library manager open source latest release maintained</li>
+          <li>Penpot desktop app offline self-host Docker local install 2026</li>
+          <li>OpenBoard interactive whiteboard insert video audio files library Windows open source</li>
+          <li>OneNote desktop record audio video notes local notebook without Microsoft account Windows 2026</li>
+          <li>support.microsoft.com OneNote &quot;This PC&quot; create notebook locally on computer instead of OneDrive</li>
+          <li>Scapple Literature and Latte Windows price features images notes offline</li>
+          <li>TriliumNext Trilium canvas note excalidraw audio video note offline Windows</li>
+          <li>ADHD adults visual note-taking whiteboard spatial organization study CHI</li>
+          <li>neurodivergent designers mood board digital canvas tools qualitative study autism ADHD dyslexia</li>
+          <li>&quot;ADHD&quot; personal knowledge management note-taking tools interview study neurodivergent 2024 2025 arXiv</li>
+          <li>dyslexia adults mind mapping concept mapping study effectiveness visual notes</li>
+          <li>Dexter Hughes 2011 graphic organizers students with learning disabilities meta-analysis Learning Disability Quarterly</li>
+          <li>ADHD &quot;infinite canvas&quot; OR &quot;whiteboard app&quot; my brain blog experience visual thinker notes</li>
+          <li>reddit r/ADHD Milanote OR Kinopio OR Heptabase OR tldraw &quot;visual&quot; notes works for my ADHD brain</li>
+          <li>autistic adult blog visual thinking digital whiteboard notes &quot;autistic&quot; &quot;canvas&quot; app sensory clutter</li>
+          <li>dyslexic designer voice notes instead of writing blog experience dyslexia audio notes tool</li>
+          <li>&quot;Collaborative visual thinking&quot; qualitative method research with autistic adults Interacting with Computers</li>
+          <li>British Dyslexia Association Dyslexia Style Guide 2023 font background colour recommendations</li>
+          <li>Stone Librande one-page designs GDC game design document visual</li>
+          <li>indie game developer uses Milanote OR Miro OR &quot;Obsidian canvas&quot; for game design document mood board level ideas devlog</li>
+          <li>AFFiNE &quot;attachment&quot; &quot;embed view&quot; video audio playback release notes 0.2x</li>
+          <li>AFFiNE Windows meeting recording audio block 2026 docs.affine.pro meeting windows</li>
+          <li>AFFiNE export workspace format local storage sqlite file edgeless export PNG markdown snapshot docs</li>
+          <li>tldraw user preferences &quot;reduce motion&quot; OR &quot;animationSpeed&quot; dark mode keyboard shortcuts accessibility docs</li>
+          <li>Excalidraw accessibility keyboard shortcuts fonts Excalifont Nunito dark mode zen mode &quot;view mode&quot;</li>
+          <li>Noteey visual note-taking Windows audio card record voice changelog file format local folder</li>
+          <li>jsoncanvas.org JSON Canvas open file format spec apps that support it</li>
+          <li>Charkoal canvas app JSON Canvas local files offline</li>
+          <li>OneNote free desktop use without signing in Microsoft account local notebook 2025 2026</li>
+          <li>Kinopio desktop app Windows offline open without internet 2026 changelog</li>
+          <li>&quot;Logseq is splitting into two versions&quot; whiteboards OG DB</li>
+          <li>OpenBoard documentation insert audio video file formats .ubz document format openboard.ch</li>
+          <li>neurodivergent remote collaboration digital whiteboard Miro study ADHD autistic workers interviews</li>
+          <li>&quot;I&#39;m never happy with what I write&quot; dyslexia social media study Reynolds Wu</li>
+          <li>ADHD and Technology Research Investigated by Neurodivergent Readers Spiel CHI 2022</li>
+          <li>&quot;Thinking in pictures in everyday life situations among autistic adults&quot; journal authors findings</li>
+          <li>ADHD adults &quot;visual&quot; reminders external aids &quot;out of sight&quot; study executive function compensatory strategies qualitative</li>
+          <li>&quot;ADHD&quot; &quot;Kinopio&quot; OR &quot;Excalidraw&quot; OR &quot;tldraw&quot; first person blog why spatial canvas helps me think</li>
+          <li>forum thread autistic OR ADHD user &quot;infinite canvas&quot; overwhelming lost too much freedom need structure</li>
+          <li>reddit ADHD &quot;out of sight out of mind&quot; digital whiteboard app pinboard notes everything visible</li>
+          <li>dyslexic game designer visual GDD mood board instead of text document interview</li>
+          <li>Excalidraw frame tool release 2023 &quot;frames&quot; feature excalidraw.com blog</li>
+          <li>Microsoft Whiteboard Windows app requires Microsoft account sign in offline</li>
+          <li>Rnote OR Lorien infinite canvas open source Windows images audio notes features</li>
+          <li>Xmind audio notes record voice topic desktop Windows offline pricing</li>
+          <li>Concepts app OR &quot;Microsoft OneNote&quot; game design mood board voice notes autistic ADHD experience</li>
+          <li>Malone 1983 &quot;How do people organize their desks&quot; piles files reminding function</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-abc"/></svg>Glossary</span><span class="sum-text"><b>Special words on this page.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <dl class="gloss">
+        <dt>Offline</dt><dd>Working on your PC without an internet connection.</dd>
+        <dt>Open source</dt><dd>The program's code is public, and anyone may use, change and share it under its licence. "Closed source" means the code is private.</dd>
+        <dt>MIT, GPL, AGPL</dt><dd>Open-source licences. MIT allows almost anything. GPL and AGPL require that changed versions stay open too (AGPL also covers programs run over the internet).</dd>
+        <dt>Board, canvas</dt><dd>An open surface where notes, pictures and clips can be placed anywhere, like a pinboard.</dd>
+        <dt>Edgeless mode</dt><dd>AFFiNE's name for its board view.</dd>
+        <dt>Workspace</dt><dd>A container for all your boards and pages in a tool.</dd>
+        <dt>Frame</dt><dd>A labelled box on a board that holds a group of notes together.</dd>
+        <dt>Template</dt><dd>A ready-made starting layout you can fill in.</dd>
+        <dt>Sticky note</dt><dd>A small coloured note card on a board.</dd>
+        <dt>Embed</dt><dd>Content from somewhere else (a video, a web page) shown inside the board.</dd>
+        <dt>mp4, webm, mov, m4a</dt><dd>File types for video clips (mp4, webm, mov) and audio clips (m4a).</dd>
+        <dt>.tldraw, .xopp, .ubz, .one</dt><dd>The file types tldraw, Xournal++, OpenBoard and OneNote save their boards or pages in.</dd>
+        <dt>JSON</dt><dd>A common text format for data that both people and programs can read.</dd>
+        <dt>JSON Canvas</dt><dd>An open file format for boards, built on JSON.</dd>
+        <dt>SQLite</dt><dd>A small database stored in one file; readable only with database tools.</dd>
+        <dt>Git</dt><dd>The tool behind GitHub that saves versions of files and shows what changed between them.</dd>
+        <dt>OG version</dt><dd>Logseq's older version ("original"), kept alongside a newer one.</dd>
+        <dt>llms.txt</dt><dd>A text file some websites publish to describe themselves for AI tools.</dd>
+        <dt>Test versions</dt><dd>Early builds released before a version is finished (also called pre-releases).</dd>
+        <dt>Graphic organizer</dt><dd>A visual layout that shows how ideas connect, such as a chart or a map of boxes and arrows.</dd>
+        <dt>Meta-analysis</dt><dd>A study that pools the results of many studies to see the overall effect.</dd>
+        <dt>CHI, CSCW, ICWSM</dt><dd>Research conferences on computers and people, teamwork with computers, and social media.</dd>
+        <dt>AuDHD</dt><dd>Being both autistic and ADHD.</dd>
+        <dt>Abstract</dt><dd>The short summary at the top of a research paper.</dd>
+        <dt>Search snippet</dt><dd>The few lines a search engine shows under each result.</dd>
+        <dt>Second-hand</dt><dd>A page that reports someone else's study instead of being the study itself.</dd>
+        <dt>Saved copy</dt><dd>When the web reader showed a PDF as raw code, the helper opened the PDF file the reader had saved on this PC.</dd>
+        <dt>Preprint, arXiv</dt><dd>A paper shared before other researchers have checked it; arXiv is a free online archive for them.</dd>
+        <dt>Bot check, bot protection</dt><dd>A page that blocks automated visitors (like the helper) before showing content.</dd>
+        <dt>403, 404, 500</dt><dd>Web error codes: 403 = the site refused the request, 404 = the page wasn't found, 500 = the site had an error.</dd>
+        <dt>Redirect</dt><dd>A web address that sends you on to a different address.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <footer>
+    <span><b>Where it came from:</b> a research helper (a second Claude in the background) looked up sources on 13.11.2026. It read 48, saw 19 only as an abstract or search snippet, and 10 did not load (all listed under <a href="#sources">Sources</a>). I checked its report against its records with the research-page skill, and wrote this page. Explanations are AI-drafted.</span>
+    <span><b>What it does not do:</b> no choice is made for you; nothing was installed or tested; the open questions are a menu. Prices and versions are as of 13.11.2026.</span>
+    <span><b>What else changed:</b> round 1 (an Obsidian comparison) was replaced by this page and is not kept in the repo. The decision that followed is in <a href="decision.md">decision.md</a>.</span>
+  </footer>
+</main>
