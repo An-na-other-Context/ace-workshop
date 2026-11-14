@@ -8,7 +8,7 @@ The folder sits outside the game: the empty file `.gdignore` makes Godot skip it
 
 | File | What it is |
 |---|---|
-| `start-here.excalidraw` | The first board: empty frames per topic, the colour legend, a "where I stopped" card. |
+| `start-here.excalidraw` | The design board, a mind-map GDD: the centre, 12 topics taken from real game design documents, a Design goals topic with the branches specific to ACE Workshop, the colour legend, a "where I stopped" card. Why these topics: [research record](../ai-assisted/claude/research/README.md). |
 | `library/ace-notes.excalidrawlib` | Note cards to drag in: idea, question, decision, research note, where I stopped, voice or video note. |
 | `media/` | Voice and video notes (Excalidraw can't hold them). See [media/README.md](media/README.md). |
 
@@ -53,6 +53,11 @@ No red or orange, by design.
 ## Words
 
 - **Excalidraw:** a free, open-source drawing board that runs in the browser.
-- **Frame:** a labelled box on the board that holds a group of notes.
+- **Topic:** a main node near the centre, one per GDD section.
+- **Branch:** a line growing out of a topic, or a connection between nodes.
+- **Design node:** any single thing on the board: a note, picture, voice note, question.
+- **Concept:** a node that holds an idea or a principle.
+- **Area:** a region where related branches gather, possibly across topics.
+- **GDD:** game design document.
 - **Library:** a set of ready-made shapes you can drag onto any board.
 - **.gdignore:** an empty file that tells Godot to leave a folder alone.
