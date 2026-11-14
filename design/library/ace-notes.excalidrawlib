@@ -1,0 +1,49 @@
+{
+  "type": "excalidrawlib",
+  "version": 2,
+  "source": "https://excalidraw.com",
+  "libraryItems": [
+    {
+      "id": "lib-idea", "status": "unpublished", "created": 1794643200000, "name": "Idea",
+      "elements": [
+        {"id": "lib-idea-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 100, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#b2f2bb", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 301, "version": 1, "versionNonce": 401, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-idea-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-idea-label", "type": "text", "x": 97.5, "y": 37.5, "width": 45, "height": 25, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 302, "version": 1, "versionNonce": 402, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Idea", "fontSize": 20, "fontFamily": 2, "textAlign": "center", "verticalAlign": "middle", "containerId": "lib-idea-card", "originalText": "Idea", "autoResize": true, "lineHeight": 1.25}
+      ]
+    },
+    {
+      "id": "lib-question", "status": "unpublished", "created": 1794643200000, "name": "Question",
+      "elements": [
+        {"id": "lib-question-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 100, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#a5d8ff", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 303, "version": 1, "versionNonce": 403, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-question-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-question-label", "type": "text", "x": 75, "y": 37.5, "width": 90, "height": 25, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 304, "version": 1, "versionNonce": 404, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Question", "fontSize": 20, "fontFamily": 2, "textAlign": "center", "verticalAlign": "middle", "containerId": "lib-question-card", "originalText": "Question", "autoResize": true, "lineHeight": 1.25}
+      ]
+    },
+    {
+      "id": "lib-decision", "status": "unpublished", "created": 1794643200000, "name": "Decision",
+      "elements": [
+        {"id": "lib-decision-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 100, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#d0bfff", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 305, "version": 1, "versionNonce": 405, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-decision-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-decision-label", "type": "text", "x": 75, "y": 37.5, "width": 90, "height": 25, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 306, "version": 1, "versionNonce": 406, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Decision", "fontSize": 20, "fontFamily": 2, "textAlign": "center", "verticalAlign": "middle", "containerId": "lib-decision-card", "originalText": "Decision", "autoResize": true, "lineHeight": 1.25}
+      ]
+    },
+    {
+      "id": "lib-research", "status": "unpublished", "created": 1794643200000, "name": "Research note",
+      "elements": [
+        {"id": "lib-research-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 100, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#96f2d7", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 307, "version": 1, "versionNonce": 407, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-research-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-research-label", "type": "text", "x": 47.5, "y": 37.5, "width": 145, "height": 25, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 308, "version": 1, "versionNonce": 408, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Research note", "fontSize": 20, "fontFamily": 2, "textAlign": "center", "verticalAlign": "middle", "containerId": "lib-research-card", "originalText": "Research note", "autoResize": true, "lineHeight": 1.25}
+      ]
+    },
+    {
+      "id": "lib-stopped", "status": "unpublished", "created": 1794643200000, "name": "Where I stopped",
+      "elements": [
+        {"id": "lib-stopped-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 140, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#ffec99", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 309, "version": 1, "versionNonce": 409, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-stopped-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-stopped-label", "type": "text", "x": 10, "y": 10, "width": 200, "height": 50, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 310, "version": 1, "versionNonce": 410, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Where I stopped: …\nNext small step: …", "fontSize": 20, "fontFamily": 2, "textAlign": "left", "verticalAlign": "top", "containerId": "lib-stopped-card", "originalText": "Where I stopped: …\nNext small step: …", "autoResize": true, "lineHeight": 1.25}
+      ]
+    },
+    {
+      "id": "lib-media", "status": "unpublished", "created": 1794643200000, "name": "Voice or video note",
+      "elements": [
+        {"id": "lib-media-card", "type": "rectangle", "x": 0, "y": 0, "width": 240, "height": 100, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "#e9ecef", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a0", "roundness": {"type": 3}, "seed": 311, "version": 1, "versionNonce": 411, "isDeleted": false, "boundElements": [{"type": "text", "id": "lib-media-label"}], "updated": 1794643200000, "link": null, "locked": false},
+        {"id": "lib-media-label", "type": "text", "x": 35, "y": 25, "width": 170, "height": 50, "angle": 0, "strokeColor": "#1e1e1e", "backgroundColor": "transparent", "fillStyle": "solid", "strokeWidth": 2, "strokeStyle": "solid", "roughness": 0, "opacity": 100, "groupIds": [], "frameId": null, "index": "a1", "roundness": null, "seed": 312, "version": 1, "versionNonce": 412, "isDeleted": false, "boundElements": null, "updated": 1794643200000, "link": null, "locked": false, "text": "Voice/video note:\nYYYY-MM-DD-topic", "fontSize": 20, "fontFamily": 2, "textAlign": "center", "verticalAlign": "middle", "containerId": "lib-media-card", "originalText": "Voice/video note:\nYYYY-MM-DD-topic", "autoResize": true, "lineHeight": 1.25}
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ It is separate from [ACE OS](https://github.com/An-na-other-Context/ace-os) (An(
 
 > Status: just started. The game has no scenes of its own yet. An AI-made graybox (a gray desk with three machines — a self-built PC, an older car's in-dash unit, a smart plug — and the goal lab) sits in [ai-learning/graybox](ai-learning/graybox) as an example, kept apart from the game.
 
+Game design documents (Excalidraw boards) live in [design/](design/README.md), outside the game.
+
 ## Open it
 
 1. Install [Godot 4.7](https://godotengine.org) (the standard version, not .NET).
