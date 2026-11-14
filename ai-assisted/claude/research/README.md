@@ -18,8 +18,8 @@ One folder per finished card, named `YYYY-MM-DD-<card>/`:
 | Card | Folder | Done |
 |---|---|---|
 | Design place: Excalidraw boards in design/ | [2026-11-14-design-place/](2026-11-14-design-place/decision.md) | 14.11.2026 |
-| #4 Research: emulating a real workshop on screen | [2026-11-14-workshop-on-screen/](2026-11-14-workshop-on-screen/decision.md) | when its board note has arrows |
-| #5 Research: dive down, climb back up | [2026-11-14-dive-and-climb/](2026-11-14-dive-and-climb/decision.md) | when its board note has arrows |
+| #4 Research: emulating a real workshop on screen | [2026-11-14-workshop-on-screen/](2026-11-14-workshop-on-screen/decision.md) | 14.11.2026 |
+| #5 Research: dive down, climb back up | [2026-11-14-dive-and-climb/](2026-11-14-dive-and-climb/decision.md) | 14.11.2026 |
 
 ## Learner profiles
 
