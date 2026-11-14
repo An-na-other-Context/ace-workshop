@@ -1,0 +1,432 @@
+<title>Real workshop on screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: research digest in the ACE page family. Summary on top, three questions folded,
+   every finding numbered (F1…) so three can be picked by number. No red or orange. */
+:root {
+  --bg: #f1f3f1; --surface: #fbfcfb; --fg: #1d2226; --muted: #586069; --line: #d3d9d6;
+  --accent: #2f6fa6; --soft: #e7ece8;
+  --s-review: #1d5e96; --s-study: #1f7a4d; --s-lived: #8a3d8f; --s-example: #10756f; --s-guide: #5d6470; --s-opinion: #7a6a2a; --s-mine: #6c3fb0;
+  --c-q1: #2a5fb0; --c-q2: #10756f; --c-q3: #8a3d8f; --c-gap: #217a45; --c-meta: #5d6470;
+  --font-body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+    --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-opinion: #d9c98a; --s-mine: #b597ec;
+    --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+  --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-opinion: #d9c98a; --s-mine: #b597ec;
+  --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.7; letter-spacing: 0.01em; word-spacing: 0.06em; }
+.page { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 2.1rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.08rem; color: var(--c); }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.lede { font-size: 1.15rem; }
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; line-height: 1.3; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; text-decoration: none; white-space: nowrap; vertical-align: 0.1em; }
+.src.review { color: var(--s-review); } .src.study { color: var(--s-study); } .src.lived { color: var(--s-lived); } .src.example { color: var(--s-example); } .src.guide { color: var(--s-guide); } .src.opinion { color: var(--s-opinion); }
+.src.mine { color: var(--s-mine); border-style: dashed; }
+.thin { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.9rem; color: var(--muted); }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.points { display: grid; gap: 12px; }
+.point { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 12px; align-items: start; }
+.point .mark { width: 2.2em; height: 2.2em; border-radius: 8px; display: grid; place-items: center; background: var(--soft); color: var(--accent); }
+.point b { display: block; }
+details.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.sec > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 16px 20px; }
+details.sec > summary::-webkit-details-marker { display: none; }
+.tag { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: var(--surface); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; }
+.sum-text { flex: 1 1 260px; min-width: 0; } .sum-text b { color: var(--c); }
+.chev { color: var(--muted); } details.sec[open] .chev { transform: rotate(90deg); }
+.body { border-top: 1px solid var(--line); padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+ol.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+ol.findings > li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 10px; align-items: start; }
+.fid { font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; color: var(--c); border: 1.5px solid var(--c); border-radius: 6px; text-align: center; padding: 1px 0; }
+.ftext { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.ftext b { color: var(--fg); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.box { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: var(--bg); min-width: 0; }
+.box h3 { margin-bottom: 6px; }
+.box ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+dl.gloss { display: grid; grid-template-columns: minmax(8em, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.gloss dt { font-weight: 700; } dl.gloss dd { margin: 0; max-width: 68ch; }
+ul.sources { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+ul.sources li { overflow-wrap: anywhere; }
+footer { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+footer b { color: var(--fg); }
+/* v2: source status = what the research helper actually got from each link. No red or orange. */
+:root { --st-read: #1f7a4d; --st-sum: #7a5c00; --st-block: #4a525c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9; } }
+:root[data-theme="dark"] { --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9; }
+.st { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; font-style: normal; line-height: 1.3; padding: 1px 8px; border-radius: 999px; color: var(--surface); background: var(--st); white-space: nowrap; vertical-align: 0.1em; }
+.read { --st: var(--st-read); } .sum { --st: var(--st-sum); } .block { --st: var(--st-block); }
+.counts { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sgroup { display: flex; flex-direction: column; gap: 10px; }
+.sgroup > h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fg); }
+.sgroup > p { color: var(--muted); font-size: 0.92rem; }
+ul.slist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.slist > li { border-left: 4px solid var(--st); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.s-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.88rem; }
+.used { font-family: var(--font-code); font-size: 0.78rem; font-weight: 700; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.unused { font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); }
+details.inner { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.inner > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.inner > ol { margin: 0; padding: 0 14px 14px 2.6em; display: grid; gap: 4px; font-size: 0.92rem; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  dl.gloss { grid-template-columns: minmax(0, 1fr); gap: 2px 0; } dl.gloss dd { margin-bottom: 8px; }
+  details.sec > summary, .body, .summary { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5a1.5 1.5 0 0 1 3 0v6M11 10V4a1.5 1.5 0 0 1 3 0v6M14 10V5a1.5 1.5 0 0 1 3 0v7M8 12a1.5 1.5 0 0 0-3 0v2a7 7 0 0 0 7 7h1a6 6 0 0 0 6-6v-3"/></symbol>
+  <symbol id="i-screen" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></symbol>
+  <symbol id="i-game" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="11" rx="4"/><path d="M7 11v3M5.5 12.5h3M16 12h.01M18 14h.01"/></symbol>
+  <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.7-2.5 2-2.5 4M12 17.5v.01"/></symbol>
+  <symbol id="i-access" viewBox="0 0 24 24"><circle cx="12" cy="4.5" r="1.8"/><path d="M5 8l7 1.5L19 8M12 9.5V14l-3 6M12 14l3 6"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-abc" viewBox="0 0 24 24"><path d="M3 17l3.5-10L10 17M4.2 13.5h4.6M13 7v10h3.5a2.5 2.5 0 0 0 0-5H13h3a2.5 2.5 0 0 0 0-5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="eyebrow">ACE Workshop · research, depth 2: what others tried · v2</span>
+    <h1>Real workshop on screen</h1>
+    <p class="lede">How real workshops teach, what carries over to a screen, and what has to change so it is accessible. Findings are numbered (F1…), so they can be picked by number.</p>
+    <p class="thin">Repo copy, 14.11.2026: written for the learner profile <a href="../learner-profiles/annaothercrow.md">annaothercrow</a>. Wording that said "you" about that learner now points to the profile; findings, sources and numbers are unchanged.</p>
+    <div class="legend">
+      <span class="src review">Review</span><span class="src study">Study</span><span class="src lived">Lived</span><span class="src example">Example</span><span class="src guide">Guideline</span><span class="src opinion">Opinion</span><span class="src mine">Mine</span>
+    </div>
+    <div class="legend counts">
+      <span class="st read"><svg class="icon"><use href="#i-ok"/></svg>read</span><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="st block"><svg class="icon"><use href="#i-block"/></svg>blocked</span>
+      <span class="thin">= what the helper got from a source. Findings without a mark were read. Full list under <a href="#sources">Sources</a>.</span>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>In short</h2>
+    <div class="points">
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-hand"/></svg></span><div><b>Real workshops teach through people and objects.</b>An expert who shows their thinking, responsibility handed over bit by bit, a real object you care about, instant physical feedback, cheap failure.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-screen"/></svg></span><div><b>For understanding, a screen does about as well as hands.</b>Adults even learned better on screen in one large meta-analysis. Hands still win for handling tools, motor skills and messy real faults. Both combined beat either alone.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-compass"/></svg></span><div><b>Guidance matters more than the medium.</b>Free exploration overloads beginners; guidance built into the scene ("guided without feeling guided") is one middle path.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-game"/></svg></span><div><b>Hardware games are loved but unproven.</b>They assume prior knowledge and explain little; repair games teach how parts fit and come apart, not how to find a fault.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-gap"/></svg></span><div><b>Adults learning alone are hardly studied,</b>and neither are motor or learning disabilities. First-person accounts fill some gaps: reassembly order, energy cost of getting to a workshop, money, amount of text.</div></div>
+    </div>
+  </section>
+
+  <details class="sec" style="--c: var(--c-q1)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-hand"/></svg>Q1 · Real workshops</span><span class="sum-text"><b>How real workshops teach.</b> F1–F8</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F1</span><span class="ftext"><b>Apprenticeship, made visible:</b> modelling, coaching, scaffolding, fading. "Global before local": tailors' apprentices first assemble pre-cut pieces, and learn to cut later. Cognitive apprenticeship adds saying your reasoning out loud, reflecting, then exploring alone. <a class="src review" href="https://www.aft.org/ae/winter1991/collins_brown_holum">Review</a></span></li>
+        <li><span class="fid">F2</span><span class="ftext"><b>Start at the edge of real work:</b> newcomers begin with small, low-risk tasks that still count, and move toward the centre (Lave &amp; Wenger 1991). <a class="src study" href="https://infed.org/mobi/?p=2651">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F3</span><span class="ftext"><b>Craft knowledge lives in the body:</b> learned by watching, copying and repeating; much can't be put into words (Marchand). <a class="src study" href="https://soas-repository.worktribe.com/output/441089/muscles-morals-and-mind-craft-apprenticeship-and-the-formation-of-person">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F4</span><span class="ftext"><b>Repair cafés (Copenhagen):</b> "educational repair" breaks tasks into parts and invites the visitor in; "diagnostic repair" with a multimeter and system logic feels like a puzzle. The object is the visitor's own, often with a story. <a class="src study" href="https://journals.aau.dk/index.php/plate2025/article/download/10423/8320/34149">Study</a></span></li>
+        <li><span class="fid">F5</span><span class="ftext"><b>Repair café (UK):</b> repairers switch between intuition and systematic checking; their know-how is rarely captured anywhere. <a class="src study" href="https://dl.eusset.eu/items/5ed0a8ff-ff46-4b17-aa9f-5f04c9e68102/full">Study</a></span></li>
+        <li><span class="fid">F6</span><span class="ftext"><b>Inclusive maker club:</b> with checklists, visual templates and self-chosen projects, nearly all 18 autistic students finished and presented; but their interest grew less than peers', some got very frustrated, and no single support worked for everyone. <a class="src study" href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2020.00075/full">Study</a></span></li>
+        <li><span class="fid">F7</span><span class="ftext"><b>Taking apart a discarded PC:</b> a withdrawn teen sorted and documented each part, charted the reassembly, found a burnt-out video card and got it running. <a class="src example" href="https://www.terc.edu/ndinstem/?p=2862">Example</a></span></li>
+        <li><span class="fid">F8</span><span class="ftext"><b>Autistic repairers:</b> troubleshooting feels logical and predictable; a failed repair costs little. <a class="src lived" href="https://www.ifixit.com/News/autism-speaks-and-repair-listens">Lived</a> "Put it back the way it came apart" never worked for an autistic ADHD writer (sequencing); one hint ("locks in place from the top down") did more than the manual. <a class="src lived" href="https://audhdhumor.substack.com/p/really-things-should-go-back-together">Lived</a></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q2)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-screen"/></svg>Q2 · On screen</span><span class="sum-text"><b>What carries over, what's lost, what's gained.</b> F9–F23</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <h3>Reviews and studies</h3>
+      <ol class="findings">
+        <li><span class="fid">F9</span><span class="ftext"><b>de Jong, Linn &amp; Zacharia 2013:</b> no difference for concepts in many studies; hands give practical skills and troubleshooting; screens can highlight, simplify, change time and show the invisible. Guidance is "the most crucial variable"; combining both is "likely to be optimal". <a class="src review" href="https://users.gw.utwente.nl/jong/dejonglinnzacharia%20science.pdf">Review</a></span></li>
+        <li><span class="fid">F10</span><span class="ftext"><b>35 studies, 3,303 learners:</b> no overall difference; <b>adults learned better on screen</b>; when touch carried no information, screen was better. Two thirds of the studies were physics. <a class="src review" href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2023.1163024/full">Review</a></span></li>
+        <li><span class="fid">F11</span><span class="ftext"><b>Physics, 58 studies:</b> combined real + virtual beat either alone; virtual did better on abstract concepts, real on handling instruments. Collaboration was designed in only 15%. <a class="src review" href="https://f1000research.com/articles/15-1682">Review</a></span></li>
+        <li><span class="fid">F12</span><span class="ftext"><b>PhET circuit kit:</b> students who used the simulation built a real circuit faster later. <a class="src study" href="https://serc.carleton.edu/sp/library/phet/examples/example2.html">Study</a> · Interviews: learning happens when the learner's own questions drive the play; anything without a learning purpose distracts. <a class="src study" href="https://phet.colorado.edu/publications/archive/PhET%20interview%20Paper%20Part%20I.htm">Study</a></span></li>
+        <li><span class="fid">F13</span><span class="ftext"><b>Implicit scaffolding:</b> guiding through what the scene allows, limits, hints and answers back, instead of written instructions. "Guided without feeling guided." <a class="src study" href="https://arxiv.org/pdf/1306.6544">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="src mine">Mine</span> may suit PDA: guidance without demands.</span></li>
+        <li><span class="fid">F14</span><span class="ftext"><b>Engineering, 22 publications:</b> virtual labs help, but "lack the ability to completely replace hands-on labs"; some reported effects are implausibly large. <a class="src review" href="https://econpapers.repec.org/RePEc:plo:pone00:0316269">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>abstract only</span></span></li>
+      </ol>
+      <h3>Representations and pacing (close to dive and climb)</h3>
+      <ol class="findings">
+        <li><span class="fid">F15</span><span class="ftext"><b>Parts alone first, then together</b> worked better for some learners (Pollock, Chandler &amp; Sweller 2002). <a class="src study" href="https://ro.uow.edu.au/edupapers/145">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F16</span><span class="ftext"><b>Arrows mean "what happens":</b> diagrams without arrows are read as structure, with arrows as function (Heiser &amp; Tversky 2006). <a class="src study" href="https://www.tc.columbia.edu/faculty/bt2158/faculty-profile/files/sincomprehendingandproducingmechanicaldiagrams.PDF">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F17</span><span class="ftext"><b>Animation rarely beats a still image</b> showing the same; it is often too fast. Letting the learner control it may help. <a class="src review" href="https://hci.stanford.edu/courses/cs448b/papers/Tversky_AnimationFacilitate_IJHCS02.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F18</span><span class="ftext"><b>Learner-paced segments help,</b> especially for complex, fast, new material. <a class="src review" href="https://www.doi.org/10.1007/S10648-018-9456-4">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F19</span><span class="ftext"><b>Trying before being taught</b> ("productive failure") beat teaching first across 53 studies; younger learners did better taught first. <a class="src review" href="https://www.x-mol.com/paper/1406031499744456704">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+      <h3>Games and courses</h3>
+      <ol class="findings">
+        <li><span class="fid">F20</span><span class="ftext"><b>nand2tetris</b> (build a computer from logic gates up): taught at 400+ places, "demanding but incredibly rewarding" (quote from learner reviews <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>); no formal study of what learners learn. <a class="src example" href="https://www.nand2tetris.org/">Example</a></span></li>
+        <li><span class="fid">F21</span><span class="ftext"><b>Turing Complete, NandGame:</b> praised, but they expect Boolean algebra and explain little; newcomers get stuck early. <a class="src lived" href="https://embeddedartistry.com/blog/2021/11/29/learning-computer-architecture-through-a-game/">Lived</a> <a class="src opinion" href="https://hackaday.com/2018/08/20/build-a-fun-cpu-in-your-browser">Opinion</a></span></li>
+        <li><span class="fid">F22</span><span class="ftext"><b>Car repair games</b> teach how parts fit, the order they come apart, sizes and torque; they "can't teach you how to figure out what's wrong". <a class="src opinion" href="https://www.jalopnik.com/2289377/wrench-video-game-teach-how-cars-are-put-together/">Opinion</a> PC Building Simulator: one weak class comparison. <a class="src study" href="https://proceeding.unnes.ac.id/veic/article/view/2834">Study</a></span></li>
+        <li><span class="fid">F23</span><span class="ftext"><b>Assemble with Care,</b> a calm repair game: praised for mood, criticised as slow and shallow. <a class="src example" href="https://www.familygamingdatabase.com/accessibility/Assemble+With+Care">Example</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+      <div class="two">
+        <div class="box"><h3 style="--c: var(--c-q3)">Lost on screen</h3><ul><li>touch, where it carries information</li><li>handling tools, motor skill</li><li>messy real faults and diagnosis</li><li>natural pauses that push planning</li><li>a mentor in the room</li></ul></div>
+        <div class="box"><h3 style="--c: var(--c-q2)">Gained on screen</h3><ul><li>time that slows or stops; the invisible made visible</li><li>clutter removed, what matters highlighted</li><li>many tries, no fear of breaking</li><li>own pace, near-zero cost</li><li>actions that can shape the help given</li></ul></div>
+      </div>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q3)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-access"/></svg>Q3 · Access</span><span class="sum-text"><b>What has to change so it works for the learner profile.</b> F24–F33</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F24</span><span class="ftext"><b>Barriers for disabled makers:</b> outreach, physical access, money, information, belonging. Getting there can leave "no strength" for the work; tools are built for a tall standing man; all disabled makers called access to information critical. <a class="src study" href="https://par.nsf.gov/servlets/purl/10481404">Study</a></span></li>
+        <li><span class="fid">F25</span><span class="ftext"><b>Makerspaces for autistic youth:</b> predictability, several ways in, equal belonging, quiet zones, visual tool labels. No autistic youth were interviewed. <a class="src study" href="https://a11y-paradise.onrender.com/reviews/69e51d0711c15470e384a451">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F26</span><span class="ftext"><b>Supports that helped weakest executive function most:</b> vocabulary cards, "I can" checkpoints, a "flashlight" that highlights what matters, visual organisers, a clean consistent interface (children). <a class="src study" href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2024.1358492/full">Study</a></span></li>
+        <li><span class="fid">F27</span><span class="ftext"><b>Dyslexic software engineers:</b> "I fear documentation the most"; diagrams, flowcharts, text-to-speech and reading a little then trying it right away helped. <a class="src study" href="https://arxiv.org/html/2511.00706v1">Study</a></span></li>
+        <li><span class="fid">F28</span><span class="ftext"><b>Virtual lab with students with disabilities (7):</b> a sense of safety, own pace, visuals in several forms; less anxiety. <a class="src study" href="https://repository.sdu.edu.kz/handle/123456789/2394">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>abstract only</span> · Across 36 studies, learning and motor disabilities are almost absent. <a class="src review" href="https://frontiersin.org/journals/education/articles/10.3389/feduc.2024.1351711/full">Review</a></span></li>
+        <li><span class="fid">F29</span><span class="ftext"><b>Hyperfocus in ADHD adults:</b> started by interest, hard to start or stop at will, long stretches need recovery. <a class="src study" href="https://eprints.gla.ac.uk/392850/">Study</a> · Monotropism: attention pulled strongly to few interests at a time, a theory from autistic people. <a class="src lived" href="https://monotropism.org/">Lived</a></span></li>
+        <li><span class="fid">F30</span><span class="ftext"><b>Game Accessibility Guidelines:</b> adjustable speed, simple remappable controls, no holding buttons, practice without failure, recall the current goal, replay instructions, hide background motion, no sudden surprises. <a class="src guide" href="https://gameaccessibilityguidelines.com/basic/">Guideline</a></span></li>
+        <li><span class="fid">F31</span><span class="ftext"><b>W3C cognitive accessibility:</b> undo, few interruptions, no reliance on memory, user controls when things move, simpler personal views. <a class="src guide" href="https://www.w3.org/TR/coga-usable/">Guideline</a></span></li>
+        <li><span class="fid">F32</span><span class="ftext"><b>Dyslexia style:</b> sans-serif, 1.5 line spacing, extra letter spacing, plain pastel background. <a class="src guide" href="https://dyslexiascotland.org.uk/dyslexia-friendly-typed-formats">Guideline</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · VR risks for autistic users: sensory overload, dizziness; adjustable stimulus. <a class="src review" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9586887">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F33</span><span class="ftext"><b>Cost:</b> screen labs are cheap, nand2tetris and NandGame free; money is a core barrier to physical making. <a class="src study" href="https://par.nsf.gov/servlets/purl/10481404">Study</a></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-gap)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-gap"/></svg>Open questions</span><span class="sum-text"><b>Gaps that could become experiments</b> (depth 3). 12, none chosen.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Collected by the research helper from what the sources leave open. A menu, nothing decided.</p>
+      <ol class="findings" style="--c: var(--c-gap)">
+        <li><span class="fid">E1</span><span class="ftext">Reassembly order: parts laid out in the order they came off, a free tray, or rebuilding from memory.</span></li>
+        <li><span class="fid">E2</span><span class="ftext">Where touch carries information in the three machines (latches, clips, plug force), and what could stand in: sound, visuals, one cheap real part.</span></li>
+        <li><span class="fid">E3</span><span class="ftext">Whole machine first, or straight into a layer (F1 and F15 point opposite ways).</span></li>
+        <li><span class="fid">E4</span><span class="ftext">Two kinds of view: exploded for structure, arrows for function (F16).</span></li>
+        <li><span class="fid">E5</span><span class="ftext">Undo versus "predict before you act".</span></li>
+        <li><span class="fid">E6</span><span class="ftext">The "still on track?" check: how often, and whether it helps or breaks hyperfocus (F29).</span></li>
+        <li><span class="fid">E7</span><span class="ftext">Text load: voice, short labels, or diagram only.</span></li>
+        <li><span class="fid">E8</span><span class="ftext">Calm defaults: which sensory settings actually get used.</span></li>
+        <li><span class="fid">E9</span><span class="ftext">Teaching fault-finding with planted faults (games teach fit and order, not diagnosis).</span></li>
+        <li><span class="fid">E10</span><span class="ftext">Standing in for a mentor who thinks aloud: replays, an expert "ghost".</span></li>
+        <li><span class="fid">E11</span><span class="ftext">A one-off check on real hardware: a discarded PC part, or a repair café visit.</span></li>
+        <li><span class="fid">E12</span><span class="ftext">The missing base: adults learning alone, motor and learning disabilities, car and smart-home electronics.</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Disagreements</span><span class="sum-text"><b>Where sources point different ways.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Question</th><th>One side</th><th>Other side</th><th>How they fit</th></tr></thead>
+        <tbody>
+          <tr><td>Screen as good as hands?</td><td>Equal, or screen better (F10, F12)</td><td>Can't replace hands (F11, F14)</td><td>Concepts vs handling skills; touch-relevant vs not</td></tr>
+          <tr><td>Guide or struggle first?</td><td>Try first helps (F19)</td><td>Guidance decides; free play overloads beginners (F9)</td><td>Depends on prior knowledge</td></tr>
+          <tr><td>Whole or parts first?</td><td>Global before local (F1)</td><td>Parts alone first (F15)</td><td>Open: E3</td></tr>
+          <tr><td>Do hardware games teach?</td><td>Players say yes (F21)</td><td>A maker says his isn't educational; no studies</td><td>Unproven</td></tr>
+          <tr><td>Animation?</td><td>Rarely beats a still (F17)</td><td>Learner-paced segments help (F18)</td><td>Control matters more than motion</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sources" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-link"/></svg>Sources</span><span class="sum-text"><b>Every source, and what the helper actually got from it.</b> 28 read · 21 summary only · 16 blocked</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Checked against the research helper's own records from 13.11.2026: every page it opened and every search it ran. Each source is listed once. <span class="used">F4</span> = the finding that uses it.</p>
+
+      <div class="sgroup read">
+        <h3><span class="st read"><svg class="icon"><use href="#i-ok"/></svg>Read</span> 28 sources</h3>
+        <p>The helper opened the linked page or PDF.</p>
+        <ul class="slist">
+          <li><span><b>Collins, Brown &amp; Holum 1991</b> · "Cognitive Apprenticeship: Making Thinking Visible", <i>American Educator</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F1</span><span class="used">Disagreements</span><a href="https://www.aft.org/ae/winter1991/collins_brown_holum">aft.org</a></span></li>
+          <li><span><b>Markussen et al. 2025</b> · repair cafés in Copenhagen, PLATE 2025 conference paper</span><span class="s-meta"><span class="src study">Study</span><span class="used">F4</span><a href="https://journals.aau.dk/index.php/plate2025/article/download/10423/8320/34149">journals.aau.dk</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Jain, Gatare, Sahoo et al. 2025</b> · "Understanding the Role of Supportive Tools in Repair: Exploring Repair as an Embodied Practice", ECSCW 2025 poster</span><span class="s-meta"><span class="src study">Study</span><span class="used">F5</span><a href="https://dl.eusset.eu/items/5ed0a8ff-ff46-4b17-aa9f-5f04c9e68102/full">dl.eusset.eu</a></span></li>
+          <li><span><b>Martin et al. 2020</b> · IDEAS, an inclusive maker club, <i>Frontiers in Education</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F6</span><a href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2020.00075/full">frontiersin.org</a></span></li>
+          <li><span><b>Asbell-Clarke 2025</b> · blog post on TERC's NDinSTEM site: Eli takes apart a discarded PC</span><span class="s-meta"><span class="src example">Example</span><span class="used">F7</span><a href="https://www.terc.edu/ndinstem/?p=2862">terc.edu</a><span class="note">a teacher's case story, retold</span></span></li>
+          <li><span><b>Weber 2019</b> · iFixit news article about Aiden, an autistic teen repairer</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F8</span><a href="https://www.ifixit.com/News/autism-speaks-and-repair-listens">ifixit.com</a></span></li>
+          <li><span><b>Owens 2026</b> · post on "Oops! AuDHD Humor" (Substack) about putting things back together</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F8</span><a href="https://audhdhumor.substack.com/p/really-things-should-go-back-together">audhdhumor.substack.com</a></span></li>
+          <li><span><b>de Jong, Linn &amp; Zacharia 2013</b> · "Physical and virtual laboratories in science and engineering education", <i>Science</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F9</span><span class="used">Disagreements</span><a href="https://users.gw.utwente.nl/jong/dejonglinnzacharia%20science.pdf">users.gw.utwente.nl</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Muilwijk &amp; Lazonder 2023</b> · meta-analysis of physical versus virtual investigation (35 studies), <i>Frontiers in Education</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F10</span><span class="used">Disagreements</span><a href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2023.1163024/full">frontiersin.org</a></span></li>
+          <li><span><b>Yahya et al. 2026</b> · "Bridging Pedagogy and Technology: A Systematic Literature Review on Inquiry-Collaborative Models Assisted with Virtual Laboratory in Physics Education", <i>F1000Research</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F11</span><span class="used">Disagreements</span><a href="https://f1000research.com/articles/15-1682">f1000research.com</a></span></li>
+          <li><span><b>Finkelstein et al. 2005</b> · PhET circuit kit instead of real equipment, as summarised by SERC (Carleton College)</span><span class="s-meta"><span class="src study">Study</span><span class="used">F12</span><span class="used">Disagreements</span><a href="https://serc.carleton.edu/sp/library/phet/examples/example2.html">serc.carleton.edu</a><span class="note">second-hand: the page reports the 2005 study</span></span></li>
+          <li><span><b>Adams et al. 2008</b> · PhET interview paper, part I</span><span class="s-meta"><span class="src study">Study</span><span class="used">F12</span><a href="https://phet.colorado.edu/publications/archive/PhET%20interview%20Paper%20Part%20I.htm">phet.colorado.edu</a></span></li>
+          <li><span><b>Schocken &amp; Nisan</b> · nand2tetris course site</span><span class="s-meta"><span class="src example">Example</span><span class="used">F20</span><a href="https://www.nand2tetris.org/">nand2tetris.org</a></span></li>
+          <li><span><b>Embedded Artistry 2021</b> · "Learning computer architecture through a game" (Turing Complete)</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F21</span><span class="used">Disagreements</span><a href="https://embeddedartistry.com/blog/2021/11/29/learning-computer-architecture-through-a-game/">embeddedartistry.com</a></span></li>
+          <li><span><b>Williams 2018</b> · "Build a fun CPU in your browser" (NandGame), Hackaday</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F21</span><a href="https://hackaday.com/2018/08/20/build-a-fun-cpu-in-your-browser">hackaday.com</a></span></li>
+          <li><span><b>Zach Barth interview</b> · Inverse, on his game Shenzhen I/O</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">Disagreements</span><a href="https://inverse.com/article/23382-shenzhen-io-zachtronics-zach-barth-interview">inverse.com</a></span></li>
+          <li><span><b>Chemello 2026</b> · Jalopnik article on Wrench and other car repair games</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F22</span><a href="https://www.jalopnik.com/2289377/wrench-video-game-teach-how-cars-are-put-together/">jalopnik.com</a></span></li>
+          <li><span><b>Fathahillah, Yahya &amp; Andayani 2024</b> · "The Implementation of PC Building Simulator as a Learning Media to Enhance Vocational High School Students' Performance in the Learning Process", VEIC proceedings</span><span class="s-meta"><span class="src study">Study</span><span class="used">F22</span><a href="https://proceeding.unnes.ac.id/veic/article/view/2834">proceeding.unnes.ac.id</a></span></li>
+          <li><span><b>Allen et al. 2023</b> · barriers for disabled makers in makerspaces, ASSETS 2023 conference</span><span class="s-meta"><span class="src study">Study</span><span class="used">F24</span><span class="used">F33</span><a href="https://par.nsf.gov/servlets/purl/10481404">par.nsf.gov</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Asbell-Clarke et al. 2024</b> · "Including neurodiversity in computational thinking", <i>Frontiers in Education</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F26</span><a href="https://www.frontiersin.org/journals/education/articles/10.3389/feduc.2024.1358492/full">frontiersin.org</a></span></li>
+          <li><span><b>Dyslexic software engineers, 2025</b> · interview study with 10 engineers, arXiv preprint</span><span class="s-meta"><span class="src study">Study</span><span class="used">F27</span><a href="https://arxiv.org/html/2511.00706v1">arxiv.org</a></span></li>
+          <li><span><b>Accessibility in virtual labs, 2024</b> · review of 36 studies, <i>Frontiers in Education</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F28</span><a href="https://frontiersin.org/journals/education/articles/10.3389/feduc.2024.1351711/full">frontiersin.org</a></span></li>
+          <li><span><b>Bowen &amp; Horlin 2026</b> · "Absorbed, trapped, or lost? A qualitative investigation of hyperfocus experiences in ADHD adults", <i>Neurodiversity</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F29</span><a href="https://eprints.gla.ac.uk/392850/">eprints.gla.ac.uk</a><span class="note">University of Glasgow repository page; the journal page was blocked</span></span></li>
+          <li><span><b>Monotropism.org</b> · the theory's home site, started by Dinah Murray and Wenn Lawson</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://monotropism.org/">monotropism.org</a></span></li>
+          <li><span><b>Game Accessibility Guidelines</b> · basic, intermediate and advanced lists</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F30</span><a href="https://gameaccessibilityguidelines.com/basic/">basic</a><a href="https://gameaccessibilityguidelines.com/intermediate/">intermediate</a><a href="https://gameaccessibilityguidelines.com/advanced/">advanced</a></span></li>
+          <li><span><b>W3C</b> · "Making Content Usable for People with Cognitive and Learning Disabilities" (COGA)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F31</span><a href="https://www.w3.org/TR/coga-usable/">w3.org</a></span></li>
+          <li><span><b>Skiers et al. 2025</b> · "Portable Silent Room: Exploring VR Design for Anxiety and Emotion Regulation for Neurodivergent Women and Non-Binary Individuals", arXiv preprint</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://www.arxiv.org/abs/2508.18591">arxiv.org</a></span></li>
+          <li><span><b>informalscience.org</b> · page on learning and facilitation frameworks; names the Exploratorium's framework without describing it</span><span class="s-meta"><span class="note">info page</span><span class="unused">not used on this page</span><a href="https://www.informalscience.org/learning-and-facilitation-frameworks">informalscience.org</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup sum">
+        <h3><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>Summary only</span> 21 sources</h3>
+        <p>The helper saw only an abstract or a search-result snippet, not the source itself. Findings that use them carry the same mark.</p>
+        <ul class="slist">
+          <li><span><b>Lave &amp; Wenger 1991</b> · situated learning, summarised in "Jean Lave, Etienne Wenger and communities of practice" (infed.org)</span><span class="s-meta"><span class="src study">Study</span><span class="used">F2</span><a href="https://infed.org/mobi/?p=2651">infed.org</a><span class="note">search snippet; the full page returned "not found"</span></span></li>
+          <li><span><b>Marchand</b> · "Muscles, morals and mind: craft apprenticeship and the formation of person", SOAS repository</span><span class="s-meta"><span class="src study">Study</span><span class="used">F3</span><a href="https://soas-repository.worktribe.com/output/441089/muscles-morals-and-mind-craft-apprenticeship-and-the-formation-of-person">soas-repository.worktribe.com</a></span></li>
+          <li><span><b>Podolefsky, Moore &amp; Perkins</b> · "Implicit scaffolding in interactive simulations: Design strategies to support multiple educational goals", arXiv</span><span class="s-meta"><span class="src study">Study</span><span class="used">F13</span><a href="https://arxiv.org/pdf/1306.6544">arxiv.org</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Li &amp; Liang 2024</b> · "Effectiveness of virtual laboratory in engineering education: A meta-analysis", <i>PLOS ONE</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F14</span><span class="used">Disagreements</span><a href="https://econpapers.repec.org/RePEc:plo:pone00:0316269">econpapers.repec.org</a><span class="note">page opened, but it holds the abstract only · newly marked in v2</span></span></li>
+          <li><span><b>Pollock, Chandler &amp; Sweller 2002</b> · "Assimilating complex information"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F15</span><span class="used">Disagreements</span><a href="https://ro.uow.edu.au/edupapers/145">ro.uow.edu.au</a></span></li>
+          <li><span><b>Heiser &amp; Tversky 2006</b> · "Arrows in comprehending and producing mechanical diagrams"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F16</span><span class="used">E4</span><a href="https://www.tc.columbia.edu/faculty/bt2158/faculty-profile/files/sincomprehendingandproducingmechanicaldiagrams.PDF">tc.columbia.edu</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Tversky, Morrison &amp; Bétrancourt 2002</b> · "Animation: can it facilitate?"</span><span class="s-meta"><span class="src review">Review</span><span class="used">F17</span><span class="used">Disagreements</span><a href="https://hci.stanford.edu/courses/cs448b/papers/Tversky_AnimationFacilitate_IJHCS02.pdf">hci.stanford.edu</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Learner-paced segments</b> · meta-analysis in <i>Educational Psychology Review</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F18</span><span class="used">Disagreements</span><a href="https://www.doi.org/10.1007/S10648-018-9456-4">doi.org</a></span></li>
+          <li><span><b>Sinha &amp; Kapur 2021</b> · productive failure, meta-analysis of 53 studies, <i>Review of Educational Research</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F19</span><span class="used">Disagreements</span><a href="https://www.x-mol.com/paper/1406031499744456704">x-mol.com</a></span></li>
+          <li><span><b>Coursera learner reviews</b> · of the nand2tetris course; source of the quote "demanding but incredibly rewarding"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F20</span><a href="https://www.coursera.org/learn/build-a-computer/reviews">coursera.org</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Family Gaming Database</b> · accessibility page for Assemble with Care</span><span class="s-meta"><span class="src example">Example</span><span class="used">F23</span><a href="https://www.familygamingdatabase.com/accessibility/Assemble+With+Care">familygamingdatabase.com</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>"Belonging in the Making: Investigating Inclusive Makerspace Design for Youth with Autism"</b> · CHI 2026, via a review page on a11y-paradise</span><span class="s-meta"><span class="src study">Study</span><span class="used">F25</span><a href="https://a11y-paradise.onrender.com/reviews/69e51d0711c15470e384a451">a11y-paradise.onrender.com</a><span class="note">the paper's own page was not reachable</span></span></li>
+          <li><span><b>Absattarova et al. 2025</b> · "Researching the user experience of students with special educational needs using virtual chemistry laboratories", <i>SDU Bulletin</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F28</span><a href="https://repository.sdu.edu.kz/handle/123456789/2394">repository.sdu.edu.kz</a><span class="note">page opened, but it holds the abstract only</span></span></li>
+          <li><span><b>Dyslexia Scotland</b> · "Dyslexia-friendly typed formats", based on the British Dyslexia Association style guide</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F32</span><a href="https://dyslexiascotland.org.uk/dyslexia-friendly-typed-formats">dyslexiascotland.org.uk</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>VR and autistic learners</b> · review on PubMed Central</span><span class="s-meta"><span class="src review">Review</span><span class="used">F32</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9586887">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Zacharia et al. 2012</b> · "Is physicality an important aspect of learning through science experimentation among kindergarten students?"</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://gnosis.library.ucy.ac.cy/handle/7/38672">gnosis.library.ucy.ac.cy</a></span></li>
+          <li><span><b>Kealy &amp; Subramaniam 2006</b> · exploded versus assembled 3D views for assembly</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>Steam store page</b> · Turing Complete, about 95–96% positive reviews</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://store.steampowered.com/app/1444480/Turing_Complete">store.steampowered.com</a></span></li>
+          <li><span><b>"Using Virtual Environments to Improve Real-World Motor Skills in Sports: A Systematic Review"</b></span><span class="s-meta"><span class="src review">Review</span><span class="unused">not used on this page</span><a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6763583/">ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>DO-IT, University of Washington</b> · "Checklist for making science labs accessible to students with disabilities"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://doit.uw.edu/brief/checklist-for-making-science-labs-accessible-to-students-with-disabilities">doit.uw.edu</a></span></li>
+          <li><span><b>PhET for blind learners</b> · spoken description, sound and other inputs</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://par.nsf.gov/servlets/purl/10216337">par.nsf.gov</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup block">
+        <h3><span class="st block"><svg class="icon"><use href="#i-block"/></svg>Blocked</span> 16 pages</h3>
+        <p>The page did not load; nothing from it is used.</p>
+        <ul class="slist">
+          <li><span><b>A PubMed Central article</b> (PMC11684589), opened after the screen-versus-hands search</span><span class="s-meta"><span class="note">a "checking your browser" page instead of the article</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC11684589/">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Exploratorium tinkering pages</b> · learning dimensions of making and tinkering</span><span class="s-meta"><span class="note">redirected, then refused (403)</span><a href="https://tinkering.exploratorium.edu/learning-dimensions-making-and-tinkering">tinkering.exploratorium.edu</a><a href="https://www.exploratorium.edu/tinkering">exploratorium.edu</a></span></li>
+          <li><span><b>ASEE paper</b> · Turing Complete game challenges in a digital logic course</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://peer.asee.org/enhancing-student-understanding-of-digital-logic-and-computer-architecture-through-turing-complete-game-challenges">peer.asee.org</a></span></li>
+          <li><span><b>Review of vocational VR</b> for people with neurodevelopmental conditions</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://ouci.dntb.gov.ua/works/4ERRnPBl">ouci.dntb.gov.ua</a></span></li>
+          <li><span><b>Meta-analysis on transfer from extended reality (XR) training</b></span><span class="s-meta"><span class="note">refused (403)</span><a href="https://journals.sagepub.com/doi/10.1177/0018720820904229">journals.sagepub.com</a></span></li>
+          <li><span><b>A journal page</b> opened together with the Bowen &amp; Horlin repository page</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://journals.sagepub.com/doi/10.1177/10870547261469625">journals.sagepub.com</a></span></li>
+          <li><span><b>A PeerJ article</b> (3393); its topic was not recorded</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://peerj.com/articles/3393">peerj.com</a></span></li>
+          <li><span><b>"About spoons and spudgers"</b> · blog by an autistic repairer</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://gizmonaut.net/blog/autism/2018/12/about_spoons_and_spudgers.html">gizmonaut.net</a></span></li>
+          <li><span><b>CACM article on nand2tetris</b></span><span class="s-meta"><span class="note">refused (403); the helper guessed this address</span><a href="https://cacm.acm.org/research/nand-to-tetris-building-a-modern-computer-system-from-first-principles/">cacm.acm.org</a></span></li>
+          <li><span><b>Notion page</b> · a pilot comparing PC Building Simulator with a manual</span><span class="s-meta"><span class="note">empty page</span><a href="https://statuesque-resonance-b20.notion.site/Simulation-Effectiveness-for-Training-147a5cd6299580cca577e074ed79901b">notion.site</a></span></li>
+          <li><span><b>NSF repository item</b> 10677046</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://par.nsf.gov/servlets/purl/10677046">par.nsf.gov</a></span></li>
+          <li><span><b>infed.org article on Lave &amp; Wenger</b> (its search snippet is used in F2)</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://infed.org/mobi/jean-lave-etienne-wenger-and-communities-of-practice/">infed.org</a></span></li>
+          <li><span><b>Houston Community College</b> · PC-building course page</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://hccs.edu/continuing-education/hcc-micro-credit-programs/pc-building">hccs.edu</a></span></li>
+          <li><span><b>researchr.org entry</b> ZhangSWH26</span><span class="s-meta"><span class="note">connection refused</span><a href="https://researchr.org/publication/ZhangSWH26">researchr.org</a></span></li>
+          <li><span><b>A study on assembling a PC in VR</b> (LearnTechLib 178439)</span><span class="s-meta"><span class="note">one address didn't exist, the other returned an empty page</span><a href="https://mail.editlib.org/primary/p//178439">mail.editlib.org</a><a href="https://www.learntechlib.org/primary/p/178439/">learntechlib.org</a></span></li>
+          <li><span><b>A <i>Cognitive Research</i> journal article</b> (s41235-016-0031-6)</span><span class="s-meta"><span class="note">redirected; the new address was not opened</span><a href="https://cognitiveresearchjournal.springeropen.com/articles/10.1186/s41235-016-0031-6">springeropen.com</a></span></li>
+        </ul>
+        <p><b>Not found at all:</b> the full text of Mazurek et al. 2015 on autistic adults and video games, and any study of what nand2tetris learners actually learn.</p>
+      </div>
+
+      <details class="inner">
+        <summary><svg class="icon"><use href="#i-search"/></svg>Searches the helper typed (48)</summary>
+        <ol>
+          <li>de Jong Linn Zacharia 2013 Science physical and virtual laboratories in science and engineering education</li>
+          <li>meta-analysis virtual vs physical laboratory learning outcomes</li>
+          <li>makerspace learning autistic ADHD students study</li>
+          <li>repair caf&#233; learning study participants skills tacit knowledge research</li>
+          <li>cognitive apprenticeship modeling coaching scaffolding fading Collins Brown Newman</li>
+          <li>makerspace learning practices study &quot;productive failure&quot; OR &quot;tinkering&quot; Exploratorium learning dimensions framework</li>
+          <li>&quot;Belonging in the Making&quot; inclusive makerspace design youth with autism</li>
+          <li>PC Building Simulator learning study students computer hardware education</li>
+          <li>nand2tetris &quot;From NAND to Tetris&quot; course evaluation students learning outcomes paper Schocken</li>
+          <li>Turing Complete game review learn computer architecture building CPU from logic gates players</li>
+          <li>Zachtronics Shenzhen I/O educational value programming learning study players</li>
+          <li>PhET implicit scaffolding design principles interactive simulations Podolefsky Moore Perkins</li>
+          <li>PhET inclusive design accessibility interactive description sonification blind learners research</li>
+          <li>PhET simulation vs real equipment circuit study Finkelstein 2005 students outperformed</li>
+          <li>Adams Perkins Wieman &quot;A study of educational simulations&quot; engagement learning interviews PhET 2008</li>
+          <li>virtual reality vocational training transfer motor skills assembly task real world meta-analysis</li>
+          <li>autistic adults video games qualitative study sensory predictability why play Mazurek OR interviews autistic gamers</li>
+          <li>ADHD adults video games qualitative study hyperfocus learning first-person accounts</li>
+          <li>dyslexic engineers hands-on learning study visual-spatial strengths interviews</li>
+          <li>DO-IT University of Washington making science labs accessible students with disabilities universal design</li>
+          <li>gameaccessibilityguidelines.com cognitive motor basic intermediate advanced guidelines</li>
+          <li>W3C COGA &quot;Making Content Usable for People with Cognitive and Learning Disabilities&quot; design patterns objectives</li>
+          <li>British Dyslexia Association style guide dyslexia friendly font size spacing background colour</li>
+          <li>neurodivergent maker blog makerspace noise overwhelm autistic ADHD my experience workshop tools</li>
+          <li>Car Mechanic Simulator taught me real car repair players learned automotive education study</li>
+          <li>&quot;Assemble with Care&quot; ustwo repair game accessibility calm review</li>
+          <li>canIplaythat.com review simulator accessibility cognitive disabled reviewer</li>
+          <li>Sinha Kapur 2021 meta-analysis productive failure problem solving before instruction effect size</li>
+          <li>exploded view vs assembled view diagrams learning how mechanical devices work study Tversky Heiser</li>
+          <li>Heiser Tversky 2006 &quot;Arrows in comprehending and producing mechanical diagrams&quot; structure function</li>
+          <li>Zacharia Loizou Papaevripidou 2012 physical manipulatives virtual beam balance kindergarten tactile prior experience</li>
+          <li>autistic learners virtual reality education systematic review sensory overload design recommendations</li>
+          <li>students with disabilities virtual laboratory accessibility study learning disabilities science simulation</li>
+          <li>ADHD game-based learning digital serious games systematic review attention learning outcomes adults</li>
+          <li>Lave Wenger legitimate peripheral participation apprenticeship tailors situated learning summary</li>
+          <li>Lave Vai Gola tailors apprentices start with finishing hems buttons then sewing then cutting reverse order production</li>
+          <li>&quot;I have ADHD&quot; learn by taking things apart hands-on computer hardware blog</li>
+          <li>autistic adult first-person account learning electronics repair special interest how things work blog</li>
+          <li>TERC INFACT neurodivergent learners executive function supports computational thinking study Asbell-Clarke findings</li>
+          <li>Pollock Chandler Sweller 2002 &quot;Assimilating complex information&quot; isolated interacting elements electrical testing</li>
+          <li>Schocken nand2tetris SIGCSE paper &quot;Taming complexity&quot; students build computer course experience</li>
+          <li>Mayer segmenting principle learner-paced animation meta-analysis pacing control</li>
+          <li>makerspace accessibility disabled people barriers study physical cognitive sensory &quot;makerspaces&quot; interviews disabled makers</li>
+          <li>NandGame logic gates browser game learners difficulty review build computer</li>
+          <li>Mazurek Engelhardt Clark 2015 &quot;Video games from the perspective of adults with autism spectrum disorder&quot; Computers in Human Behavior findings</li>
+          <li>Trevor Marchand fine woodworking apprenticeship embodied knowledge study craft learning</li>
+          <li>Bowen Horlin 2026 hyperfocus ADHD adults qualitative interviews distinct from flow</li>
+          <li>Tversky Morrison Betrancourt 2002 &quot;Animation: can it facilitate?&quot; findings static vs animated</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-abc"/></svg>Glossary</span><span class="sum-text"><b>Special words on this page.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <dl class="gloss">
+        <dt>Meta-analysis</dt><dd>A study that pools the results of many studies to see the overall effect.</dd>
+        <dt>Effect size (g)</dt><dd>How big a difference is: around 0.2 small, 0.5 medium, 0.8 large.</dd>
+        <dt>Scaffolding</dt><dd>Temporary help that is taken away as the learner gets better (fading).</dd>
+        <dt>Cognitive apprenticeship</dt><dd>Learning like an apprentice, with the expert's thinking made visible, not only their hands.</dd>
+        <dt>Tacit knowledge</dt><dd>Know-how that is hard to put into words, like how a part feels when it clicks in.</dd>
+        <dt>PhET</dt><dd>Free science simulations from the University of Colorado.</dd>
+        <dt>Productive failure</dt><dd>Letting learners try a problem before teaching them the method.</dd>
+        <dt>Hyperfocus</dt><dd>Very deep, long focus on one interest, hard to steer at will.</dd>
+        <dt>Monotropism</dt><dd>A theory, developed by autistic people, that attention gathers strongly on few things at a time.</dd>
+        <dt>Abstract</dt><dd>The short summary at the top of a research paper.</dd>
+        <dt>Search snippet</dt><dd>The few lines a search engine shows under each result.</dd>
+        <dt>Second-hand</dt><dd>A page that reports someone else's study instead of being the study itself.</dd>
+        <dt>Saved copy</dt><dd>When the web reader showed a PDF as raw code, the helper opened the PDF file the reader had saved on this PC.</dd>
+        <dt>Repository</dt><dd>A university's online archive of papers.</dd>
+        <dt>Preprint, arXiv</dt><dd>A paper shared before other researchers have checked it; arXiv is a free online archive for them.</dd>
+        <dt>PubMed Central</dt><dd>A free archive of medical and life-science papers, run by the US National Library of Medicine.</dd>
+        <dt>403, 404</dt><dd>Web error codes: 403 = the site refused the request, 404 = the page wasn't found.</dd>
+        <dt>Redirect</dt><dd>A web address that sends you on to a different address.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <footer>
+    <span><b>Where it came from:</b> a research helper (a second Claude in the background) looked up sources on 13.11.2026. It opened 28, saw 21 only as an abstract or search snippet, and 16 did not load (all listed under <a href="#sources">Sources</a>). I read its report and its records, and wrote this page. Explanations are AI-drafted.</span>
+    <span><b>What it does not do:</b> no design decisions; the open questions are a menu. Much of the evidence is about children or students, not adults learning alone.</span>
+    <span><b>What changed from v1:</b> the Sources list; 7 more findings marked "summary only" (F13, F14, F16, F17, F20, F23, F32); "Gaps in reading" moved into Sources. Finding texts are unchanged apart from the marks; F20 now also says where its quote came from. v1 is not kept in the repo; what was concluded is in <a href="decision.md">decision.md</a>.</span>
+  </footer>
+</main>

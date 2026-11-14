@@ -47,7 +47,7 @@ No red or orange, by design.
 ## Who made what
 
 - The starter layout, the note cards and these READMEs were made by Claude (AI) on 14.11.2026: structure only, no design content.
-- Everything on the boards is made by people (see [CONTRIBUTING.md](../CONTRIBUTING.md)).
+- Everything on the boards is made by people (see [CONTRIBUTING.md](../CONTRIBUTING.md)), except research notes that say "AI draft": Claude drafts those (dashed teal cards with a link to the research record), and the arrows from them are drawn by people.
 - Licence of the board content: CC BY-SA 4.0 ([LICENSE-CONTENT.txt](../LICENSE-CONTENT.txt)).
 
 ## Words

@@ -13,7 +13,7 @@ Thank you for wanting to help. These rules apply to everything added to this rep
   - and cautions on what is not checked.
 - 3D models, textures and sprites: built in code or made by people, with a fitting licence and credit in [CREDITS.md](CREDITS.md). Never generative-AI art.
 - Everything AI-made lives in [ai-assisted/](ai-assisted/README.md), one folder per AI tool (so far `ai-assisted/claude/`). It is marked as AI-made, is not part of the game or its learning content, and is left out of every export. [learning/](ai-assisted/claude/learning/README.md) holds AI-made learning material (notes and code examples for learning Godot and programming); scripts there use no `class_name`. [research/](ai-assisted/claude/research/README.md) keeps the research behind finished board cards, with a decision note for each. No generative-AI art there either.
-- The folder [design/](design/README.md) holds the game design documents (Excalidraw boards). Their content is made by people; AI may only set up empty layouts, note-card templates and docs, marked as AI-made.
+- The folder [design/](design/README.md) holds the game design documents (Excalidraw boards). Their content is made by people; AI may only set up empty layouts, note-card templates and docs, marked as AI-made, and draft research notes that say "AI draft" on the card.
 
 ## 2 · No malicious use
 

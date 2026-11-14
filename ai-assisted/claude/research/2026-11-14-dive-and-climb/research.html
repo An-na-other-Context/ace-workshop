@@ -1,0 +1,467 @@
+<title>Dive down, climb back up</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: research digest, same family as "Real workshop on screen". The model's three parts
+   (dive, check, climb) each get one colour used everywhere on the page. No red or orange. */
+:root {
+  --bg: #f1f3f1; --surface: #fbfcfb; --fg: #1d2226; --muted: #586069; --line: #d3d9d6;
+  --accent: #2f6fa6; --soft: #e7ece8;
+  --dive: #1d5e96; --check: #8a3d8f; --climb: #1f7a4d;
+  --s-review: #1d5e96; --s-study: #1f7a4d; --s-lived: #8a3d8f; --s-example: #10756f; --s-theory: #5d6470; --s-opinion: #7a6a2a; --s-mine: #6c3fb0;
+  --c-meta: #5d6470; --c-gap: #10756f;
+  --font-body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+    --dive: #8dbbe6; --check: #e0a3e4; --climb: #7fd1a0;
+    --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-theory: #b0b7c1; --s-opinion: #d9c98a; --s-mine: #b597ec;
+    --c-meta: #b0b7c1; --c-gap: #6fd0c7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+  --dive: #8dbbe6; --check: #e0a3e4; --climb: #7fd1a0;
+  --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-theory: #b0b7c1; --s-opinion: #d9c98a; --s-mine: #b597ec;
+  --c-meta: #b0b7c1; --c-gap: #6fd0c7;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.7; letter-spacing: 0.01em; word-spacing: 0.06em; }
+.page { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 2.1rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.08rem; }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.lede { font-size: 1.15rem; }
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; line-height: 1.3; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; text-decoration: none; white-space: nowrap; vertical-align: 0.1em; }
+.src.review { color: var(--s-review); } .src.study { color: var(--s-study); } .src.lived { color: var(--s-lived); } .src.example { color: var(--s-example); } .src.theory { color: var(--s-theory); } .src.opinion { color: var(--s-opinion); }
+.src.mine { color: var(--s-mine); border-style: dashed; }
+.thin { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.9rem; color: var(--muted); }
+.part { font-weight: 700; }
+.part.dive { color: var(--dive); } .part.check { color: var(--check); } .part.climb { color: var(--climb); }
+
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.summary ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 8px; }
+.loop { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; }
+.loop-card { border: 2px solid var(--pc); border-radius: 10px; padding: 12px 14px; background: var(--bg); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.loop-card h3 { color: var(--pc); display: flex; align-items: center; gap: 8px; }
+.loop-card .plus, .loop-card .minus { font-size: 0.95rem; }
+.loop-card .plus b { color: var(--climb); } .loop-card .minus b { color: var(--muted); }
+
+details.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.sec > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 16px 20px; }
+details.sec > summary::-webkit-details-marker { display: none; }
+.tag { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: var(--surface); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; }
+.sum-text { flex: 1 1 260px; min-width: 0; } .sum-text b { color: var(--c); }
+.chev { color: var(--muted); } details.sec[open] .chev { transform: rotate(90deg); }
+.body { border-top: 1px solid var(--line); padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+.body h3 { color: var(--c); }
+ol.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+ol.findings > li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 10px; align-items: start; }
+.fid { font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; color: var(--c); border: 1.5px solid var(--c); border-radius: 6px; text-align: center; padding: 1px 0; }
+.ftext { min-width: 0; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+dl.gloss { display: grid; grid-template-columns: minmax(8em, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.gloss dt { font-weight: 700; } dl.gloss dd { margin: 0; max-width: 68ch; }
+ul.plain { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 4px; }
+ul.plain li { overflow-wrap: anywhere; }
+footer { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+footer b { color: var(--fg); }
+/* v2: source status = what the research helper actually got from each link. No red or orange. */
+:root { --st-read: #1f7a4d; --st-sum: #7a5c00; --st-block: #4a525c; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9; } }
+:root[data-theme="dark"] { --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9; }
+.st { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; font-style: normal; line-height: 1.3; padding: 1px 8px; border-radius: 999px; color: var(--surface); background: var(--st); white-space: nowrap; vertical-align: 0.1em; }
+.read { --st: var(--st-read); } .sum { --st: var(--st-sum); } .block { --st: var(--st-block); }
+.counts { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sgroup { display: flex; flex-direction: column; gap: 10px; }
+.body .sgroup > h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fg); }
+.sgroup > p { color: var(--muted); font-size: 0.92rem; }
+ul.slist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.slist > li { border-left: 4px solid var(--st); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.s-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.88rem; }
+.used { font-family: var(--font-code); font-size: 0.78rem; font-weight: 700; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.unused { font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); }
+details.inner { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.inner > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.inner > ol { margin: 0; padding: 0 14px 14px 2.6em; display: grid; gap: 4px; font-size: 0.92rem; overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  dl.gloss { grid-template-columns: minmax(0, 1fr); gap: 2px 0; } dl.gloss dd { margin-bottom: 8px; }
+  details.sec > summary, .body, .summary { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 4v16M6 14l6 6 6-6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12l3 3 5-6"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 20V4M6 10l6-6 6 6"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5z"/><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 4.8"/></symbol>
+  <symbol id="i-warn" viewBox="0 0 24 24"><path d="M12 3l9 16H3z"/><path d="M12 10v4M12 17v.01"/></symbol>
+  <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.7-2.5 2-2.5 4M12 17.5v.01"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-abc" viewBox="0 0 24 24"><path d="M3 17l3.5-10L10 17M4.2 13.5h4.6M13 7v10h3.5a2.5 2.5 0 0 0 0-5H13h3a2.5 2.5 0 0 0 0-5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="eyebrow">ACE Workshop · research, depth 2: what others tried · v2</span>
+    <h1>Dive down, climb back up</h1>
+    <p class="lede">Learning approaches that match the learner profile's model, what people like the profile report, and where it goes wrong. Colours follow the model's three parts: <span class="part dive">dive</span>, <span class="part check">check</span>, <span class="part climb">climb</span>.</p>
+    <p class="thin">Repo copy, 14.11.2026: written for the learner profile <a href="../learner-profiles/annaothercrow.md">annaothercrow</a>. Wording that said "you" about that learner now points to the profile; findings, sources and numbers are unchanged.</p>
+    <div class="legend">
+      <span class="src review">Review</span><span class="src study">Study</span><span class="src theory">Theory</span><span class="src example">Example</span><span class="src lived">Lived</span><span class="src opinion">Opinion</span><span class="src mine">Mine</span>
+    </div>
+    <div class="legend counts">
+      <span class="st read"><svg class="icon"><use href="#i-ok"/></svg>read</span><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="st block"><svg class="icon"><use href="#i-block"/></svg>blocked</span>
+      <span class="thin">= what the helper got from a source. Findings without a mark were read. Full list under <a href="#sources">Sources</a>.</span>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>In short</h2>
+    <ul>
+      <li><b>No published method covers the whole loop.</b> The closest is "semantic waves" from computing teaching: down from the abstract word to concrete examples and back up. It even names the profile's risk: going down and never repacking ("down escalator").</li>
+      <li><b>Bottom-up computing courses exist</b> (nand2tetris, Petzold's <i>Code</i>, Ben Eater's breadboard computer). nand2tetris starts at the top, traces a running game down to logic gates, then builds back up. No outcome studies for any of them.</li>
+      <li><b>Asking why and explaining to yourself help</b> (medium effects), but asking why is weak where you know little: exactly a brand-new bottom layer.</li>
+      <li><b>The clearest warning is unguided depth.</b> Exploring with guidance and a summing-up step wins; without help it loses. The help needed changes per layer.</li>
+      <li><b>Research on people like the profile mostly fits the model</b> (monotropism, autistic flow, dyslexic "exploring"), and names the risks: transitions, getting stuck, interruptions, a slower whole picture. Much of it is theory, interviews and first-person accounts.</li>
+    </ul>
+    <div class="loop">
+      <div class="loop-card" style="--pc: var(--dive)"><h3><svg class="icon"><use href="#i-down"/></svg>Dive</h3>
+        <span class="plus"><b>Backed by:</b> semantic waves (unpacking), diving as a natural coping move, asking why and self-explanation, curiosity aiding memory, monotropism, Temple Grandin's bottom-up thinking.</span>
+        <span class="minus"><b>Watch for:</b> "why" is weak at a new layer; interesting but off-goal detail lowers learning; unguided discovery does worse; hard to leave once deep.</span></div>
+      <div class="loop-card" style="--pc: var(--check)"><h3><svg class="icon"><use href="#i-check"/></svg>Check</h3>
+        <span class="plus"><b>Backed by:</b> metacognition (+7 months of progress in school studies), "explain it" exposes false understanding, nand2tetris tests at every layer, check-ins tailored to the person.</span>
+        <span class="minus"><b>Watch for:</b> we all overrate our understanding; alarms and lists often fail with autistic inertia; a check from outside can break flow, so it works better from inside the task.</span></div>
+      <div class="loop-card" style="--pc: var(--climb)"><h3><svg class="icon"><use href="#i-up"/></svg>Climb</h3>
+        <span class="plus"><b>Backed by:</b> semantic waves (repacking), concreteness fading, worked examples with "name the principle" prompts, 4C/ID (large effect), learning by teaching, nand2tetris building up.</span>
+        <span class="minus"><b>Watch for:</b> never repacking; putting the whole together may simply take longer for autistic thinkers; help has to shrink as you master a layer.</span></div>
+    </div>
+  </section>
+
+  <details class="sec" style="--c: var(--dive)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-book"/></svg>Approaches</span><span class="sum-text"><b>Methods that match parts of the loop.</b> A1–A12</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">A1</span><span class="ftext"><b>Semantic waves:</b> unpack an abstract term into concrete examples and simple words, then repack it into the term. Failure modes: "high flatline" (only abstract: the profile's "top-down"), "low flatline" (only concrete, never linked up), "down escalator" (down, then moving on). Lesson analyses, no outcome trials. <a class="src theory" href="https://static.raspberrypi.org/files/curriculum/quickreads/6-Pedagogy_Summary_Semantic_Waves_2025_en-gb.pdf">Theory</a> <a class="src example" href="https://qmro.qmul.ac.uk/xmlui/bitstream/123456789/66685/2/Waite%20Using%20Semantic%20Waves%202020%20Accepted.pdf">Example</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">A2</span><span class="ftext"><b>"Up and down the ladder of abstraction"</b> (Bret Victor): step down to single cases to see why, step up to see the whole range, repeat. An essay for designers. <a class="src opinion" href="https://worrydream.com/LadderOfAbstraction/">Opinion</a></span></li>
+        <li><span class="fid">A3</span><span class="ftext"><b>nand2tetris:</b> week 1 traces a running game down to NAND gates, then builds up through logic, ALU, memory, machine code, compiler, operating system. Every module has a test script: a built-in check per layer. Its bottom is the logic gate, not electronics. <a class="src example" href="https://nand2tetris.org/_files/ugd/44046b_9b60bbc2723a435db664fa0faa4dc645.pdf">Example</a></span></li>
+        <li><span class="fid">A4</span><span class="ftext"><b>Petzold's <i>Code</i></b> (flashlights and relays up to a CPU) and <b>Ben Eater's</b> 8-bit breadboard computer: bottom-up builds, no outcome studies. <a class="src example" href="https://eater.net/8bit/">Example</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · Julia Evans: everything on a computer happens for a logical reason; learning can start from a question or a bug. <a class="src lived" href="https://jvns.ca/blog/so-you-want-to-be-a-wizard/">Lived</a></span></li>
+        <li><span class="fid">A5</span><span class="ftext"><b>Spiral curriculum</b> (Bruner): topics return, deeper each time. Fits the profile's repeated passes, but usually starts shallow; criticised for staying superficial and for simplifications that turn into misconceptions. <a class="src theory" href="https://files.eric.ed.gov/fulltext/EJ1286824.pdf">Theory</a></span></li>
+        <li><span class="fid">A6</span><span class="ftext"><b>Concreteness fading:</b> from acting it out, to a picture, to the symbol. Positive in maths and science; may not carry over to every subject. <a class="src review" href="https://scholarworks.iu.edu/dspace/items/f1ea5994-0d9f-4215-abec-152a03149277">Review</a></span></li>
+        <li><span class="fid">A7</span><span class="ftext"><b>Productive failure:</b> struggle first, then teaching (53 studies, g 0.36, higher with a faithful design). The teaching afterwards is part of the method; reversed for young children. <a class="src review" href="https://phys.org/news/2021-09-productively-wiser.html">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">A8</span><span class="ftext"><b>Cognitive apprenticeship:</b> modelling, coaching, help that's withdrawn, saying it out loud, reflecting, exploring. No verified meta-analysis. <a class="src theory" href="https://www.isls-naples.psy.uni-muenchen.de/intro/all-webinars/collins/cognitive-apprenticeship.pdf">Theory</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">A9</span><span class="ftext"><b>Learning by building</b> (Papert): fits "can I build it". Weak evidence; across 164 studies, discovery without help did worse than teaching, discovery with guidance did better. <a class="src opinion" href="https://neverworkintheory.org/2021/10/11/a-critical-history-of-logo-and-constructionist-learning.html">Opinion</a> <a class="src review" href="https://www.fisme.science.uu.nl/publicaties/literatuur/2011_alfieri_discovery_learning.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">A10</span><span class="ftext"><b>4C/ID:</b> whole realistic tasks from simple to complex, with background knowledge (the why and how), just-in-time steps, practice of routines, and help that shrinks. Large effect (d 0.79), strongest in higher education. <a class="src review" href="https://repositorio.iscte-iul.pt/bitstream/10071/23015/1/article_81383.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">A11</span><span class="ftext"><b>Asking why, explaining to yourself, teaching:</b> self-explanation g 0.55; asking why d 0.56 and better with prior knowledge; at low knowledge, picturing it did better. Preparing to teach g 0.35, teaching g 0.56. <a class="src review" href="https://www.structural-learning.com/research-briefings/ask-why-and-how">Review</a></span></li>
+        <li><span class="fid">A12</span><span class="ftext"><b>Illusion of explanatory depth:</b> people overrate how well they understand a device until they try to explain it. Supports "explain it" as a check. <a class="src study" href="https://en.wikipedia.org/wiki/Illusion_of_explanatory_depth">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · <b>Diving is a natural move:</b> learners who can't handle a concept drop to a more concrete level on their own (Hazzan). <a class="src study" href="https://link.springer.com/article/10.1007/s10649-005-3335-x">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--check)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-people"/></svg>People like the profile</span><span class="sum-text"><b>Autistic, ADHD and dyslexic learners</b> in research and in their own words. P1–P12</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <h3>Monotropism and flow</h3>
+      <ol class="findings">
+        <li><span class="fid">P1</span><span class="ftext"><b>Monotropism:</b> attention gathers in a few deep tunnels; learning follows interest; switching is hard; parts aren't enough without how they fit. Helps: building on interests, less time pressure, time to switch. <a class="src theory" href="https://monotropism.org/murray-lesser-lawson/">Theory</a></span></li>
+        <li><span class="fid">P2</span><span class="ftext"><b>Measuring it:</b> people who are both autistic and ADHD scored highest on a monotropism questionnaire (preprint); lab results since are mixed. <a class="src study" href="https://www.autism.org.uk/learn/knowledge-hub/professional-practice/what-is-monotropism">Study</a></span></li>
+        <li><span class="fid">P3</span><span class="ftext"><b>Autistic flow</b> (10 adults): it helps self-regulation; unpredictable interruptions are distressing and spoil later flow; predictable times and places helped. <a class="src study" href="https://kar.kent.ac.uk/112495/">Study</a></span></li>
+        <li><span class="fid">P4</span><span class="ftext"><b>Autistic inertia</b> (32 adults): starting is hardest, stopping and switching hard too; willpower doesn't fix it. Helped: another person nearby, tiny first steps, routines. Usually not: alarms, lists, reminders. "Never coming back up" may be inertia, not a lack of discipline. <a class="src study" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008">Study</a></span></li>
+      </ol>
+      <h3>In their own words</h3>
+      <ol class="findings">
+        <li><span class="fid">P5</span><span class="ftext"><b>Temple Grandin:</b> "All my thinking is bottom-up instead of top-down": details assembled into concepts; needs lots of data; struggles with what she can't picture. <a class="src lived" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2677580">Lived</a></span></li>
+        <li><span class="fid">P6</span><span class="ftext"><b>A monotropic rabbit hole</b> (mentions ADHD, PDA, monotropism): thrilling, torn between tangents and covering ground, uneasy about unfinished parts of the mental map; plans pushed aside. What helped: turning the dive into open questions, setting intentions. <a class="src lived" href="https://spiralsandconstellations.substack.com/p/i-fell-into-a-monotropic-rabbit-hole">Lived</a></span></li>
+        <li><span class="fid">P7</span><span class="ftext"><b>Map of monotropic experiences:</b> names "rabbit holes of research" and inertia that leaves you unable to start or to stop; transitions need time. <a class="src lived" href="https://stimpunks.org/2024/10/21/map-of-monotropic-experiences/">Lived</a></span></li>
+      </ol>
+      <h3>Detail first, ADHD, dyslexia</h3>
+      <ol class="findings">
+        <li><span class="fid">P8</span><span class="ftext"><b>Detail-first, disputed:</b> older reviews found a strong pull to local detail; a 2015 meta-analysis found no detail advantage, but the whole picture forms more slowly. So the climb may simply need more time. <a class="src review" href="https://lirias.kuleuven.be/bitstream/123456789/461389/2/Van%20der%20Hallen%20et%20al._Psy%20Bulletin_2015.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">P9</span><span class="ftext"><b>Hyperfocus in ADHD:</b> set off by engaging tasks, time disappears, hard to leave; only about 7 studies. <a class="src review" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7851038">Review</a> · People with more ADHD traits explored more in a foraging game and still earned more. <a class="src study" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10878810">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">P10</span><span class="ftext"><b>Working memory:</b> moderate limits in ADHD adults, so warnings about overload apply strongly. <a class="src review" href="https://pubmed.ncbi.nlm.nih.gov/23688211/">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> · Tailored check-ins help; generic adjustments often don't (25 interview studies). <a class="src review" href="https://ro.ecu.edu.au/ecuworks2022-2026/8906">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">P11</span><span class="ftext"><b>Dyslexia as exploring:</b> strong gist and big picture, weaker automatic routines; learning is more conscious and connecting, but slower (partly speculative). <a class="src theory" href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.889245/full">Theory</a></span></li>
+        <li><span class="fid">P12</span><span class="ftext"><b>Dyslexic students</b> more often learned deeply, but reported picking out main ideas less, which may matter for the "still on track?" check. <a class="src study" href="https://researchers.mq.edu.au/en/publications/learning-strategies-and-study-approaches-of-postsecondary-student/">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--climb)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-warn"/></svg>Needs and limits</span><span class="sum-text"><b>What the loop needs to work,</b> and where it fails. N1–N7</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">N1</span><span class="ftext"><b>Guidance and a summing-up step:</b> discovery with help wins, without help loses; productive failure only works when teaching follows. <a class="src review" href="https://www.fisme.science.uu.nl/publicaties/literatuur/2011_alfieri_discovery_learning.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">N2</span><span class="ftext"><b>Help per layer:</b> help that aids beginners hinders those who already know a topic (expertise reversal). The learner is a beginner at each new bottom layer and closer to expert higher up. <a class="src review" href="https://ro.uow.edu.au/edupapers/136">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">N3</span><span class="ftext"><b>Depth needs a goal:</b> interesting but off-goal detail lowered learning across 58 studies (short sessions); curiosity itself improves memory. <a class="src review" href="https://news.wsu.edu/2020/03/19/seductive-details-inhibit-learning/">Review</a> <a class="src study" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4252494">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summaries only</span></span></li>
+        <li><span class="fid">N4</span><span class="ftext"><b>"Why" needs something to build on:</b> weak where you know little; picturing it or a concrete example may work better there (A11).</span></li>
+        <li><span class="fid">N5</span><span class="ftext"><b>The climb has to be built in:</b> otherwise it becomes the "down escalator" (A1); fading steps without "name the principle" prompts doesn't reach new kinds of problems. <a class="src study" href="https://asu.elsevierpure.com/en/publications/structuring-the-transition-from-example-study-to-problem-solving--2">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">N6</span><span class="ftext"><b>Stopping points:</b> layer boundaries with tests (nand2tetris) work like save points; for autistic learners, predictable exits, time to switch, and another person nearby rather than alarms (P4).</span></li>
+        <li><span class="fid">N7</span><span class="ftext"><b>Black boxes:</b> at some point upper layers have to be used without opening them; learners who keep opening the box can stall. <a class="src study" href="https://cris.openu.ac.il/en/publications/reductive-thinking-in-computer-science/">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-gap)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-gap"/></svg>Open questions</span><span class="sum-text"><b>Possible experiments,</b> depth 3. 10, none chosen.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Collected by the research helper from what the sources leave open. A menu, nothing decided. No study has tested the whole loop with neurodivergent learners, so the learner's own notes could be the first data.</p>
+      <ol class="findings">
+        <li><span class="fid">E1</span><span class="ftext">Top first or bottom first: the nand2tetris way (see the whole, then dive) against a pure bottom start.</span></li>
+        <li><span class="fid">E2</span><span class="ftext">A concrete check: one line linking back to the top question, plus "explain it". Does it catch false understanding?</span></li>
+        <li><span class="fid">E3</span><span class="ftext">Exits: save points at layer boundaries with a breadcrumb trail back up, against timers; another person nearby.</span></li>
+        <li><span class="fid">E4</span><span class="ftext">A stopping rule for depth: "can I predict the layer above from this one?"</span></li>
+        <li><span class="fid">E5</span><span class="ftext">Help per layer in ACE Workshop: more at a new bottom layer, less where mastered.</span></li>
+        <li><span class="fid">E6</span><span class="ftext">A tangent log: do tangents help or hurt what stays?</span></li>
+        <li><span class="fid">E7</span><span class="ftext">Climb time: extra time and visual maps for putting the whole together; audio for reading load.</span></li>
+        <li><span class="fid">E8</span><span class="ftext">"Down escalator" as a design check for every lesson in the game.</span></li>
+        <li><span class="fid">E9</span><span class="ftext">At a new layer: picturing it or a concrete example, against "why" questions.</span></li>
+        <li><span class="fid">E10</span><span class="ftext">Write down the loop as it gets used, to compare with these findings later.</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Disagreements</span><span class="sum-text"><b>Where sources point different ways.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Question</th><th>One side</th><th>Other side</th><th>For the loop</th></tr></thead>
+        <tbody>
+          <tr><td>Where to start</td><td>Semantic waves: abstract, then down</td><td>Concreteness fading: concrete, then up</td><td>Waves fit the start (top question, dive); fading fits the climb</td></tr>
+          <tr><td>How much guidance</td><td>Struggle first (A7)</td><td>Worked examples first; minimal guidance fails (N1)</td><td>Depends on prior knowledge per layer (N2)</td></tr>
+          <tr><td>Interesting detail</td><td>Curiosity aids memory</td><td>Off-goal detail hurts (N3)</td><td>Open: E6</td></tr>
+          <tr><td>Detail-first thinking</td><td>Local bias or strength</td><td>No advantage; whole is slower (P8)</td><td>Give the climb time</td></tr>
+          <tr><td>Learning by building</td><td>Papert's claims</td><td>Success may have come from the helpers</td><td>Building works with guidance (A9)</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sources" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-link"/></svg>Sources</span><span class="sum-text"><b>Every source, and what the helper actually got from it.</b> 18 read · 43 summary only · 5 blocked</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Checked against the research helper's own records from 13.11.2026: every page it opened and every search it ran. Each source is listed once. <span class="used">A1</span> = the finding that uses it; "In short" = the summary and the three loop cards at the top.</p>
+      <p><b>Worth knowing:</b> most sources on this page were seen only as summaries. The helper read 18 in full; 43 more came from abstracts, search snippets or news write-ups.</p>
+
+      <div class="sgroup read">
+        <h3><span class="st read"><svg class="icon"><use href="#i-ok"/></svg>Read</span> 18 sources</h3>
+        <p>The helper opened the linked page or PDF.</p>
+        <ul class="slist">
+          <li><span><b>Raspberry Pi Foundation 2025</b> · pedagogy summary "Semantic waves"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">A1</span><span class="used">In short</span><span class="used">Disagreements</span><span class="used">E8</span><a href="https://static.raspberrypi.org/files/curriculum/quickreads/6-Pedagogy_Summary_Semantic_Waves_2025_en-gb.pdf">static.raspberrypi.org</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Bret Victor</b> · "Up and Down the Ladder of Abstraction", an essay</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">A2</span><a href="https://worrydream.com/LadderOfAbstraction/">worrydream.com</a></span></li>
+          <li><span><b>Schocken &amp; Nisan</b> · nand2tetris course syllabus</span><span class="s-meta"><span class="src example">Example</span><span class="used">A3</span><span class="used">N6</span><span class="used">E1</span><a href="https://nand2tetris.org/_files/ugd/44046b_9b60bbc2723a435db664fa0faa4dc645.pdf">nand2tetris.org</a><span class="note">the address redirected; PDF read from a saved copy of where it led</span></span></li>
+          <li><span><b>Julia Evans</b> · "So you want to be a wizard"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">A4</span><a href="https://jvns.ca/blog/so-you-want-to-be-a-wizard/">jvns.ca</a></span></li>
+          <li><span><b>Ireland &amp; Mouthaan 2020</b> · spiral and network curriculum models, Cambridge Assessment</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">A5</span><a href="https://files.eric.ed.gov/fulltext/EJ1286824.pdf">files.eric.ed.gov</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Fyfe &amp; Nathan 2018</b> · "Making 'concreteness fading' more concrete as a theory of instruction for promoting transfer"</span><span class="s-meta"><span class="src review">Review</span><span class="used">A6</span><span class="used">Disagreements</span><a href="https://scholarworks.iu.edu/dspace/items/f1ea5994-0d9f-4215-abec-152a03149277">scholarworks.iu.edu</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Ames on Logo</b> · a critical history of Logo and learning by building, summarised on "Never Work in Theory" (2021)</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">A9</span><span class="used">Disagreements</span><a href="https://neverworkintheory.org/2021/10/11/a-critical-history-of-logo-and-constructionist-learning.html">neverworkintheory.org</a><span class="note">second-hand: a summary of Ames's critique</span></span></li>
+          <li><span><b>Structural Learning</b> · research briefing "Ask why and how"</span><span class="s-meta"><span class="src review">Review</span><span class="used">A11</span><a href="https://www.structural-learning.com/research-briefings/ask-why-and-how">structural-learning.com</a><span class="note">second-hand: summarises Donoghue &amp; Hattie 2021 and others</span></span></li>
+          <li><span><b>Murray, Lesser &amp; Lawson 2005</b> · "Attention, monotropism and the diagnostic criteria for autism"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">P1</span><a href="https://monotropism.org/murray-lesser-lawson/">monotropism.org</a></span></li>
+          <li><span><b>Edgar &amp; Adkin 2025</b> · "What is monotropism?", National Autistic Society</span><span class="s-meta"><span class="src study">Study</span><span class="used">P2</span><a href="https://www.autism.org.uk/learn/knowledge-hub/professional-practice/what-is-monotropism">autism.org.uk</a><span class="note">second-hand: reports the 2023 questionnaire study by Garau et al.</span></span></li>
+          <li><span><b>Wain et al. 2026</b> · transitioning in and out of autistic flow, interviews with 10 autistic adults, <i>Counselling and Psychotherapy Research</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">P3</span><span class="used">In short</span><a href="https://kar.kent.ac.uk/112495/">kar.kent.ac.uk</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Buckle, Leadbitter, Poliakoff &amp; Gowen 2021</b> · autistic inertia, first-hand accounts from 32 adults</span><span class="s-meta"><span class="src study">Study</span><span class="used">P4</span><span class="used">N6</span><span class="used">In short</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8314008">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Grandin 2009</b> · "How does visual thinking work in the mind of a person with autism? A personal account", <i>Philosophical Transactions of the Royal Society B</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">P5</span><span class="used">In short</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2677580">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Keiner 2025</b> · "I fell into a monotropic rabbit hole", <i>Spirals + Constellations</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">P6</span><a href="https://spiralsandconstellations.substack.com/p/i-fell-into-a-monotropic-rabbit-hole">spiralsandconstellations.substack.com</a><span class="note">the first address redirected here</span></span></li>
+          <li><span><b>Edgar (Autistic Realms) with Stimpunks 2024</b> · "Map of Monotropic Experiences"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">P7</span><a href="https://stimpunks.org/2024/10/21/map-of-monotropic-experiences/">stimpunks.org</a></span></li>
+          <li><span><b>Ashinoff &amp; Abu-Akel</b> · hyperfocus review, <i>Psychological Research</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">P9</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7851038">pmc.ncbi.nlm.nih.gov</a><span class="note">first part only; dated 2019 on the page, 2021 in the helper's report</span></span></li>
+          <li><span><b>Taylor &amp; Vestergaard 2022</b> · "Developmental dyslexia: disorder or specialization in exploration?", <i>Frontiers in Psychology</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">P11</span><a href="https://www.frontiersin.org/journals/psychology/articles/10.3389/fpsyg.2022.889245/full">frontiersin.org</a><span class="note">first part only</span></span></li>
+          <li><span><b>ASEE 2022</b> · "Conceptualizing first-principles thinking in engineering education"</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://peer.asee.org/conceptualizing-first-principles-thinking-in-engineering-education.pdf">peer.asee.org</a><span class="note">PDF read from a saved copy</span></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup sum">
+        <h3><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>Summary only</span> 43 sources</h3>
+        <p>The helper saw only an abstract, a search-result snippet or a news write-up, not the source itself. Findings that use them carry the same mark.</p>
+        <ul class="slist">
+          <li><span><b>Waite et al. 2020</b> · using semantic waves, accepted manuscript, Queen Mary University of London repository</span><span class="s-meta"><span class="src example">Example</span><span class="used">A1</span><a href="https://qmro.qmul.ac.uk/xmlui/bitstream/123456789/66685/2/Waite%20Using%20Semantic%20Waves%202020%20Accepted.pdf">qmro.qmul.ac.uk</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Petzold</b> · <i>Code: The Hidden Language of Computer Hardware and Software</i>, 2nd edition, publisher page</span><span class="s-meta"><span class="src example">Example</span><span class="used">A4</span><a href="https://www.pearson.com/store/en-au/p/code-the-hidden-language-of-computer-hardware-and-software/P200000007298">pearson.com</a><span class="note">named in A4 without a link</span></span></li>
+          <li><span><b>Ben Eater</b> · 8-bit breadboard computer</span><span class="s-meta"><span class="src example">Example</span><span class="used">A4</span><a href="https://eater.net/8bit/">eater.net</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Sinha &amp; Kapur 2021</b> · productive failure, via the phys.org news piece "Those who fail productively are all the wiser"</span><span class="s-meta"><span class="src review">Review</span><span class="used">A7</span><span class="used">Disagreements</span><a href="https://phys.org/news/2021-09-productively-wiser.html">phys.org</a></span></li>
+          <li><span><b>Collins, Brown &amp; Newman</b> · cognitive apprenticeship, ISLS webinar PDF</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">A8</span><a href="https://www.isls-naples.psy.uni-muenchen.de/intro/all-webinars/collins/cognitive-apprenticeship.pdf">isls-naples.psy.uni-muenchen.de</a></span></li>
+          <li><span><b>Alfieri et al. 2011</b> · "Does discovery-based instruction enhance learning?", meta-analysis of 164 studies</span><span class="s-meta"><span class="src review">Review</span><span class="used">A9</span><span class="used">N1</span><a href="https://www.fisme.science.uu.nl/publicaties/literatuur/2011_alfieri_discovery_learning.pdf">fisme.science.uu.nl</a><span class="note">newly marked in v2</span></span></li>
+          <li><span><b>Costa, Miranda &amp; Melo 2021</b> · 4C/ID meta-analysis (authors as named in the helper's search), ISCTE repository</span><span class="s-meta"><span class="src review">Review</span><span class="used">A10</span><span class="used">In short</span><a href="https://repositorio.iscte-iul.pt/bitstream/10071/23015/1/article_81383.pdf">repositorio.iscte-iul.pt</a></span></li>
+          <li><span><b>SUNY Cortland</b> · "Theory Name: 4C/ID – Four Component Instructional Design Model"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">A10</span><a href="https://web.cortland.edu/frieda/ID/IDtheories/8.html">web.cortland.edu</a></span></li>
+          <li><span><b>Kobayashi 2019</b> · "Learning by Preparing-to-Teach and Teaching: A Meta-Analysis"</span><span class="s-meta"><span class="src review">Review</span><span class="used">A11</span><a href="https://www.scinapse.io/papers/2886178087">scinapse.io</a></span></li>
+          <li><span><b>Bisra et al. 2018</b> · self-explanation meta-analysis, summary by the TUM Clearing House</span><span class="s-meta"><span class="src review">Review</span><span class="used">A11</span><a href="https://www.clearinghouse.edu.tum.de/wp-content/uploads/2023/09/CHU-KR-25_ENG_Bisra_2018_Selbsterklaerungen.pdf">clearinghouse.edu.tum.de</a></span></li>
+          <li><span><b>Woloshyn et al.</b> · why-questions work better with prior knowledge (1992); picturing it did better at low knowledge (1994)</span><span class="s-meta"><span class="src study">Study</span><span class="used">A11</span><span class="used">N4</span><span class="used">E9</span><a href="https://core.ac.uk/download/232778694.pdf">core.ac.uk</a><span class="note">which of the two papers sits behind this link was not recorded</span></span></li>
+          <li><span><b>Rozenblit &amp; Keil 2002</b> · via the Wikipedia article "Illusion of explanatory depth"</span><span class="s-meta"><span class="src study">Study</span><span class="used">A12</span><span class="used">In short</span><a href="https://en.wikipedia.org/wiki/Illusion_of_explanatory_depth">wikipedia.org</a></span></li>
+          <li><span><b>Hazzan</b> · learners "reducing abstraction", Springer journal record</span><span class="s-meta"><span class="src study">Study</span><span class="used">A12</span><a href="https://link.springer.com/article/10.1007/s10649-005-3335-x">link.springer.com</a></span></li>
+          <li><span><b>Concreteness fading, 2020 analysis</b> · <i>Educational Psychology Review</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">A6</span><a href="https://link.springer.com/article/10.1007/s10648-020-09581-7">link.springer.com</a><span class="note">the page itself sent the helper to a login</span></span></li>
+          <li><span><b>Anatomy study 2023</b> · concreteness fading hurt learning, <i>Current Research in Behavioral Sciences</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">A6</span><a href="https://doaj.org/article/5edf984b1ea14c8b8568eb55158a5b99">doaj.org</a></span></li>
+          <li><span><b>Education Endowment Foundation (EEF)</b> · "Metacognition and self-regulation", technical appendix</span><span class="s-meta"><span class="src review">Review</span><span class="used">In short</span><a href="https://educationendowmentfoundation.org.uk/education-evidence/teaching-learning-toolkit/metacognition-and-self-regulation/technical-appendix">educationendowmentfoundation.org.uk</a></span></li>
+          <li><span><b>Monotropism.org research round-up</b> · lab results on monotropism so far</span><span class="s-meta"><span class="src review">Review</span><span class="used">P2</span><a href="https://monotropism.org/?p=2486">monotropism.org</a></span></li>
+          <li><span><b>Van der Hallen et al. 2015</b> · local versus global processing in autism, meta-analysis, <i>Psychological Bulletin</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">P8</span><span class="used">Disagreements</span><span class="used">E7</span><a href="https://lirias.kuleuven.be/bitstream/123456789/461389/2/Van%20der%20Hallen%20et%20al._Psy%20Bulletin_2015.pdf">lirias.kuleuven.be</a></span></li>
+          <li><span><b>Happé &amp; Frith 2006</b> · "The weak coherence account: detail-focused cognitive style in autism"</span><span class="s-meta"><span class="src review">Review</span><span class="used">P8</span><span class="used">Disagreements</span><a href="https://scalda.mijn.bsl.nl/the-weak-coherence-account-detail-focused-cognitive-style-in-aut/543842">scalda.mijn.bsl.nl</a></span></li>
+          <li><span><b>Mottron et al. 2006</b> · enhanced perceptual functioning in autism</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">P8</span><span class="used">Disagreements</span><a href="https://link.springer.com/content/pdf/10.1007/s10803-005-0040-7.pdf">link.springer.com</a></span></li>
+          <li><span><b>Barack et al. 2024</b> · ADHD traits and exploring in a foraging game</span><span class="s-meta"><span class="src study">Study</span><span class="used">P9</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10878810">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Alderson et al. 2013</b> · "Attention-deficit/hyperactivity disorder (ADHD) and working memory in adults: a meta-analytic review"</span><span class="s-meta"><span class="src review">Review</span><span class="used">P10</span><a href="https://pubmed.ncbi.nlm.nih.gov/23688211/">pubmed.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Mestichelli et al. 2026</b> · ADHD, meta-ethnography of 25 interview studies</span><span class="s-meta"><span class="src review">Review</span><span class="used">P10</span><span class="used">In short</span><a href="https://ro.ecu.edu.au/ecuworks2022-2026/8906">ro.ecu.edu.au</a></span></li>
+          <li><span><b>Kirby et al. 2008</b> · learning strategies and study approaches of postsecondary students with dyslexia</span><span class="s-meta"><span class="src study">Study</span><span class="used">P12</span><a href="https://researchers.mq.edu.au/en/publications/learning-strategies-and-study-approaches-of-postsecondary-student/">researchers.mq.edu.au</a></span></li>
+          <li><span><b>Kalyuga et al. 2003</b> · the expertise reversal effect</span><span class="s-meta"><span class="src review">Review</span><span class="used">N2</span><span class="used">In short</span><a href="https://ro.uow.edu.au/edupapers/136">ro.uow.edu.au</a></span></li>
+          <li><span><b>Kirschner, Sweller &amp; Clark 2006</b> · "Why minimal guidance during instruction does not work"</span><span class="s-meta"><span class="src review">Review</span><span class="used">Disagreements</span><span class="note">no link kept by the helper</span></span></li>
+          <li><span><b>Sundararajan &amp; Adesope 2020</b> · seductive details, via the WSU news piece "Seductive details inhibit learning"</span><span class="s-meta"><span class="src review">Review</span><span class="used">N3</span><span class="used">Disagreements</span><a href="https://news.wsu.edu/2020/03/19/seductive-details-inhibit-learning/">news.wsu.edu</a></span></li>
+          <li><span><b>Gruber et al. 2014</b> · curiosity improves memory</span><span class="s-meta"><span class="src study">Study</span><span class="used">N3</span><span class="used">Disagreements</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4252494">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Renkl &amp; Atkinson 2003</b> · structuring the transition from example study to problem solving</span><span class="s-meta"><span class="src study">Study</span><span class="used">N5</span><a href="https://asu.elsevierpure.com/en/publications/structuring-the-transition-from-example-study-to-problem-solving--2">asu.elsevierpure.com</a></span></li>
+          <li><span><b>"Reductive thinking in computer science"</b> · Open University of Israel record (Armoni et al., per the helper)</span><span class="s-meta"><span class="src study">Study</span><span class="used">N7</span><a href="https://cris.openu.ac.il/en/publications/reductive-thinking-in-computer-science/">cris.openu.ac.il</a></span></li>
+          <li><span><b>Frontline Learning Research 2019</b> · dyslexia, working memory and multimedia learning</span><span class="s-meta"><span class="src study">Study</span><span class="used">E7</span><a href="https://flr.journals.publicknowledgeproject.org/index.php/journal/article/download/451/551/4165">flr.journals.publicknowledgeproject.org</a></span></li>
+          <li><span><b>Dunlosky et al. 2013</b> · effective learning techniques, PubMed record</span><span class="s-meta"><span class="src review">Review</span><span class="unused">not used on this page</span><a href="https://www.pubmed.gov/26173288/">pubmed.gov</a></span></li>
+          <li><span><b>Boven 2018</b> · special interests and inclusive academic learning, an autistic perspective, <i>Advances in Autism</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://research.rug.nl/en/publications/special-interests-and-inclusive-academic-learning-an-autistic-per/">research.rug.nl</a><span class="note">page opened, but it holds the abstract only</span></span></li>
+          <li><span><b>Liebel et al. 2024</b> · software engineers with ADHD, arXiv preprint</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://arxiv.org/abs/2312.05029v1">arxiv.org</a><span class="note">page opened, but it holds the abstract only</span></span></li>
+          <li><span><b>Heasman 2024</b> · towards an autistic flow theory</span><span class="s-meta"><span class="src theory">Theory</span><span class="unused">not used on this page</span><a href="https://kar.kent.ac.uk/106162">kar.kent.ac.uk</a></span></li>
+          <li><span><b>Baron-Cohen et al. 2009</b> · "Talent in autism: hyper-systemizing, hyper-attention to detail and sensory hypersensitivity"</span><span class="s-meta"><span class="src theory">Theory</span><span class="unused">not used on this page</span><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC2677592">pmc.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>Wood</b> · "Autism, intense interests and support in school: from wasted efforts to shared understandings"</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://repository.uel.ac.uk/item/87422">repository.uel.ac.uk</a></span></li>
+          <li><span><b>Sedgwick et al. 2019</b> · positive aspects of ADHD</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://www.springermedicine.com/the-positive-aspects-of-attention-deficit-hyperactivity-disorder/22119852">springermedicine.com</a></span></li>
+          <li><span><b>Dodson's "interest-based nervous system"</b> · via a coach's blog post</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://lifeskillsadvocate.com/blog/interest-based-nervous-system/">lifeskillsadvocate.com</a></span></li>
+          <li><span><b>Kasper et al. 2012</b> · working memory in ADHD, meta-analysis, PubMed record</span><span class="s-meta"><span class="src review">Review</span><span class="unused">not used on this page</span><a href="https://www.pubmed.gov/22917740/">pubmed.gov</a></span></li>
+          <li><span><b>Hmelo-Silver et al. 2007</b> · "Scaffolding and Achievement in Problem-Based and Inquiry Learning: A Response to Kirschner, Sweller, and Clark (2006)"</span><span class="s-meta"><span class="src review">Review</span><span class="unused">not used on this page</span><a href="https://bibsonomy.org/bibtex/26b900b0d98149b52011cd1efb9827fe3/tobold">bibsonomy.org</a></span></li>
+          <li><span><b>Sweller et al. 2019</b> · "Cognitive architecture and instructional design: 20 years later"</span><span class="s-meta"><span class="src review">Review</span><span class="unused">not used on this page</span><a href="https://cris.maastrichtuniversity.nl/en/publications/cognitive-architecture-and-instructional-design-20years-later/">cris.maastrichtuniversity.nl</a></span></li>
+          <li><span><b>Tes magazine</b> · "What is the Feynman technique?"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://www.tes.com/magazine/teaching-learning/general/what-is-the-feynman-technique">tes.com</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup block">
+        <h3><span class="st block"><svg class="icon"><use href="#i-block"/></svg>Blocked</span> 5 pages</h3>
+        <p>The page did not load; nothing from it is used.</p>
+        <ul class="slist">
+          <li><span><b>A PubMed record</b> (25420221), opened after the detail-first searches</span><span class="s-meta"><span class="note">a cookie wall, no content</span><a href="https://pubmed.ncbi.nlm.nih.gov/25420221/">pubmed.ncbi.nlm.nih.gov</a></span></li>
+          <li><span><b>A CORE record</b> (108841047), opened after the dyslexia searches</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://core.ac.uk/display/108841047">core.ac.uk</a></span></li>
+          <li><span><b>A CORE PDF</b> (237588613), opened after the cognitive load searches</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://core.ac.uk/download/237588613.pdf">core.ac.uk</a></span></li>
+          <li><span><b>NSW education department</b> · 2017 summary "Cognitive load theory: Research that teachers really need to understand"</span><span class="s-meta"><span class="note">the address didn't exist</span><a href="https://prod65.education.nsw.gov.au/content/dam/main-education/about-us/educational-data/cese/2017-cognitive-load-theory-summary.pdf">education.nsw.gov.au</a></span></li>
+          <li><span><b>Indiana University lab page</b> (?p=885)</span><span class="s-meta"><span class="note">showed the lab's home page, not the paper</span><a href="https://pc.cogs.indiana.edu/?p=885">pc.cogs.indiana.edu</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup">
+        <h3>From the helper's memory, not checked</h3>
+        <p>The goal-free effect (problems without one fixed goal lower the load for beginners) and Gagné's learning hierarchies (lower skills before higher ones). Neither is used on this page.</p>
+      </div>
+
+      <details class="inner">
+        <summary><svg class="icon"><use href="#i-search"/></svg>Searches the helper typed (63)</summary>
+        <ol>
+          <li>Murray Lesser Lawson 2005 &quot;Attention, monotropism and the diagnostic criteria for autism&quot;</li>
+          <li>Garau Murray monotropism questionnaire 2023 study</li>
+          <li>Fergus Murray monotropism learning education attention tunnels</li>
+          <li>semantic waves computing education Maton Curzon Waite abstract concrete</li>
+          <li>Happ&#233; Frith 2006 weak coherence account detail-focused cognitive style autism</li>
+          <li>Mottron 2006 enhanced perceptual functioning model autism eight principles</li>
+          <li>Temple Grandin &quot;bottom-up thinking&quot; details to concepts autism</li>
+          <li>Van der Hallen 2015 meta-analysis global local processing autism</li>
+          <li>Sedgwick 2019 positive aspects of ADHD qualitative curiosity hyperfocus adults</li>
+          <li>Ashinoff Abu-Akel 2021 hyperfocus review &quot;rabbit hole&quot; OR &quot;hyperfocus: the forgotten frontier of attention&quot;</li>
+          <li>ADHD &quot;interest-based nervous system&quot; Dodson evidence critique</li>
+          <li>software engineers with ADHD challenges strengths strategies qualitative study 2024 Liebel</li>
+          <li>Taylor Vestergaard 2022 &quot;Developmental dyslexia: disorder or specialization in exploration&quot; Frontiers</li>
+          <li>dyslexic university students learning strategies qualitative study &quot;big picture&quot; understanding first-person</li>
+          <li>dyslexia working memory cognitive load multimedia learning study students</li>
+          <li>Kirby Silvestri Allingham Parrila La Fave 2008 learning strategies study approaches postsecondary students dyslexia deep approach</li>
+          <li>nand2tetris Schocken Nisan &quot;From NAND to Tetris&quot; course evaluation students learning outcomes paper</li>
+          <li>Bret Victor &quot;Up and Down the Ladder of Abstraction&quot;</li>
+          <li>Fyfe McNeil Son Goldstone 2014 concreteness fading review Educational Psychology Review</li>
+          <li>Dunlosky 2013 improving students learning effective techniques elaborative interrogation self-explanation moderate utility</li>
+          <li>Collins Brown Newman cognitive apprenticeship modeling coaching scaffolding fading articulation reflection exploration</li>
+          <li>Harden 1999 &quot;What is a spiral curriculum&quot; Medical Teacher features revisiting increasing difficulty</li>
+          <li>Alfieri 2011 meta-analysis &quot;Does discovery-based instruction enhance learning&quot; unassisted enhanced discovery</li>
+          <li>Kirschner Sweller Clark 2006 &quot;Why minimal guidance during instruction does not work&quot; Hmelo-Silver response</li>
+          <li>Kalyuga Ayres Chandler Sweller 2003 expertise reversal effect Educational Psychologist</li>
+          <li>Sinha Kapur 2021 meta-analysis productive failure &quot;When problem solving followed by instruction works&quot;</li>
+          <li>Costa Miranda Melo 2021 4C/ID meta-analysis four-component instructional design effect size</li>
+          <li>Bisra Liu Nesbit Salimi Winne 2018 self-explanation meta-analysis effect size</li>
+          <li>EEF metacognition and self-regulated learning guidance report plan monitor evaluate months progress</li>
+          <li>Rozenblit Keil 2002 illusion of explanatory depth explaining mechanisms reduces confidence</li>
+          <li>Sundararajan Adesope 2020 seductive details meta-analysis Educational Psychology Review</li>
+          <li>Kobayashi 2019 meta-analysis learning by preparing to teach and teaching effect size</li>
+          <li>concreteness fading meta-analysis effectiveness mixed results 2022 OR 2023 OR 2024</li>
+          <li>Feynman technique evidence research learning explain simple terms</li>
+          <li>Gruber Gelman Ranganath 2014 curiosity states enhance hippocampus-dependent learning Neuron incidental information</li>
+          <li>Papert constructionism evidence review Logo learning outcomes critique Pea Kurland</li>
+          <li>&quot;concreteness fading&quot; Educational Psychology Review 2020 &quot;may not be as generalizable&quot; authors</li>
+          <li>Renkl Atkinson 2003 structuring transition from example study to problem solving fading worked-out steps</li>
+          <li>autistic adults learning &quot;need to understand why&quot; first-person account education complete understanding</li>
+          <li>Buckle Leadbitter Poliakoff Gowen 2021 &quot;No way out except from external intervention&quot; autistic inertia first-hand accounts</li>
+          <li>Wood 2021 &quot;Autism, intense interests and support in school&quot; Educational Review</li>
+          <li>Heasman 2024 &quot;autistic flow theory&quot; monotropism flow states</li>
+          <li>Barack 2024 ADHD symptoms foraging explore leave patch earlier Proceedings Royal Society B</li>
+          <li>ADHD university students learning experiences qualitative study strategies interest structure deadlines</li>
+          <li>Sweller cognitive load theory element interactivity novices working memory review 2019 &quot;Cognitive architecture and instructional design: 20 years later&quot;</li>
+          <li>CESE NSW &quot;Cognitive load theory: Research that teachers really need to understand&quot; expertise reversal worked examples</li>
+          <li>first principles thinking learning education evidence &quot;first principles&quot; Musk Aristotle critique</li>
+          <li>Hazzan &quot;reducing abstraction level&quot; students computer science learning mental process</li>
+          <li>Charles Petzold &quot;Code: The Hidden Language of Computer Hardware and Software&quot; starts with flashlights relays builds up to computer</li>
+          <li>Julia Evans blog learning &quot;dig deeper&quot; OR &quot;rabbit hole&quot; how to learn computer systems layers</li>
+          <li>Ben Eater 8-bit breadboard computer video series learn how computers work from transistors</li>
+          <li>spiral curriculum effectiveness evidence review Ireland Mouthaan 2020 Cambridge Assessment spiral and network models</li>
+          <li>cognitive apprenticeship meta-analysis effect size learning outcomes</li>
+          <li>EEF teaching and learning toolkit metacognition and self-regulation &quot;+7 months&quot; evidence strength</li>
+          <li>elaborative interrogation effect depends on prior knowledge why questions Woloshyn Pressley</li>
+          <li>ADDitude Dodson &quot;Secrets of the ADHD Brain&quot; interest-based nervous system interest novelty challenge urgency</li>
+          <li>Baron-Cohen 2009 &quot;Talent in autism: hyper-systemizing, hyper-attention to detail and sensory hypersensitivity&quot;</li>
+          <li>autistic students higher education computing learning preferences study &quot;special interests&quot; OR &quot;deep understanding&quot; qualitative 2022 OR 2023 OR 2024</li>
+          <li>&quot;rabbit hole&quot; ADHD autistic learning first-person blog monotropic &quot;info-dump&quot; deep dive coming back</li>
+          <li>Stimpunks monotropism learning &quot;interest-based learning&quot; self-directed neurodivergent</li>
+          <li>4C/ID four components learning tasks supportive information procedural information part-task practice van Merri&#235;nboer whole task simple-to-complex</li>
+          <li>Kasper Alderson Hudec 2012 meta-analysis working memory deficits ADHD adults children effect size</li>
+          <li>monotropism.org Murray 2025 research round-up hyperfocus autism mixed findings Edgar</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-abc"/></svg>Glossary</span><span class="sum-text"><b>Special words on this page.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <dl class="gloss">
+        <dt>Semantic waves</dt><dd>Moving between abstract words and concrete examples, down and back up, while teaching.</dd>
+        <dt>Repacking</dt><dd>Putting concrete understanding back into the abstract term, the climb.</dd>
+        <dt>NAND gate</dt><dd>A tiny logic switch; every part of a computer can be built from many of them.</dd>
+        <dt>ALU</dt><dd>Arithmetic logic unit: the part of a processor that calculates.</dd>
+        <dt>Metacognition</dt><dd>Thinking about your own thinking: planning, checking and judging how you learn.</dd>
+        <dt>Expertise reversal</dt><dd>Help that supports beginners gets in the way of people who already know the topic.</dd>
+        <dt>Black box</dt><dd>A part you use by what it does, without opening it to see how.</dd>
+        <dt>Effect size (g, d)</dt><dd>How big a difference is: about 0.2 small, 0.5 medium, 0.8 large.</dd>
+        <dt>Monotropism</dt><dd>A theory from autistic people: attention gathers strongly on few things at a time.</dd>
+        <dt>Autistic inertia</dt><dd>Difficulty starting, stopping or switching activities, not fixed by willpower.</dd>
+        <dt>Meta-analysis</dt><dd>A study that pools the results of many studies to see the overall effect.</dd>
+        <dt>Meta-ethnography</dt><dd>A study that pools the findings of many interview studies.</dd>
+        <dt>Abstract</dt><dd>The short summary at the top of a research paper.</dd>
+        <dt>Search snippet</dt><dd>The few lines a search engine shows under each result.</dd>
+        <dt>Second-hand</dt><dd>A page that reports someone else's study instead of being the study itself.</dd>
+        <dt>Saved copy</dt><dd>When the web reader showed a PDF as raw code, the helper opened the PDF file the reader had saved on this PC.</dd>
+        <dt>Repository</dt><dd>A university's online archive of papers.</dd>
+        <dt>Preprint, arXiv</dt><dd>A paper shared before other researchers have checked it; arXiv is a free online archive for them.</dd>
+        <dt>PubMed, PubMed Central</dt><dd>Free archives of medical and life-science papers, run by the US National Library of Medicine.</dd>
+        <dt>CORE</dt><dd>A free search service for open-access research papers.</dd>
+        <dt>403</dt><dd>A web error code: the site refused the request.</dd>
+        <dt>Redirect</dt><dd>A web address that sends you on to a different address.</dd>
+        <dt>Cookie wall</dt><dd>A page that shows nothing until you accept its cookies.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <footer>
+    <span><b>Where it came from:</b> a research helper (a second Claude in the background) looked up sources on 13.11.2026. It opened 18, saw 43 only as an abstract, search snippet or news write-up, and 5 did not load (all listed under <a href="#sources">Sources</a>). I read its report and its records, and wrote this page. Explanations are AI-drafted.</span>
+    <span><b>What it does not do:</b> no advice on diagnosis or therapy, no design decisions; the open questions are a menu.</span>
+    <span><b>What changed from v1:</b> the Sources list; 3 more sources marked "summary only" (in A1, A4, A9 and N1); "Gaps in reading" moved into Sources. Finding texts are unchanged apart from the marks. v1 is not kept in the repo; what was concluded is in <a href="decision.md">decision.md</a>.</span>
+  </footer>
+</main>
