@@ -11,5 +11,6 @@ Everything in this repository that an AI made, kept in one place, so anyone can 
 |---|---|
 | [claude/learning/](claude/learning/README.md) | Notes and code examples for learning Godot and programming, including the first graybox. |
 | [claude/research/](claude/research/README.md) | The research behind finished board cards, with a decision note for each, and the learner profile the research was written for. |
+| [claude/design-cycle/](claude/design-cycle/README.md) | Tools from Anna (@annaothercrow)'s design cycle, rebuilt for ACE Workshop. |
 
 Until 14.11.2026 the learning folder was called `ai-learning/` at the top of the repository.
