@@ -121,12 +121,12 @@ All four pass → done. Not yet → next cycle: write a few more, then walk the 
 - **Design principles** (p. 53), an alternative: guidelines that frame decisions across a project.
 - **Context mapping** (p. 133), a helper: how an everyday experience is perceived, when, with whom, in what context.
 - **Cause-effect diagrams** (p. 49), a helper: named only, no page of their own.
-- **5W+H questions** (p. 71), a helper: who, what, when, where, why, how. Not built here yet.
-- **How might we questions** (p. 125), a helper: turns a found need into a design challenge. Not built here yet.
+- **5W+H questions** (p. 71), a helper: who, what, when, where, why, how. [5W+H](../../supports/5w-h/5w-h.md).
+- **How might we questions** (p. 125), a helper: turns a found need into a design challenge. [How might we](../../3-define/how-might-we/how-might-we.md).
 
 ## Parked: dot voting (p. 159–162)
 
-In a team of 5–10, everyone places 3–5 dots on the options that best meet criteria agreed beforehand; the options with the most dots get regrouped and decided openly. Alone there's nobody to vote with, so the discernment matrix does the choosing. Three of dot voting's parts already live here: criteria first (the matrix questions), writing kept apart from judging (steps 1 and 2), and the parking lot. The book's other choosing tool, the 2x2 matrix (p. 155–156), is not built here yet.
+In a team of 5–10, everyone places 3–5 dots on the options that best meet criteria agreed beforehand; the options with the most dots get regrouped and decided openly. Alone there's nobody to vote with, so the discernment matrix does the choosing. Three of dot voting's parts already live here: criteria first (the matrix questions), writing kept apart from judging (steps 1 and 2), and the parking lot. The book's other choosing tool is the [2x2 matrix](../../4-ideate/2x2-matrix/2x2-matrix.md) (p. 155–156).
 
 ## Sources
 

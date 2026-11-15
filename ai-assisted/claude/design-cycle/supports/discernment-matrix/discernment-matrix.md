@@ -53,7 +53,7 @@ The items change; the four questions don't. Rewording is a change to a keeper, s
 | MVP | each candidate feature |
 | Retrospective sailboat | each anchor |
 
-Built in ACE Workshop so far: [Problem statement](../../1-understand/problem-statement/problem-statement.md). The others are tools of Anna's toolkit that aren't rebuilt yet.
+All of these are rebuilt in ACE Workshop; the [design cycle README](../../README.md) links each one.
 
 ## Where it does not apply
 
