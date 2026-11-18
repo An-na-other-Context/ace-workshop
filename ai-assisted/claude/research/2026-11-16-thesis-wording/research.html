@@ -1,0 +1,630 @@
+<title>Wording a design thesis v4</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Research page (skill research-page). Summary on top, sections folded, every finding numbered
+   so Anna can pick by number. Calm colours, no red or orange. Source status: green read,
+   ochre summary only, slate blocked. */
+:root {
+  --bg: #f1f3f1; --surface: #fbfcfb; --fg: #1d2226; --muted: #586069; --line: #d3d9d6;
+  --accent: #2f6fa6; --soft: #e7ece8;
+  --s-review: #1d5e96; --s-study: #1f7a4d; --s-lived: #8a3d8f; --s-example: #10756f; --s-guide: #5d6470; --s-theory: #4b5a8a; --s-opinion: #7a6a2a; --s-mine: #6c3fb0;
+  --c-q1: #2a5fb0; --c-q2: #10756f; --c-q3: #8a3d8f; --c-q4: #5a4bb0; --c-q5: #56661c; --c-q6: #1f6f8b; --c-q7: #4d5d1f; --c-do: #3d5a80; --c-gap: #217a45; --c-meta: #5d6470;
+  --st-read: #1f7a4d; --st-sum: #7a5c00; --st-block: #4a525c;
+  --font-body: "Atkinson Hyperlegible", "Verdana", "Segoe UI", sans-serif;
+  --font-code: "JetBrains Mono", "Cascadia Mono", "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+    --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-theory: #a9b6e6; --s-opinion: #d9c98a; --s-mine: #b597ec;
+    --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-q4: #b3a8f0; --c-q5: #c4d07a; --c-q6: #8fd0e6; --c-q7: #c9d98f; --c-do: #9db6d9; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+    --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15191c; --surface: #1c2125; --fg: #e4e8e6; --muted: #a2abb3; --line: #333b41; --accent: #7fb3df; --soft: #232a2f;
+  --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-theory: #a9b6e6; --s-opinion: #d9c98a; --s-mine: #b597ec;
+  --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-q4: #b3a8f0; --c-q5: #c4d07a; --c-q6: #8fd0e6; --c-q7: #c9d98f; --c-do: #9db6d9; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+  --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.7; letter-spacing: 0.01em; word-spacing: 0.06em; }
+.page { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 48px; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 2.1rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.08rem; color: var(--c); }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.lede { font-size: 1.15rem; }
+.ver { font-size: 0.9rem; color: var(--muted); }
+.hers { border-left: 4px solid var(--s-lived); background: var(--surface); border-radius: 0 10px 10px 0; padding: 10px 16px; display: flex; flex-direction: column; gap: 4px; }
+.hers .who { font-size: 0.85rem; font-weight: 700; color: var(--s-lived); }
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; line-height: 1.3; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; text-decoration: none; white-space: nowrap; vertical-align: 0.1em; }
+.src.review { color: var(--s-review); } .src.study { color: var(--s-study); } .src.lived { color: var(--s-lived); } .src.example { color: var(--s-example); } .src.guide { color: var(--s-guide); } .src.theory { color: var(--s-theory); } .src.opinion { color: var(--s-opinion); }
+.src.mine { color: var(--s-mine); border-style: dashed; }
+.thin { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.9rem; color: var(--muted); }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.points { display: grid; gap: 12px; }
+.point { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 12px; align-items: start; }
+.point .mark { width: 2.2em; height: 2.2em; border-radius: 8px; display: grid; place-items: center; background: var(--soft); color: var(--accent); }
+.point b { display: block; }
+details.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.sec > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 16px 20px; }
+details.sec > summary::-webkit-details-marker { display: none; }
+.tag { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: var(--surface); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; }
+.sum-text { flex: 1 1 260px; min-width: 0; } .sum-text b { color: var(--c); }
+.chev { color: var(--muted); } details.sec[open] .chev { transform: rotate(90deg); }
+.body { border-top: 1px solid var(--line); padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+ol.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+ol.findings > li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 10px; align-items: start; }
+.fid { font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; color: var(--c); border: 1.5px solid var(--c); border-radius: 6px; text-align: center; padding: 1px 0; }
+.ftext { min-width: 0; }
+.ftext b { color: var(--fg); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+dl.gloss { display: grid; grid-template-columns: minmax(8em, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.gloss dt { font-weight: 700; } dl.gloss dd { margin: 0; max-width: 68ch; }
+/* Source status */
+.st { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; font-style: normal; line-height: 1.3; padding: 1px 8px; border-radius: 999px; color: var(--surface); background: var(--st); white-space: nowrap; vertical-align: 0.1em; }
+.read { --st: var(--st-read); } .sum { --st: var(--st-sum); } .block { --st: var(--st-block); }
+.counts { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sgroup { display: flex; flex-direction: column; gap: 10px; }
+.body .sgroup > h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fg); }
+.sgroup > p { color: var(--muted); font-size: 0.92rem; }
+ul.slist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.slist > li { border-left: 4px solid var(--st); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.s-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.88rem; }
+.used { font-family: var(--font-code); font-size: 0.78rem; font-weight: 700; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.unused { font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); }
+details.inner { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.inner > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.inner > ol { margin: 0; padding: 0 14px 14px 2.6em; display: grid; gap: 4px; font-size: 0.92rem; overflow-wrap: anywhere; }
+footer { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+footer b { color: var(--fg); }
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  dl.gloss { grid-template-columns: minmax(0, 1fr); gap: 2px 0; } dl.gloss dd { margin-bottom: 8px; }
+  details.sec > summary, .body, .summary { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></symbol>
+  <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.7-2.5 2-2.5 4M12 17.5v.01"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-abc" viewBox="0 0 24 24"><path d="M3 17l3.5-10L10 17M4.2 13.5h4.6M13 7v10h3.5a2.5 2.5 0 0 0 0-5H13h3a2.5 2.5 0 0 0 0-5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/></symbol>
+  <symbol id="i-ask" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M10 9.5a2 2 0 0 1 4 .3c0 1.2-2 1.5-2 3M12 14.5v.01"/></symbol>
+  <symbol id="i-self" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+  <symbol id="i-repo" viewBox="0 0 24 24"><path d="M6 3h11a1 1 0 0 1 1 1v16l-3-2-3 2-3-2-3 2V4a1 1 0 0 1 1-1z"/><path d="M9 8h6M9 12h6"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M2 20a6 6 0 0 1 12 0M10 20a6 6 0 0 1 12 0"/></symbol>
+  <symbol id="i-do" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-frame" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 12h8M12 8v8"/></symbol>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="eyebrow">ACE Workshop · #28 · research, depth 2: what others tried and suggested · version 4</span>
+    <h1>Wording a design thesis and its research questions</h1>
+    <p class="lede">What design research says about wording a thesis and the research questions built on it, so a repo can work as a design research document. Findings are numbered so they can be picked by number.</p>
+    <p class="thin">Repo copy, 16.11.2026: written for the learner profile <a href="../learner-profiles/annaothercrow.md">annaothercrow</a>. Wording that addressed Anna (@annaothercrow) as "you" now names Anna or the learner profile; findings, sources and numbers are unchanged. Versions 1–3 were private pages and are not linked. The decision is in <a href="decision.md">decision.md</a>.</p>
+    <p class="ver">Version 4 (16.11.2026): adds Q7 · Reframing the issue (F51–F75), from rounds 3 and 4, on Anna's request to stop looking at the word and look for reframings of the issue itself: mismatch, the paradigm shift, diversity and critical disability studies. Q6 came in version 3; everything else is unchanged.</p>
+    <div class="hers">
+      <span class="who">Anna's example (14.11.2026), unchanged. Anna words it; this page doesn't reword it.</span>
+      <span>"How can I create and learn with a bottom-up learning process so that I can build my own Operating System?"</span>
+    </div>
+    <div class="legend">
+      <span class="src review">Review</span><span class="src study">Study</span><span class="src lived">Lived</span><span class="src example">Example</span><span class="src guide">Guideline</span><span class="src theory">Theory</span><span class="src opinion">Opinion</span><span class="src mine">Mine</span>
+    </div>
+    <div class="legend counts">
+      <span class="st read"><svg class="icon"><use href="#i-ok"/></svg>read</span><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="st block"><svg class="icon"><use href="#i-block"/></svg>blocked</span>
+      <span class="thin">= what the helper got from a source. Findings without a mark were read. Full list under <a href="#sources">Sources</a>.</span>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>In short</h2>
+    <div class="points">
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>No agreed formula for a "design thesis".</b>None of the sources uses "design thesis" as a defined term. They speak of a research question, a problem framing, a <a href="#g-preferred">preferred state</a> or a claim (F1, F9).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Parts that come up again and again.</b>A short question or problem; its context (why it matters, what exists); the method; the outcome and who it is for (Candy, F5). Plus the preferred state and why it is better (Zimmerman et al., F1).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>The question is expected to change.</b>Questions grow out of the making and "<a href="#g-drift">drift</a>"; in one case the final question was worded only after the fourth artefact worked (F7, F8, F10). Claims stay provisional (F3, summary only).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>When the designer is also the user.</b><a href="#g-first">First-person research</a> asks for clear boundaries, an interpretive step and a link to wider themes, so accounts become findings (F17, F19).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Repos as research documents exist; wording rules don't.</b>Game researchers keep design reasoning in a repo, a dated public journal or playtest reports (F23–F25). No source gave rules for question grammar (open or closed, sub-questions, "so that"), and nothing on this topic came from ADHD, dyslexic or PDA researchers (F14, F22, F29).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-clock"/></svg></span><div><b>Time boundaries: stated openly, no standard length.</b>First-person studies run from weeks to a decade and mostly end for outside reasons (F33, F35). Planning guides use milestones, a plan that can change and "what if" questions; buffer percentages are rules of thumb (F40–F43). A time box helps when scope can shrink to fit it (F45). Nothing found on planning with dates for ADHD, autistic, dyslexic or PDA adults (F48).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-frame"/></svg></span><div><b>Reframing: every framing found puts the problem outside the person.</b>In the design (mismatch), in institutions as they are now (systemic mismatch), in the abilities a system assumes (ability-based design), in who gets to design (design justice), or in the idea of one "normal" and the power behind it (critical disability studies, neurodiversity paradigm). Critics warn that real effects such as pain can drop out of view (F51–F62).</div></div>
+    </div>
+  </section>
+
+  <details class="sec" style="--c: var(--c-q1)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-pen"/></svg>Q1 · The thesis</span><span class="sum-text"><b>What a thesis-like statement is called and which parts it has.</b> F1–F9</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F1</span><span class="ftext"><b>Preferred state instead of thesis:</b> an <a href="#g-rtd">RtD</a> project frames a concrete problem and describes a "preferred state"; the artefact shows what "ought to be". This is the closest thing to a thesis in this paper. <a class="src theory" href="https://courses.ischool.berkeley.edu/i262/s13/readings_pdf/Zimmerman_Research_Through_Design_as_a_Method_for_IaD_in_HCI_0.pdf">Zimmerman et al. 2007</a></span></li>
+        <li><span class="fid">F2</span><span class="ftext"><b>Four lenses for judging the work:</b> process (enough detail and reasons for the methods), invention, relevance (why the preferred state is better) and extensibility (others can build on it). <a class="src theory" href="https://courses.ischool.berkeley.edu/i262/s13/readings_pdf/Zimmerman_Research_Through_Design_as_a_Method_for_IaD_in_HCI_0.pdf">Zimmerman et al. 2007</a></span></li>
+        <li><span class="fid">F3</span><span class="ftext"><b>Claims stay provisional:</b> RtD theory is "provisional, contingent, aspirational"; theory can live as notes on real design examples (<a href="#g-portfolio">annotated portfolios</a>). <a class="src theory" href="https://research.gold.ac.uk/id/eprint/14818">Gaver 2012</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F4</span><span class="ftext"><b>Practice-based or practice-led:</b> if the made thing is the basis of the contribution, it is practice-based; if the work mainly brings new understanding about practice, practice-led. The two terms are often swapped. <a class="src guide" href="https://www.creativityandcognition.com/wp-content/uploads/2011/04/PBR-Guide-1.1-2006.pdf">Candy 2006</a></span></li>
+        <li><span class="fid">F5</span><span class="ftext"><b>Parts of a framing:</b> the problem (a short statement of the question), the context (the work behind it and why it matters), the method, and the outcomes (what they add, and for whom). Citing a UK funding body (<a href="#g-ahrb">AHRB</a>, 2000): define the questions, give context, name methods with reasons. <a class="src guide" href="https://www.creativityandcognition.com/wp-content/uploads/2011/04/PBR-Guide-1.1-2006.pdf">Candy 2006</a></span></li>
+        <li><span class="fid">F6</span><span class="ftext"><b>What to avoid:</b> purely private, unspoken knowing isn't research in the doctoral sense; the knowledge has to be shareable and open to challenge. <a class="src guide" href="https://www.creativityandcognition.com/wp-content/uploads/2011/04/PBR-Guide-1.1-2006.pdf">Candy 2006</a></span></li>
+        <li><span class="fid">F7</span><span class="ftext"><b>Worded late:</b> in one master's project, the first three artefacts failed; the final question was worded only once the fourth worked. Writing things down made the researcher explain choices. Advice: re-check dropped ideas, notice when to switch and which switch to make. One case, so weak evidence. <a class="src study" href="https://repository.tudelft.nl/file/File_1bf77a8c-23ce-440b-b010-8075e1e4f61c">Reeker et al.</a></span></li>
+        <li><span class="fid">F8</span><span class="ftext"><b>Drifting is normal:</b> design research often moves away from its first question on purpose, towards results nobody expected. Krogh names five ways of drifting (accumulative, comparative, serial, expansive, probing). <a class="src theory" href="https://pure.au.dk/ws/files/335764215/How_Constructive_Design_Researchers_Drift_Four_Epistemologies.pdf">Krogh &amp; Koskinen</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>; second-hand in <a class="src study" href="https://repository.tudelft.nl/file/File_1bf77a8c-23ce-440b-b010-8075e1e4f61c">Reeker et al.</a></span></li>
+        <li><span class="fid">F9</span><span class="ftext"><b>Constructive design research</b> works in lab, field or showroom; one chapter is called "Physical Hypotheses and Design" (table of contents only). "Constructive design research" and RtD name similar work. <a class="src theory" href="https://shop.elsevier.com/books/design-research-through-practice/koskinen/978-0-12-385502-2">Koskinen et al. 2011</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span> <a class="src study" href="https://pure.au.dk/ws/files/465399057/3706598.3713942.pdf">Alrøe &amp; Krogh 2025</a></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q2)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-ask"/></svg>Q2 · Research questions</span><span class="sum-text"><b>How the questions relate to the thesis and to the making.</b> F10–F14</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F10</span><span class="ftext"><b>Questions grow from the making:</b> in practice-based research, questions and design criteria come up while making. <a class="src theory" href="https://core.ac.uk/download/228192235.pdf">Candy &amp; Edmonds 2018</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F11</span><span class="ftext"><b>One question, the artefact as evidence:</b> the Delft case ended with a single question of the form "Can a … process be created, such that …?", answered by the working artefact. <a class="src study" href="https://repository.tudelft.nl/file/File_1bf77a8c-23ce-440b-b010-8075e1e4f61c">Reeker et al.</a></span></li>
+        <li><span class="fid">F12</span><span class="ftext"><b>How might we is a different tool:</b> design-thinking guides place "<a href="#g-hmw">How might we</a>" questions after research and synthesis, as a start for ideas. They assume a solution is possible and leave room for many answers. <a class="src guide" href="https://digital.gov/guides/hcd/discovery-operations/reframing">digital.gov</a> <a class="src guide" href="https://ecolecanada.gc.ca/tools/jobaids/pdfs/how-might-we-eng.pdf">Canada School</a> <a class="src guide" href="https://your.wa.gov/cx-resources/how-might-we-statements/">WA CX</a> <a class="src guide" href="https://greenbook.org/insights/research-methodologies/framing-your-insights-with-a-8220how-might-we8221-statement-part-2">Greenbook</a> <a class="src guide" href="https://sites.google.com/vanderbilt.edu/nsf-kelly-chang/human-centered-design/themes">Vanderbilt</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F13</span><span class="ftext"><b>Games:</b> prototype plans follow the scope of the research questions <a class="src guide" href="https://ideas.repec.org/a/sae/simgam/v43y2012i3p391-412.html">Eladhari &amp; Ollila 2012</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. Game design is often reported only as a tool for other questions; "research through game design" treats the design process itself as where knowledge is made, with no wording rules for questions. <a class="src example" href="https://eprints.lancs.ac.uk/id/eprint/236169/1/2026bates-RtGD.pdf">Bates et al. 2026</a></span></li>
+        <li><span class="fid">F14</span><span class="ftext"><b>Gap:</b> no source gave rules on open or closed questions, main and sub-questions, or "so that" parts in design research questions. Only F5 and F11 touch on form. <span class="src mine">helper's search result</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q3)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-self"/></svg>Q3 · Designer as user</span><span class="sum-text"><b>First-person research: researching your own process.</b> F15–F22</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F15</span><span class="ftext"><b>What it is:</b> research with data and experience from the researcher themselves: <a href="#g-auto">autoethnography</a>, <a href="#g-autobio">autobiographical design</a>, autoethnographic RtD. <a class="src review" href="https://discovery.ucl.ac.uk/10092122/1/1PR_DIS_ABS_03AL.pdf">Lucero et al. 2019</a></span></li>
+        <li><span class="fid">F16</span><span class="ftext"><b>Common, rarely reported:</b> 11 interviews found autobiographical design is common but seldom written up; it rests on long, real use by the people building the system. <a class="src study" href="https://www.doi.org/10.1145/2317956.2318034">Neustaedter &amp; Sengers 2012</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F17</span><span class="ftext"><b>An interpretive step is needed:</b> without it, detailed accounts stay accounts and add little knowledge (Chien &amp; Hassenzahl, second-hand). <a class="src review" href="https://discovery.ucl.ac.uk/10092122/1/1PR_DIS_ABS_03AL.pdf">Lucero et al. 2019</a></span></li>
+        <li><span class="fid">F18</span><span class="ftext"><b>Role tension:</b> balancing roles such as designer, researcher and parent (Desjardins &amp; Ball, second-hand). <a class="src review" href="https://discovery.ucl.ac.uk/10092122/1/1PR_DIS_ABS_03AL.pdf">Lucero et al. 2019</a></span></li>
+        <li><span class="fid">F19</span><span class="ftext"><b>Seven criteria:</b> study boundaries (time, place, project type, point of view), authenticity, plausibility, criticality, self-revealing writing, weaving material with personal content, and generalisability. Lucero's own focus and words came from first writing look-back accounts. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">pp. 79–86 read</span></span></li>
+        <li><span class="fid">F20</span><span class="ftext"><b>Not a shortcut:</b> it takes dedication, documentation and resilience. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a></span></li>
+        <li><span class="fid">F21</span><span class="ftext"><b>Autistic first-person design research:</b> little is written on how autoethnography is actually done, and autistic practice varies. The authors built recorders so data is caught with little effort and analysed later. <a class="src study" href="https://pure.au.dk/ws/files/465399057/3706598.3713942.pdf">Alrøe &amp; Krogh 2025</a> <span class="note">pp. 1–3 read</span></span></li>
+        <li><span class="fid">F22</span><span class="ftext"><b>Gap:</b> none of these gives wording rules for the aim of a first-person study; "how to plan a first-person project" is listed as an open goal. <a class="src review" href="https://discovery.ucl.ac.uk/10092122/1/1PR_DIS_ABS_03AL.pdf">Lucero et al. 2019</a></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q4)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-repo"/></svg>Q4 · Working examples</span><span class="sum-text"><b>Design research kept as a living document or repo.</b> F23–F28</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F23</span><span class="ftext"><b>Design reasoning in the repo:</b> the "Method for Design Materialization" keeps design reasoning in one repository; <a href="#g-commit">commit</a> messages link changes to design goals. <a class="src example" href="https://dl.digra.org/index.php/dl/article/view/2041">Khaled &amp; Barr 2023</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>; also described in <a class="src example" href="https://eprints.lancs.ac.uk/id/eprint/236169/1/2026bates-RtGD.pdf">Bates et al. 2026</a></span></li>
+        <li><span class="fid">F24</span><span class="ftext"><b>Playtest reflections for Godot:</b> "Reflection at Design Actualization" is an open tool for Unity and Godot that records playtests and turns tagged reflections into reports. It starts from a research goal; linking logs to commits is named as future work. <a class="src example" href="https://arxiv.org/html/2602.12887v1">Demleitner et al. 2026</a> <span class="note">first ~70% read</span></span></li>
+        <li><span class="fid">F25</span><span class="ftext"><b>A public process journal:</b> dated entries mixing decisions, goals as to-do lists, reflections and links to commits. No research question is written out; the aim stays implicit. <a class="src example" href="https://pippinbarr.com/v-r-5/process/journal.html">Barr 2024</a> <span class="note">first ~85% read</span>; talk <a class="src example" href="https://pippinbarr.com/v-r-5/process/talks/talk.html">Barr</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F26</span><span class="ftext"><b>Annotated portfolio of games:</b> four games, with what knowledge came out of designing them; process detail left out on purpose. <a class="src example" href="https://eprints.lancs.ac.uk/id/eprint/236169/1/2026bates-RtGD.pdf">Bates et al. 2026</a> <span class="note">pp. 1–5 read</span></span></li>
+        <li><span class="fid">F27</span><span class="ftext"><b>A timeline picture:</b> artefacts, experiments and theories mapped over seven months, dropped ones marked. <a class="src study" href="https://repository.tudelft.nl/file/File_1bf77a8c-23ce-440b-b010-8075e1e4f61c">Reeker et al.</a></span></li>
+        <li><span class="fid">F28</span><span class="ftext"><b>Reflective documentation:</b> a written record (diary or blog), an overview chart, set review points. Ask what was proposed, decided and carried through, what blocked, and what failures taught. <a class="src guide" href="https://www.creativityandcognition.com/wp-content/uploads/2011/04/PBR-Guide-1.1-2006.pdf">Candy 2006</a></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q5)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-people"/></svg>Q5 · People with similar traits, to the learner profile</span><span class="sum-text"><b>Neurodivergent researchers and designers: little on this topic.</b> F29–F31</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F29</span><span class="ftext"><b>Accounts exist, not on wording:</b> first-person accounts by autistic and ADHD researchers turned up, but none covers wording research questions or scoping self-directed research. One read account: a doctorate is largely self-led and unclear at first; a weekly plan and a visual map helped, and asking directly when instructions were unclear. <a class="src lived" href="https://www.simplypsychology.org/how-i-manage-being-an-autistic-phd-student.html">Simply Psychology</a>. Others seen as snippets only: <a class="src lived" href="https://bps.org.uk/psychologist/insights-autistic-researcher">BPS</a> <a class="src lived" href="https://eprints.whiterose.ac.uk/id/eprint/237620/2/Insights%20essay_24.09.2025.pdf">White Rose essay</a> <a class="src lived" href="https://www.autistica.org.uk/get-involved/my-autism-story/beth-changemakers">Autistica (Beth)</a> <a class="src lived" href="https://www.autistica.org.uk/get-involved/my-autism-story/kana-grace-neurodivergent-neurodivergence-researcher">Autistica (Kana Grace)</a> <a class="src lived" href="https://elifesciences.org/collections/73e48266">eLife</a> <a class="src lived" href="https://theconversation.edu.au/profiles/kathryn-williams-1428044">K. Williams</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F30</span><span class="ftext"><b>Lower the effort of capturing:</b> data collection fitted to autistic rhythms, with less daily effort and analysis moved to later (Kender &amp; Spiel, second-hand). <a class="src study" href="https://pure.au.dk/ws/files/465399057/3706598.3713942.pdf">Alrøe &amp; Krogh 2025</a></span></li>
+        <li><span class="fid">F31</span><span class="ftext"><b>PDA:</b> a study of adults with <a href="#g-pda">PDA</a> found themes of trust and safety; participants asked for more autonomy and flexibility in support. It doesn't look at self-directed work. <a class="src study" href="https://doras.dcu.ie/30963/">Kenny &amp; Doyle 2024</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. Nothing found on ADHD, dyslexia or PDA and question wording.</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q6)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-clock"/></svg>Q6 · Time boundaries</span><span class="sum-text"><b>How others state a time boundary, plan milestones and buffers, and keep scope in check.</b> F32–F50 · added in version 3</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <h3>Examples: how long, and how it was bounded</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Study</th><th>Type</th><th>Timeframe</th><th>How bounded</th></tr></thead>
+        <tbody>
+          <tr><td>Living without a mobile phone (Lucero)</td><td>Autoethnography</td><td>2002–2008 and 2014–2017, extended to 2019: about a decade</td><td>Open; ended by personal circumstances. Notes every two weeks in the second period. (F34)</td></tr>
+          <tr><td>Moments, home video system (Neustaedter)</td><td>Autobiographical design</td><td>2 years of family use</td><td>Ended by choice: old hardware, full storage, a student leaving, funding. (F34)</td></tr>
+          <tr><td>Living in a prototype, a camper van (Desjardins)</td><td>Autobiographical design</td><td>Since 2013, still going in 2020</td><td>Fuzzy on purpose; stays open. (F34, F36)</td></tr>
+          <tr><td>Light Touch (Gaver &amp; Gaver)</td><td>Autoethnography</td><td>"the last two years"</td><td>No rule found <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></td></tr>
+          <tr><td>Planned long-term deployments (Berger et al.)</td><td>Research through design</td><td>6–12 months</td><td>Fixed in advance, reported a year later. (F37)</td></tr>
+          <tr><td>Master's RtD project (Reeker et al.)</td><td>Research through design</td><td>7 months</td><td>From the first round (F27).</td></tr>
+        </tbody>
+      </table></div>
+      <ol class="findings">
+        <li><span class="fid">F32</span><span class="ftext"><b>Time is one facet of "study boundaries":</b> next to place, project type and point of view; boundaries are one of seven criteria for a good autoethnography. Authors describe their limits; no length is given. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">p. 84</span></span></li>
+        <li><span class="fid">F33</span><span class="ftext"><b>Lengths vary widely:</b> many field studies run weeks; 2 years counts as very long in HCI; an autoethnography can run weeks, months, years or a decade. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">pp. 85, 90</span></span></li>
+        <li><span class="fid">F34</span><span class="ftext"><b>The examples in the table</b> come from the same chapter's three case accounts. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">pp. 80–95</span> · Light Touch: <a class="src study" href="https://researchportal.northumbria.ac.uk/en/publications/living-with-light-touch-an-autoethnography-of-a-simple-communicat/">Gaver &amp; Gaver 2023</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F35</span><span class="ftext"><b>Endings mostly come from outside:</b> personal circumstances, student training and grant funding, or "temporarily finished" with work going on. The chapter suggests weighing research needs together with personal needs; long first-person studies are hard to fund and to stay committed to. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">pp. 90–91, 97</span></span></li>
+        <li><span class="fid">F36</span><span class="ftext"><b>Fuzzy boundaries are named as normal</b> in first-person projects, in time and in scope. One author chose to end, another chose to stay open. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">p. 93</span></span></li>
+        <li><span class="fid">F37</span><span class="ftext"><b>Time is often under-reported in RtD:</b> long deployments rarely fit funding or PhD cycles (3–4 years); first-person work can avoid many of these problems. The authors propose 6–12 month deployments. A workshop proposal, not a study. <a class="src review" href="https://labs.cs.queensu.ca/istudio/wp-content/uploads/sites/12/2025/06/Research-Products-and-Time.pdf">Berger et al. 2025</a></span></li>
+        <li><span class="fid">F38</span><span class="ftext"><b>No standard length for an RtD thesis:</b> only semester structures (a three-semester design thesis) and a weekly thesis table turned up. <a class="src guide" href="https://designart.unibz.it/course/thesis-project-phase-1-research-through-design-exploration-and-experimentation">UniBZ</a> <a class="src example" href="https://itp.nyu.edu/lowres/thesis2021/?p=1743">NYU ITP</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F39</span><span class="ftext"><b>First iterations shift expectations:</b> a guide for design-science master's theses reports that expectations changed a lot in the first iteration and that understanding the real problem took long. <a class="src guide" href="https://arxiv.org/pdf/2012.04966">Constructive master's thesis guide</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F40</span><span class="ftext"><b>Plan, and let the plan change:</b> plan at the start and during the project; break the work down; a <a href="#g-gantt">Gantt chart</a>; <a href="#g-milestone">milestones</a> to check progress; "the project plan can be changed". The example plan runs in quarters over 3.5 years. <a class="src guide" href="https://www.materials.ox.ac.uk/files/project20management20pd20warren202017pdf">Warren 2017</a> <span class="note">slides 1–12, 22–33 of 33</span></span></li>
+        <li><span class="fid">F41</span><span class="ftext"><b>Contingency as "what if" questions:</b> what if something arrives late, a tool is missing, the person you rely on is away. No buffer percentage. <a class="src guide" href="https://www.materials.ox.ac.uk/files/project20management20pd20warren202017pdf">Warren 2017</a></span></li>
+        <li><span class="fid">F42</span><span class="ftext"><b>Four planning levels:</b> the whole project, the coming year, the next months, each day. Expect non-linear progress; plan regular work rather than a last-minute push. Templates for accountability when working alone. No mention of buffers. <a class="src guide" href="https://www.federation.edu.au/students/study-skills/study-resources/hdr-thesis/plan-your-thesis/thesis-planning/">Federation University</a></span></li>
+        <li><span class="fid">F43</span><span class="ftext"><b>Buffer numbers are rules of thumb:</b> 10–15% per phase, contingency weeks after drafts, a 2–4 week block before the final date. From a company blog and a training deck, not research. <a class="src opinion" href="https://ones.com/blog/?p=1098162">ONES blog</a> <a class="src guide" href="https://indico.ph.liv.ac.uk/event/527/sessions/849/attachments/1709/2215/Slides%20-%20Project%20Management%20Training%20Ricardo%20Torres.pdf">Liverpool slides</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F44</span><span class="ftext"><b>Gap:</b> nothing specific to design theses or to researchers without a supervisor; the guides assume one. <span class="src mine">helper's search result</span></span></li>
+        <li><span class="fid">F45</span><span class="ftext"><b>Time-boxing:</b> the time is fixed and the scope flexes; each <a href="#g-timebox">time box</a> has its own deliverable, ideally in 2–4 week rounds. When work doesn't fit, scope gets cut, from a ranked list (<a href="#g-moscow">MoSCoW</a>). A box that is only a self-set target, with no agreed partial outcomes, is "of little value". A project-management source, not design research. <a class="src guide" href="https://mail.mosaicprojects.com.au/WhitePapers/WP1020_Time_Boxing.pdf">Mosaic Projects</a></span></li>
+        <li><span class="fid">F46</span><span class="ftext"><b>Check the date first:</b> build a normal schedule first, to see how realistic a fixed date is. <a class="src guide" href="https://mail.mosaicprojects.com.au/WhitePapers/WP1020_Time_Boxing.pdf">Mosaic Projects</a></span></li>
+        <li><span class="fid">F47</span><span class="ftext"><b>Long studies change things too:</b> tiredness with collecting data, lost data; the theory, the made thing and the researcher's life all change over the years. <a class="src guide" href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">Lucero et al. 2021</a> <span class="note">pp. 93–97</span></span></li>
+        <li><span class="fid">F48</span><span class="ftext"><b>Gap for people with similar traits, to the learner profile:</b> no study on self-set deadlines, milestones or buffers for ADHD, autistic, dyslexic or PDA adults; nothing PDA- or dyslexia-specific at all. <span class="src mine">helper's search result</span></span></li>
+        <li><span class="fid">F49</span><span class="ftext"><b>ADHD:</b> a study of 65 adults found no time-perception difference by symptom level, though problems may still be felt <a class="src study" href="https://medscimonit.com/abstract/full/idArt/936849">Medical Science Monitor 2023</a>. A review reports impaired time perception with very mixed methods <a class="src opinion" href="https://www.hmpgloballearningnetwork.com/site/pcn/news/adult-adhd-treatment-should-address-time-perception-expert-says">HMP Global</a>. A podcast says outside accountability often works better than self-set deadlines; not research <a class="src lived" href="https://www.buzzsprout.com/2179424/episodes/19018844-why-your-team-doesn-t-trust-your-deadlines-adhd-time-blindness-explained">ADHD Skills Lab</a>. <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F50</span><span class="ftext"><b>Autism:</b> a 2025 study (29 autistic adults, 30 others) found no everyday prospective-memory difficulty but higher felt stress (link not recorded). An autistic author describes self-set projects slipping when other deadlines came first <a class="src lived" href="https://www.tameri.com/autisticme/2018/04/10/podcast-episode-002-life-versus-plans/">Autistic Me</a>. An interview study with 14 autistic young adults, known only through a blog write-up <a class="src lived" href="https://behavioristbookclub.com/aba-research/autism-developmental/i-definitely-feel-more-in-control-of-my-life---the-perspectives-of-yo/">Behaviorist Book Club</a>. <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-q7)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-frame"/></svg>Q7 · Reframing the issue</span><span class="sum-text"><b>Framings that place the problem in the design or the system, not in the living being.</b> F51–F75 · added in version 4</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="hers"><span class="who">Anna (16.11.2026)</span><span>It's not the baby's, teenager's, adult's, animal's or elderly person's fault that it can't access the thing others seemingly can. It's a design problem. The human rights model applies only where design has failed to accommodate.</span></div>
+      <h3>Where each framing puts the problem</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Framing</th><th>Problem sits in</th><th>What it asks of designers</th><th>Findings</th></tr></thead>
+        <tbody>
+          <tr><td>Mismatch</td><td>the design, in a situation</td><td>Fix the mismatch; design for adaptability</td><td>F51, F52</td></tr>
+          <tr><td>Systemic mismatch</td><td>institutions, as they are now</td><td>Grow what institutions can accommodate</td><td>F53</td></tr>
+          <tr><td>Difference is neutral (Gill)</td><td>the interaction</td><td>Change the arrangements; anyone can</td><td>F54</td></tr>
+          <tr><td>Ability-based design</td><td>abilities a system assumes</td><td>Question required abilities; let systems adapt</td><td>F56</td></tr>
+          <tr><td>Design justice</td><td>who holds design power</td><td>Centre those most affected; designers as facilitators</td><td>F57</td></tr>
+          <tr><td>Critical disability studies</td><td>the norm, ableism, power</td><td>Question the norm; be accountable to disabled people</td><td>F59–F62</td></tr>
+          <tr><td>Neurodiversity paradigm</td><td>the idea of one "normal" mind</td><td>Stop treating one way of thinking as default</td><td>F63</td></tr>
+          <tr><td>No average / UDL</td><td>the average-based curriculum</td><td>Fit the environment to the learner; plan for variation</td><td>F64, F65</td></tr>
+          <tr><td>Cognitive accessibility (COGA)</td><td>content design and language</td><td>Use patterns; involve users throughout</td><td>F68, F69</td></tr>
+          <tr><td>Human rights model</td><td>barriers, plus support still needed</td><td>Support on an equal basis</td><td>F74</td></tr>
+        </tbody>
+      </table></div>
+      <h3>Mismatch</h3>
+      <ol class="findings">
+        <li><span class="fid">F51</span><span class="ftext"><b>Mismatch:</b> a gap between a person's needs and the design of a product, place, system or service. It depends on the situation (context, lighting, device, how someone prefers to learn), so a designer can fix it. Asks: design for adaptability and flexibility; note your own mismatches. <a class="src guide" href="https://guide.inclusivedesign.ca/insights/disability-as-mismatch/">IDRC</a></span></li>
+        <li><span class="fid">F52</span><span class="ftext"><b>Three inclusive design principles:</b> recognise exclusion (it comes from mismatches and the team's own assumptions), learn from diversity, solve for one and extend to many. <a class="src guide" href="https://inclusive.microsoft.design/">Microsoft Inclusive Design</a>. Holmes's book reportedly takes "mismatch" from the WHO's 2001 view of disability as an interaction between body and environment <a class="src theory" href="https://mitpressbookstore.mit.edu/book/9780262539487">Holmes 2018</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. The persona spectrum (permanent, temporary, situational) wasn't confirmed: the guidebook link gave 404.</span></li>
+        <li><span class="fid">F53</span><span class="ftext"><b>Systemic mismatch:</b> a mismatch between a person's traits and what institutions can accommodate at present, not what they could (Schriner &amp; Scotch 2001, second-hand). <a class="src guide" href="https://ualr.edu/disability/reframing-disability">UALR</a></span></li>
+        <li><span class="fid">F54</span><span class="ftext"><b>Difference is neutral:</b> the remedy is changing the interaction between a person and society, and anyone who changes those arrangements can do it (Gill 1994, second-hand). Words like "special services" or "victim of" keep the medical model alive; universal design is named as the framework. <a class="src guide" href="https://ualr.edu/disability/reframing-disability">UALR</a></span></li>
+        <li><span class="fid">F55</span><span class="ftext"><b>Critiques, of the social model rather than of "mismatch":</b> it can treat disabled people's own everyday understanding as partial; the authors prefer starting from people's own perspectives <a class="src theory" href="https://archive.cs.st-andrews.ac.uk/STSE-Handbook/Papers/DewsburyAntiSocialModelofDisability.pdf">Dewsbury et al.</a> <span class="note">PDF pp. 1–4</span>. It is said to leave out real effects of impairment such as pain and fatigue; a "bio-social" model tries to hold both <a class="src study" href="https://researchonline.rca.ac.uk/362/1/Bichard_:_Langdon_HCII_07.pdf">Bichard &amp; Langdon 2007</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. No critique of "mismatch" by name turned up.</span></li>
+      </ol>
+      <h3>The paradigm shift</h3>
+      <ol class="findings">
+        <li><span class="fid">F56</span><span class="ftext"><b>Ability-based design:</b> moves the focus from disability to ability; systems adapt to people instead of demanding abilities they may not have. <a class="src theory" href="https://www.eecs.harvard.edu/~kgajos/papers/2011/wobbrock11abd.shtml">Wobbrock et al. 2011</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F57</span><span class="ftext"><b>Design justice:</b> those most affected by a design have the least say in it. Principles include centring the voices of those directly affected, designers as facilitators, and everyone as an expert on their own experience. <a class="src guide" href="https://designjustice.org/read-the-principles">Design Justice Network</a></span></li>
+        <li><span class="fid">F58</span><span class="ftext"><b>Universal design, inclusive design, design for all:</b> regional names with a shared aim, design for human diversity. "Good design enables, bad design disables" <a class="src guide" href="https://dfaeurope.eu/wordpress/wp-content/uploads/2014/05/stockholm-declaration_english.pdf">Stockholm Declaration 2004</a>. Critics say universal design still carries "ideologies of ability" (link not recorded). <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+      <h3>Critical disability studies</h3>
+      <ol class="findings">
+        <li><span class="fid">F59</span><span class="ftext"><b>Beyond the social model:</b> traditional disability studies centred civil rights and mostly physical disability; critical disability studies widens it to culture, history, power, race and the global South. <a class="src theory" href="https://plato.stanford.edu/entries/disability-critical/">Stanford Encyclopedia</a> <span class="note">first ~80% read</span></span></li>
+        <li><span class="fid">F60</span><span class="ftext"><b>Impairment, three ways:</b> the social model treats impairment as natural and disability as made; critical disability studies (Tremain) says impairment is also shaped by history; others say its real effects get left out (F55). The sources don't agree. <a class="src theory" href="https://plato.stanford.edu/entries/disability-critical/">Stanford Encyclopedia</a></span></li>
+        <li><span class="fid">F61</span><span class="ftext"><b>Ableism as a system:</b> one "normal" body and mind set as the standard (Garland-Thomson's "normate"); a cultural logic of autonomy, self-sufficiency and independence that touches everyone. <a class="src theory" href="https://eprints.whiterose.ac.uk/129050/1/The%20Dis%20Ability%20Complex%20final%20authors%20copy.pdf">Goodley 2018</a> <span class="note">PDF pp. 1–5</span> <a class="src theory" href="https://plato.stanford.edu/entries/disability-critical/">Stanford</a></span></li>
+        <li><span class="fid">F62</span><span class="ftext"><b>Intersections and authors:</b> intersectional work (feminist, race) turned disability studies into critical disability studies (Meekosha &amp; Shuttleworth 2009, via Goodley). Names in the read sources include Garland-Thomson, Campbell, Tremain, Kafer, McRuer and Goodley. Neither source gives design instructions; they ask to question the norm, include disabled people as authors and link theory to action. <a class="src theory" href="https://eprints.whiterose.ac.uk/129050/1/The%20Dis%20Ability%20Complex%20final%20authors%20copy.pdf">Goodley 2018</a> <a class="src theory" href="https://plato.stanford.edu/entries/disability-critical/">Stanford</a></span></li>
+      </ol>
+      <h3>Diversity and variation</h3>
+      <ol class="findings">
+        <li><span class="fid">F63</span><span class="ftext"><b>Neurodiversity paradigm:</b> variation in minds is natural and valuable; one "normal" mind is a cultural fiction; neurodiversity carries the same power dynamics as other diversity. <a class="src theory" href="https://neuroqueer.com/neurodiversity-terms-and-definitions/">Walker</a></span></li>
+        <li><span class="fid">F64</span><span class="ftext"><b>There is no average:</b> of 4,000+ pilots measured on ten body dimensions, almost none were average on all, so cockpits became adjustable. Schools fit an imagined average student; learners have "jagged" profiles. <a class="src theory" href="https://www.gse.harvard.edu/ideas/ed-magazine/15/08/beyond-average">Rose, Harvard Ed.</a></span></li>
+        <li><span class="fid">F65</span><span class="ftext"><b>Universal Design for Learning:</b> responds to barriers rooted in biases and systems of exclusion <a class="src guide" href="https://udlguidelines.cast.org/">CAST</a>. Planning for learner variability from the start <a class="src opinion" href="https://www1.ascd.org/blogs/inclusion-reboot">ASCD</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. The article on UDL changing the concept of disability (Wilson 2017) was blocked.</span></li>
+        <li><span class="fid">F66</span><span class="ftext"><b>Curb-cut effect:</b> what is built for one group often helps many; target the need and design the full path. <a class="src opinion" href="https://ssir.org/articles/entry/the_curb_cut_effect">Blackwell, SSIR</a></span></li>
+        <li><span class="fid">F67</span><span class="ftext"><b>Beyond humans and ages:</b> HCI work on "more-than-human" design moves the human out of the centre <a class="src theory" href="https://repository.tudelft.nl/record/uuid:89c7558b-d22a-46a9-a607-400159fe524a">TU Delft</a> <a class="src theory" href="https://arxiv.org/pdf/2402.11576">arXiv 2402.11576</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>. Nothing found on babies to elderly in the disability sources.</span></li>
+      </ol>
+      <h3>Cognitive and learning design</h3>
+      <ol class="findings">
+        <li><span class="fid">F68</span><span class="ftext"><b>Cognitive accessibility as content design:</b> design, structure and language choices can make content inaccessible. Eight objectives, for example understanding what things are, staying focused, not relying on memory, avoiding and fixing mistakes, getting help and adapting the interface; each with user stories and use/avoid patterns; involve users throughout. <a class="src guide" href="https://www.w3.org/TR/coga-usable/">W3C COGA</a> <span class="note">first ~20% read</span></span></li>
+        <li><span class="fid">F69</span><span class="ftext"><b>A spectrum:</b> people without a diagnosis meet the same difficulties under stress or distraction; for others they last. <a class="src guide" href="https://www.w3.org/TR/coga-usable/">W3C COGA</a></span></li>
+        <li><span class="fid">F70</span><span class="ftext"><b>Dyslexia as a system problem:</b> a 2025 report on young people's school experiences ("Set up for somebody else") asks for classroom standards and assistive technology. <a class="src lived" href="https://www.bdadyslexia.org.uk/news/set-up-for-somebody-else">British Dyslexia Association</a> <span class="note">news page only</span>. A critic of the dyslexia concept (Elliott) appears in a thesis snippet (link not recorded, summary only).</span></li>
+      </ol>
+      <h3>People with similar traits, to the learner profile</h3>
+      <ol class="findings">
+        <li><span class="fid">F71</span><span class="ftext"><b>Environment and expectations:</b> autistic researchers urge looking at how environment and expectations may cause anxiety (Milton; Woods; second-hand), in a study of adults with PDA. <a class="src study" href="https://doras.dcu.ie/30963/7/kenny-doyle-2024-a-phenomenological-exploration-of-the-lived-experience-of-adults-experiencing-pathological-demand%20%281%29.pdf">Kenny &amp; Doyle 2024</a> <span class="note">PDF pp. 1–3 of 13</span></span></li>
+        <li><span class="fid">F72</span><span class="ftext"><b>Double empathy and "untypical":</b> communication breaks down between two differently disposed groups, not because of an autistic deficit <a class="src theory" href="https://explore.psychsafety.com/n/milton-2012/">Milton 2012</a>; the world is built without autistic people in mind <a class="src lived" href="https://divergent-tabletop-wiki.pages.dev/3-ND-Resources/2-Books--and--Papers-Summaries/Memoirs/Untypical---How-the-world-isnt-built-for-autistic-people-and-what-we-should-all-do-about-it">Wharmby, "Untypical"</a>; an ADHD student study calls access "social and relational" (link not recorded). <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+        <li><span class="fid">F73</span><span class="ftext"><b>Gap:</b> no first-person ADHD, dyslexic or PDA source using "design mismatch" words, and no PDA-led participatory design work. <span class="src mine">helper's search result</span></span></li>
+      </ol>
+      <h3>Words (from the word search before the reframing)</h3>
+      <ol class="findings">
+        <li><span class="fid">F74</span><span class="ftext"><b>Social and human rights models:</b> barriers, not impairment, block equal participation; difference is part of human diversity and support may still be needed. Both "disabled people" and "people with disability" are in use; follow the person's lead. Not recommended: "the disabled", "special needs", "differently-abled", "suffering from". <a class="src guide" href="https://pwd.org.au/wp-content/uploads/2021/12/PWDA-Language-Guide-v2-2021.pdf">PWDA 2021</a> <span class="note">pp. 1–8, 11, 19–20</span></span></li>
+        <li><span class="fid">F75</span><span class="ftext"><b>UK social-model usage:</b> "disabled people" means disabled by society's barriers; "non-disabled" instead of "able-bodied". <a class="src guide" href="https://www.bristol.gov.uk/bristol-style/a-to-z-of-style/a-to-z-of-style-item?id=34">Bristol</a> <a class="src guide" href="https://disabilitywales.org/wp-content/uploads/2024/08/SMD-Toolkit.pdf">Disability Wales</a> <a class="src guide" href="https://lawsociety.org.uk/Topics/Disabled-Solicitors/Guides/A-guide-to-disability-terminology-and-language">Law Society</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-do)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-do"/></svg>Do and don't</span><span class="sum-text"><b>What the sources advise, collected.</b> D1–D10 · N1–N6</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">D1</span><span class="ftext">Name the question briefly, then context, method, outcomes and who they're for (F5).</span></li>
+        <li><span class="fid">D2</span><span class="ftext">Describe the preferred state and why it is better (F1).</span></li>
+        <li><span class="fid">D3</span><span class="ftext">Document the process and the reasons for choices so others can follow (F2, F5).</span></li>
+        <li><span class="fid">D4</span><span class="ftext">Log what changed and why; revisit dropped ideas (F7).</span></li>
+        <li><span class="fid">D5</span><span class="ftext">Give first-person accounts an interpretive step and a link to wider themes (F17).</span></li>
+        <li><span class="fid">D6</span><span class="ftext">State study boundaries: time, place, project type, point of view (F19).</span></li>
+        <li><span class="fid">D7</span><span class="ftext">Treat claims as provisional and open to challenge (F3 <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>, F6).</span></li>
+        <li><span class="fid">D8</span><span class="ftext">Describe the time limits openly; report when it started, its rhythms and its pauses (F32, F37).</span></li>
+        <li><span class="fid">D9</span><span class="ftext">Plan at several levels and update the plan; ask "what if" questions early (F40–F42).</span></li>
+        <li><span class="fid">D10</span><span class="ftext">Give each time box its own deliverable, and rank what can be dropped (F45).</span></li>
+        <li><span class="fid">N1</span><span class="ftext">Private, unspoken knowing alone doesn't count as research; it has to be shareable (F6).</span></li>
+        <li><span class="fid">N2</span><span class="ftext">First-person accounts left as narration only (F17).</span></li>
+        <li><span class="fid">N3</span><span class="ftext">First-person work seen as a shortcut (F20).</span></li>
+        <li><span class="fid">N4</span><span class="ftext">A How might we challenge used as a research question (F12 <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span>; the contrast itself is the helper's reading, not a source's words).</span></li>
+        <li><span class="fid">N5</span><span class="ftext">A self-set date on its own, with no partial outcomes defined (F45).</span></li>
+        <li><span class="fid">N6</span><span class="ftext">Expecting a standard length; sources give none (F33, F38).</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-gap)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-gap"/></svg>Open questions</span><span class="sum-text"><b>Gaps that could become experiments</b> (depth 3). 8, none chosen.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Collected from what the sources leave open. A menu, nothing decided.</p>
+      <ol class="findings">
+        <li><span class="fid">E1</span><span class="ftext">One question kept with a dated revision log instead of being overwritten: does it help, or add pressure? (F7, F8) <span class="src mine">helper's suggestion</span></span></li>
+        <li><span class="fid">E2</span><span class="ftext">Commit messages that name the design goal or question they serve, as in the repo method of F23. <span class="src mine">helper's suggestion</span></span></li>
+        <li><span class="fid">E3</span><span class="ftext">A closed form ("Can X be created such that Y?", F11) next to an open "How …" form, compared after each iteration. <span class="src mine">helper's suggestion</span></span></li>
+        <li><span class="fid">E4</span><span class="ftext">A boundaries line for first-person work: time, place, project type, point of view (F19). <span class="src mine">Mine</span></span></li>
+        <li><span class="fid">E5</span><span class="ftext">Anna's sentence held next to the parts lists (F1, F5, F19), part by part, with Anna doing the wording. Not done on this page: applying findings to that sentence needed Anna's go. <span class="src mine">Mine</span></span></li>
+        <li><span class="fid">E6</span><span class="ftext">Full texts not read yet: Gaver 2012, Neustaedter &amp; Sengers 2012, Khaled &amp; Barr 2023, Krogh &amp; Koskinen. Several are blocked or paywalled; Anna could download one and hand it over. <span class="src mine">Mine</span></span></li>
+        <li><span class="fid">E7</span><span class="ftext">A stated review point instead of a hard end date (F35, F36, F45). <span class="src mine">helper's suggestion</span></span></li>
+        <li><span class="fid">E8</span><span class="ftext">Planning with dates and buffers, tried and logged in first person, since no source covers it for people with similar traits, to the learner profile (F48). <span class="src mine">Mine</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Disagreements</span><span class="sum-text"><b>Where sources point different ways.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Question</th><th>One side</th><th>Other side</th><th>How they fit</th></tr></thead>
+        <tbody>
+          <tr><td>How firm should the claim be?</td><td>New invention, process documented well enough to follow (F2)</td><td>Theory stays provisional; no push for one standard (F3, summary only)</td><td>Both want the process open to others; they differ on how settled the claim has to be.</td></tr>
+          <tr><td>Practice-based or practice-led?</td><td>Split by where the contribution sits (F4)</td><td>The same source says the terms are used interchangeably (F4)</td><td>A naming choice; it changes what counts as the result.</td></tr>
+          <tr><td>Is personal knowing research?</td><td>Private, unspoken knowing isn't (F6)</td><td>First-person research is built on personal experience (F15, F16)</td><td>First-person methods add the interpretive step and boundaries that make it shareable (F17, F19).</td></tr>
+          <tr><td>End the study, or keep it open?</td><td>Neustaedter ended his on purpose (F34)</td><td>Desjardins keeps hers open (F36)</td><td>The same chapter says to weigh research needs and personal needs (F35).</td></tr>
+          <tr><td>Fixed time, or emergence?</td><td>Time fixed, scope flexes (F45)</td><td>Design research as emergent and provisional (F3, summary only)</td><td>A time box fixes the time but not the content; neither source is about the other's field.</td></tr>
+          <tr><td>Are self-set deadlines useful?</td><td>Little value without agreed partial outcomes (F45)</td><td>Templates for accountability when working alone (F42)</td><td>Neither is about design research or about neurodivergent people.</td></tr>
+          <tr><td>What is impairment?</td><td>Natural; only disability is made by society (social model, F60)</td><td>Also shaped by history (Tremain, F60), or real in its effects and left out (F55, summary only)</td><td>No agreement; the three point different ways.</td></tr>
+          <tr><td>Does universal design go far enough?</td><td>"Good design enables, bad design disables" (F58)</td><td>It still carries "ideologies of ability" (F58)</td><td>Both summary only.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sources" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-link"/></svg>Sources</span><span class="sum-text"><b>Every source, and what the helpers actually got from it.</b> 29 read · 55 summary only · 8 blocked</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Checked against the research helpers' own records: round 1 (15.11.2026), round 2 on time boundaries and round 4 on reframing (16.11.2026). Round 3 (16.11.2026) was my own lookup: four searches, the PWDA guide read from its saved copy, and three single-page readers (Walker, IDRC, UALR; DSQ blocked). Each source is listed once. <span class="used">F1</span> = the finding that uses it.</p>
+
+      <div class="sgroup read">
+        <h3><span class="st read"><svg class="icon"><use href="#i-ok"/></svg>Read</span> 29 sources</h3>
+        <p>The helper opened the linked page or PDF.</p>
+        <ul class="slist">
+          <li><span><b>Zimmerman, Forlizzi, Evenson 2007</b> · "Research through Design as a Method for Interaction Design Research in HCI", <i>CHI 2007</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F1</span><span class="used">F2</span><a href="https://courses.ischool.berkeley.edu/i262/s13/readings_pdf/Zimmerman_Research_Through_Design_as_a_Method_for_IaD_in_HCI_0.pdf">courses.ischool.berkeley.edu</a><span class="note">PDF read from a saved copy · pp. 496–499 only</span></span></li>
+          <li><span><b>Candy 2006</b> · "Practice Based Research: A Guide", <i>Creativity &amp; Cognition Studios report</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F4</span><span class="used">F5</span><span class="used">F6</span><span class="used">F28</span><a href="https://www.creativityandcognition.com/wp-content/uploads/2011/04/PBR-Guide-1.1-2006.pdf">creativityandcognition.com</a><span class="note">PDF read from a saved copy · pp. 1–8</span></span></li>
+          <li><span><b>Reeker, van Langen, Brazier (undated)</b> · "Lessons Learned from Research through Design", <i>TU Delft repository</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F7</span><span class="used">F8</span><span class="used">F11</span><span class="used">F27</span><a href="https://repository.tudelft.nl/file/File_1bf77a8c-23ce-440b-b010-8075e1e4f61c">repository.tudelft.nl</a><span class="note">PDF read from a saved copy · all 6 pages · single case</span></span></li>
+          <li><span><b>Lucero et al. 2019</b> · "A Sample of One: First-Person Research Methods in HCI", <i>DIS 2019 workshop</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F15</span><span class="used">F17</span><span class="used">F18</span><span class="used">F22</span><a href="https://discovery.ucl.ac.uk/10092122/1/1PR_DIS_ABS_03AL.pdf">discovery.ucl.ac.uk</a><span class="note">PDF read from a saved copy · second-hand for Chien &amp; Hassenzahl, Desjardins &amp; Ball</span></span></li>
+          <li><span><b>Lucero, Desjardins, Neustaedter 2021</b> · "Longitudinal First-Person HCI Research Methods", <i>book chapter</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F19</span><span class="used">F20</span><span class="used">F32–F36</span><span class="used">F47</span><a href="https://users.aalto.fi/~luceroa1/publications/2021/lucero21_longitudinal.pdf">users.aalto.fi</a><span class="note">PDF read from a saved copy · round 1: pp. 79–86; round 2: PDF pages 1–20</span></span></li>
+          <li><span><b>Berger et al. 2025</b> · "Research Products and Time", <i>CHI 2025 workshop proposal</i></span><span class="s-meta"><span class="src review">Review</span><span class="used">F37</span><a href="https://labs.cs.queensu.ca/istudio/wp-content/uploads/sites/12/2025/06/Research-Products-and-Time.pdf">labs.cs.queensu.ca</a><span class="note">PDF read from a saved copy · all 6 pages · second-hand for the studies it reviews</span></span></li>
+          <li><span><b>Mosaic Projects (undated)</b> · "Timeboxing", <i>white paper</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F45</span><span class="used">F46</span><a href="https://mail.mosaicprojects.com.au/WhitePapers/WP1020_Time_Boxing.pdf">mosaicprojects.com.au</a><span class="note">PDF read from a saved copy · all 4 pages · project management, not design research</span></span></li>
+          <li><span><b>Warren 2017</b> · "Project Management for Doctoral Students", <i>Oxford slides</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F40</span><span class="used">F41</span><a href="https://www.materials.ox.ac.uk/files/project20management20pd20warren202017pdf">materials.ox.ac.uk</a><span class="note">PDF read from a saved copy · slides 1–12 and 22–33 of 33</span></span></li>
+          <li><span><b>Federation University</b> · "Thesis planning", <i>study guide</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F42</span><a href="https://www.federation.edu.au/students/study-skills/study-resources/hdr-thesis/plan-your-thesis/thesis-planning/">federation.edu.au</a></span></li>
+          <li><span><b>Inclusive Design Research Centre (OCAD)</b> · "Disability as mismatch", <i>Inclusive Design Guide</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F51</span><a href="https://guide.inclusivedesign.ca/insights/disability-as-mismatch/">guide.inclusivedesign.ca</a><span class="note">rounds 3 and 4</span></span></li>
+          <li><span><b>Microsoft</b> · Inclusive Design, <i>toolkit home page</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F52</span><a href="https://inclusive.microsoft.design/">inclusive.microsoft.design</a><span class="note">round 4 · persona spectrum not on this page</span></span></li>
+          <li><span><b>UALR</b> · "Reframing disability", <i>University of Arkansas at Little Rock</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F53</span><span class="used">F54</span><a href="https://ualr.edu/disability/reframing-disability">ualr.edu</a><span class="note">round 3 · second-hand for Schriner &amp; Scotch 2001, Gill 1994, Oliver 1996</span></span></li>
+          <li><span><b>Dewsbury, Clarke, Randall, Rouncefield, Sommerville</b> · "The Anti-Social Model of Disability"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F55</span><a href="https://archive.cs.st-andrews.ac.uk/STSE-Handbook/Papers/DewsburyAntiSocialModelofDisability.pdf">archive.cs.st-andrews.ac.uk</a><span class="note">PDF read from a saved copy · pp. 1–4 · round 4</span></span></li>
+          <li><span><b>Design Justice Network</b> · "Read the principles"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F57</span><a href="https://designjustice.org/read-the-principles">designjustice.org</a><span class="note">round 4</span></span></li>
+          <li><span><b>Stanford Encyclopedia of Philosophy</b> · "Critical Disability Theory"</span><span class="s-meta"><span class="src review">Review</span><span class="used">F59–F62</span><a href="https://plato.stanford.edu/entries/disability-critical/">plato.stanford.edu</a><span class="note">first ~100,000 of ~124,000 characters · round 4</span></span></li>
+          <li><span><b>Goodley 2018</b> · "The Dis/ability Complex", <i>DiGeSt</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F61</span><span class="used">F62</span><a href="https://eprints.whiterose.ac.uk/129050/1/The%20Dis%20Ability%20Complex%20final%20authors%20copy.pdf">eprints.whiterose.ac.uk</a><span class="note">PDF read from a saved copy · PDF pp. 1–5 · round 4</span></span></li>
+          <li><span><b>Walker</b> · "Neurodiversity: some basic terms &amp; definitions"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F63</span><a href="https://neuroqueer.com/neurodiversity-terms-and-definitions/">neuroqueer.com</a><span class="note">rounds 3 and 4</span></span></li>
+          <li><span><b>Rose</b> · "Beyond Average", <i>Harvard Ed. magazine</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F64</span><a href="https://www.gse.harvard.edu/ideas/ed-magazine/15/08/beyond-average">gse.harvard.edu</a><span class="note">round 4</span></span></li>
+          <li><span><b>CAST</b> · Universal Design for Learning Guidelines, <i>home page</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F65</span><a href="https://udlguidelines.cast.org/">udlguidelines.cast.org</a><span class="note">round 4</span></span></li>
+          <li><span><b>Blackwell</b> · "The Curb-Cut Effect", <i>Stanford Social Innovation Review</i></span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F66</span><a href="https://ssir.org/articles/entry/the_curb_cut_effect">ssir.org</a><span class="note">round 4</span></span></li>
+          <li><span><b>W3C</b> · "Making Content Usable for People with Cognitive and Learning Disabilities" (COGA)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F68</span><span class="used">F69</span><a href="https://www.w3.org/TR/coga-usable/">w3.org</a><span class="note">first ~100,000 of ~470,000 characters · round 4</span></span></li>
+          <li><span><b>British Dyslexia Association 2025</b> · "Set up for somebody else", <i>news page about a report</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F70</span><a href="https://www.bdadyslexia.org.uk/news/set-up-for-somebody-else">bdadyslexia.org.uk</a><span class="note">report PDF not opened · round 4</span></span></li>
+          <li><span><b>Kenny, Doyle 2024</b> · adults experiencing PDA, <i>Neurodiversity</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F31</span><span class="used">F71</span><a href="https://doras.dcu.ie/30963/">doras.dcu.ie (record)</a><a href="https://doras.dcu.ie/30963/7/kenny-doyle-2024-a-phenomenological-exploration-of-the-lived-experience-of-adults-experiencing-pathological-demand%20%281%29.pdf">doras.dcu.ie (PDF)</a><span class="note">round 1: summary only (F31); round 4: PDF pp. 1–3 of 13 read from a saved copy, second-hand for Milton and Woods</span></span></li>
+          <li><span><b>People with Disability Australia 2021</b> · "PWDA Language Guide"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F74</span><a href="https://pwd.org.au/wp-content/uploads/2021/12/PWDA-Language-Guide-v2-2021.pdf">pwd.org.au</a><span class="note">PDF read from a saved copy · pp. 1–8, 11, 19–20 · round 3</span></span></li>
+          <li><span><b>Alrøe, Krogh 2025</b> · "De-centering Inclusivity: Fitting Design for Aut-Ethnography", <i>CHI 2025</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F9</span><span class="used">F21</span><span class="used">F30</span><a href="https://pure.au.dk/ws/files/465399057/3706598.3713942.pdf">pure.au.dk</a><span class="note">PDF read from a saved copy · pp. 1–3 only · second-hand for Kender &amp; Spiel</span></span></li>
+          <li><span><b>Bates, Kirman, Tavares Smith, Green 2026</b> · "Research through game design", <i>DRS 2026</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F13</span><span class="used">F23</span><span class="used">F26</span><a href="https://eprints.lancs.ac.uk/id/eprint/236169/1/2026bates-RtGD.pdf">eprints.lancs.ac.uk</a><span class="note">PDF read from a saved copy · pp. 1–5 only</span></span></li>
+          <li><span><b>Demleitner, Khaled, Barr 2026</b> · "Reflection at Design Actualization", <i>arXiv preprint</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F24</span><a href="https://arxiv.org/html/2602.12887v1">arxiv.org</a><span class="note">first 100,000 of ~139,000 characters</span></span></li>
+          <li><span><b>Barr 2024</b> · "v r 5" process journal, <i>pippinbarr.com</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F25</span><a href="https://pippinbarr.com/v-r-5/process/journal.html">pippinbarr.com</a><span class="note">first 100,000 of ~115,000 characters</span></span></li>
+          <li><span><b>Simply Psychology (undated)</b> · "How I Manage Being an Autistic PhD Student", <i>first-person essay</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://www.simplypsychology.org/how-i-manage-being-an-autistic-phd-student.html">simplypsychology.org</a></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup sum">
+        <h3><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>Summary only</span> 55 sources</h3>
+        <p>The helper saw only an abstract, a record page or a search-result snippet, not the source itself. Findings that use them carry the same mark.</p>
+        <ul class="slist">
+          <li><span><b>Gaver 2012</b> · "What Should We Expect From Research Through Design?", <i>CHI 2012</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F3</span><a href="https://research.gold.ac.uk/id/eprint/14818">research.gold.ac.uk</a><span class="note">record page with abstract; full PDF blocked (below)</span></span></li>
+          <li><span><b>Khaled, Barr 2023</b> · "A Method for Design Materialization: Accountable Game Design Research", <i>DiGRA 2023</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F23</span><a href="https://dl.digra.org/index.php/dl/article/view/2041">dl.digra.org</a><span class="note">record page opened but empty; content from search snippets</span></span></li>
+          <li><span><b>Barr 2024</b> · "In Praise of Shadows" talk, <i>pippinbarr.com</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F25</span><a href="https://pippinbarr.com/v-r-5/process/talks/talk.html">pippinbarr.com</a></span></li>
+          <li><span><b>Neustaedter, Sengers 2012</b> · "Autobiographical design in HCI research", <i>DIS 2012</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F16</span><a href="https://www.doi.org/10.1145/2317956.2318034">doi.org</a><span class="note">abstract, and second-hand in Lucero 2019</span></span></li>
+          <li><span><b>Koskinen et al. 2011</b> · "Design Research Through Practice", <i>book</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F9</span><a href="https://shop.elsevier.com/books/design-research-through-practice/koskinen/978-0-12-385502-2">shop.elsevier.com</a><span class="note">table of contents only</span></span></li>
+          <li><span><b>Krogh, Koskinen 2020/2022</b> · "Drifting by Intention" / "How Constructive Design Researchers Drift"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F8</span><a href="https://pure.au.dk/ws/files/335764215/How_Constructive_Design_Researchers_Drift_Four_Epistemologies.pdf">pure.au.dk</a></span></li>
+          <li><span><b>Candy, Edmonds 2018</b> · "Practice-Based Research in the Creative Arts", <i>Leonardo</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F10</span><a href="https://core.ac.uk/download/228192235.pdf">core.ac.uk</a></span></li>
+          <li><span><b>Eladhari, Ollila 2012</b> · "Design for Research Results", <i>Simulation &amp; Gaming</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F13</span><a href="https://ideas.repec.org/a/sae/simgam/v43y2012i3p391-412.html">ideas.repec.org</a></span></li>
+          <li><span><b>digital.gov</b> · "Reframing" (human-centred design guide)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F12</span><a href="https://digital.gov/guides/hcd/discovery-operations/reframing">digital.gov</a></span></li>
+          <li><span><b>Canada School of Public Service</b> · "How might we" job aid</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F12</span><a href="https://ecolecanada.gc.ca/tools/jobaids/pdfs/how-might-we-eng.pdf">ecolecanada.gc.ca</a></span></li>
+          <li><span><b>Washington State CX</b> · "How might we statements"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F12</span><a href="https://your.wa.gov/cx-resources/how-might-we-statements/">your.wa.gov</a></span></li>
+          <li><span><b>Greenbook</b> · "Framing your insights with a How might we statement, part 2"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F12</span><a href="https://greenbook.org/insights/research-methodologies/framing-your-insights-with-a-8220how-might-we8221-statement-part-2">greenbook.org</a></span></li>
+          <li><span><b>Vanderbilt (course site)</b> · human-centred design themes</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F12</span><a href="https://sites.google.com/vanderbilt.edu/nsf-kelly-chang/human-centered-design/themes">sites.google.com</a></span></li>
+          <li><span><b>The Psychologist (BPS)</b> · "Insights of an autistic researcher"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://bps.org.uk/psychologist/insights-autistic-researcher">bps.org.uk</a></span></li>
+          <li><span><b>White Rose repository</b> · "Insights essay" (24.09.2025)</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://eprints.whiterose.ac.uk/id/eprint/237620/2/Insights%20essay_24.09.2025.pdf">eprints.whiterose.ac.uk</a></span></li>
+          <li><span><b>Autistica</b> · "Beth: anthropology research and neurodevelopmental care"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://www.autistica.org.uk/get-involved/my-autism-story/beth-changemakers">autistica.org.uk</a></span></li>
+          <li><span><b>Autistica</b> · "Kana Grace: neurodivergent neurodivergence researcher"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://www.autistica.org.uk/get-involved/my-autism-story/kana-grace-neurodivergent-neurodivergence-researcher">autistica.org.uk</a></span></li>
+          <li><span><b>eLife</b> · collection of neurodivergent researchers' accounts</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://elifesciences.org/collections/73e48266">elifesciences.org</a></span></li>
+          <li><span><b>The Conversation</b> · Kathryn Williams, author profile</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F29</span><a href="https://theconversation.edu.au/profiles/kathryn-williams-1428044">theconversation.edu.au</a></span></li>
+          <li><span><b>Löwgren 2013</b> · "Annotated portfolios and other forms of intermediate-level knowledge", <i>Interactions</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="unused">not used on this page</span><a href="https://www.slideshare.net/jazzliang/annotated-portfolios-94100134">slideshare.net</a><span class="note">bibliographic record only, on a second-hand site</span></span></li>
+          <li><span><b>Stolterman 2008</b> · "The Nature of Design Practice and Implications for Interaction Design Research", <i>International Journal of Design</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="unused">not used on this page</span><a href="https://www.ijdesign.org/index.php/IJDesign/article/view/240">ijdesign.org</a></span></li>
+          <li><span><b>uxdesign.cc</b> · "Being a dyspraxic designer: why design &amp; tech needs neurodiversity"</span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://uxdesign.cc/being-a-dyspraxic-designer-why-design-tech-needs-neurodiversity-1677d67e13dc">uxdesign.cc</a><span class="note">seen in results, not opened</span></span></li>
+          <li><span><b>Design Society</b> · "Ecosystems surrounding neurodiversity in design education: a case study"</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://www.designsociety.org/download-publication/48819/ecosystems_surrounding_neurodiversity_in_design_education_a_case_study">designsociety.org</a><span class="note">seen in results, not opened</span></span></li>
+          <li><span><b>Gaver, Gaver 2023</b> · "Living with Light Touch: an autoethnography of a simple communication device"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F34</span><a href="https://researchportal.northumbria.ac.uk/en/publications/living-with-light-touch-an-autoethnography-of-a-simple-communicat/">researchportal.northumbria.ac.uk</a><span class="note">record page with abstract only · round 2</span></span></li>
+          <li><span><b>UniBZ</b> · "Thesis project phase 1: research through design", <i>course page</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F38</span><a href="https://designart.unibz.it/course/thesis-project-phase-1-research-through-design-exploration-and-experimentation">designart.unibz.it</a><span class="note">round 2</span></span></li>
+          <li><span><b>NYU ITP</b> · thesis timeline pages, <i>student thesis blog 2021</i></span><span class="s-meta"><span class="src example">Example</span><span class="used">F38</span><a href="https://itp.nyu.edu/lowres/thesis2021/?p=1743">itp.nyu.edu (timeline)</a><a href="https://itp.nyu.edu/lowres/thesis2021/?p=1705">itp.nyu.edu (production timeline)</a><span class="note">round 2</span></span></li>
+          <li><span><b>Constructive Master's Thesis Work in Industry</b> · guidelines for design science research, <i>arXiv</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F39</span><a href="https://arxiv.org/pdf/2012.04966">arxiv.org</a><span class="note">PDF opened but gave no usable text; search snippet used · round 2</span></span></li>
+          <li><span><b>ONES</b> · thesis planning posts, <i>company blog</i></span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F43</span><a href="https://ones.com/blog/?p=1098162">ones.com (1)</a><a href="https://ones.com/blog/?p=1115588">ones.com (2)</a><span class="note">round 2</span></span></li>
+          <li><span><b>Torres</b> · "Project Management Training", <i>University of Liverpool slides</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F43</span><a href="https://indico.ph.liv.ac.uk/event/527/sessions/849/attachments/1709/2215/Slides%20-%20Project%20Management%20Training%20Ricardo%20Torres.pdf">indico.ph.liv.ac.uk</a><span class="note">round 2</span></span></li>
+          <li><span><b>Medical Science Monitor 2023</b> · ADHD symptom level and time perception, 65 adults</span><span class="s-meta"><span class="src study">Study</span><span class="used">F49</span><a href="https://medscimonit.com/abstract/full/idArt/936849">medscimonit.com</a><span class="note">abstract page only · round 2</span></span></li>
+          <li><span><b>HMP Global</b> · "Adult ADHD treatment should address time perception", <i>news</i></span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F49</span><a href="https://www.hmpgloballearningnetwork.com/site/pcn/news/adult-adhd-treatment-should-address-time-perception-expert-says">hmpgloballearningnetwork.com</a><span class="note">round 2</span></span></li>
+          <li><span><b>The ADHD Skills Lab</b> · podcast episodes on time blindness and deadlines</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F49</span><a href="https://www.buzzsprout.com/2179424/episodes/19018844-why-your-team-doesn-t-trust-your-deadlines-adhd-time-blindness-explained">buzzsprout.com (1)</a><a href="https://www.buzzsprout.com/2179424/episodes/19462931-if-you-re-bad-at-managing-your-time-have-adhd-listen-to-this">buzzsprout.com (2)</a><span class="note">round 2</span></span></li>
+          <li><span><b>Autistic Me (tameri.com)</b> · "Life versus plans", <i>podcast page</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F50</span><a href="https://www.tameri.com/autisticme/2018/04/10/podcast-episode-002-life-versus-plans/">tameri.com</a><span class="note">round 2</span></span></li>
+          <li><span><b>Behaviorist Book Club</b> · write-up of an interview study with autistic young adults (Cribb et al. 2019)</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F50</span><a href="https://behavioristbookclub.com/aba-research/autism-developmental/i-definitely-feel-more-in-control-of-my-life---the-perspectives-of-yo/">behavioristbookclub.com</a><span class="note">second-hand · round 2</span></span></li>
+          <li><span><b>Autism Research 2025</b> · prospective memory in 29 autistic adults and 30 others</span><span class="s-meta"><span class="src study">Study</span><span class="used">F50</span><span class="note">search snippet; the helper didn't record a link · round 2</span></span></li>
+          <li><span><b>HSLU</b> · master design handbook pages</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://blog.hslu.ch/masterdesignhandbook/project-module/">blog.hslu.ch</a><span class="note">round 2</span></span></li>
+          <li><span><b>Thesis Ace</b> · "How to develop a research plan for a PhD thesis", <i>company blog</i></span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://www.thesisacewriters.com/blog/how-to-develop-a-research-plan-for-phd-thesis">thesisacewriters.com</a><span class="note">round 2</span></span></li>
+          <li><span><b>HealthyPlace</b> · "The planning fallacy and ADHD", <i>blog</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://www.healthyplace.com/blogs/livingwithadultadhd/2019/3/the-planning-fallacy-and-adhd">healthyplace.com</a><span class="note">round 2</span></span></li>
+          <li><span><b>ADDitude</b> · "Does anyone know what time it is?"</span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://www.additudemag.com/does-anyone-know-what-time-it-is/amp">additudemag.com</a><span class="note">round 2</span></span></li>
+          <li><span><b>Lucero 2018</b> · "Living Without a Mobile Phone: An Autoethnography", <i>arXiv</i></span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page (the study is used through the 2021 chapter)</span><a href="https://arxiv.org/pdf/1804.04833">arxiv.org</a><span class="note">round 2</span></span></li>
+          <li><span><b>Holmes 2018</b> · "Mismatch: How Inclusion Shapes Design", <i>MIT Press, book</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F52</span><a href="https://mitpressbookstore.mit.edu/book/9780262539487">mitpressbookstore.mit.edu</a><span class="note">book not read; search snippets · round 4</span></span></li>
+          <li><span><b>Bichard, Langdon et al. 2007</b> · bio-social model, <i>HCII 2007</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F55</span><a href="https://researchonline.rca.ac.uk/362/1/Bichard_:_Langdon_HCII_07.pdf">researchonline.rca.ac.uk</a><span class="note">PDF came back as raw code, saved copy not opened; snippet used · round 4</span></span></li>
+          <li><span><b>Wobbrock et al. 2011</b> · "Ability-Based Design", <i>abstract page</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F56</span><a href="https://www.eecs.harvard.edu/~kgajos/papers/2011/wobbrock11abd.shtml">eecs.harvard.edu</a><span class="note">abstract only · round 4</span></span></li>
+          <li><span><b>EIDD 2004</b> · Stockholm Declaration (Design for All)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F58</span><a href="https://dfaeurope.eu/wordpress/wp-content/uploads/2014/05/stockholm-declaration_english.pdf">dfaeurope.eu</a><span class="note">not opened · round 4</span></span></li>
+          <li><span><b>Critical disability theory article</b> · universal design and "ideologies of ability"</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F58</span><span class="note">search snippet; the helper didn't record a link · round 4</span></span></li>
+          <li><span><b>ASCD</b> · "Inclusion reboot", <i>blog</i></span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F65</span><a href="https://www1.ascd.org/blogs/inclusion-reboot">ascd.org</a><span class="note">round 3</span></span></li>
+          <li><span><b>More-than-human design</b> · TU Delft repository record; "Toward Humanity-Centered Design without Hubris" (arXiv); Lancaster eprint</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F67</span><a href="https://repository.tudelft.nl/record/uuid:89c7558b-d22a-46a9-a607-400159fe524a">repository.tudelft.nl</a><a href="https://arxiv.org/pdf/2402.11576">arxiv.org</a><a href="https://eprints.lancs.ac.uk/id/eprint/232018">eprints.lancs.ac.uk</a><span class="note">round 4</span></span></li>
+          <li><span><b>Elliott</b> · critique of the dyslexia concept, via a thesis</span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F70</span><span class="note">search snippet; link not recorded · round 4</span></span></li>
+          <li><span><b>Milton 2012</b> · "On the ontological status of autism: the double empathy problem", <i>summary page</i></span><span class="s-meta"><span class="src theory">Theory</span><span class="used">F72</span><a href="https://explore.psychsafety.com/n/milton-2012/">explore.psychsafety.com</a><span class="note">paper not found open-access · round 4</span></span></li>
+          <li><span><b>Wharmby</b> · "Untypical", <i>book summary on a wiki</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F72</span><a href="https://divergent-tabletop-wiki.pages.dev/3-ND-Resources/2-Books--and--Papers-Summaries/Memoirs/Untypical---How-the-world-isnt-built-for-autistic-people-and-what-we-should-all-do-about-it">divergent-tabletop-wiki.pages.dev</a><span class="note">round 4</span></span></li>
+          <li><span><b>ADHD student interview study</b> (11 students), access as "social and relational"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F72</span><span class="note">search snippet; link not recorded · round 4</span></span></li>
+          <li><span><b>Bristol City Council</b> · style guide, "Disabilities and conditions"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F75</span><a href="https://www.bristol.gov.uk/bristol-style/a-to-z-of-style/a-to-z-of-style-item?id=34">bristol.gov.uk</a><span class="note">round 3</span></span></li>
+          <li><span><b>Disability Wales</b> · Social Model of Disability toolkit</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F75</span><a href="https://disabilitywales.org/wp-content/uploads/2024/08/SMD-Toolkit.pdf">disabilitywales.org</a><span class="note">round 3</span></span></li>
+          <li><span><b>The Law Society</b> · "A guide to disability terminology and language"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F75</span><a href="https://lawsociety.org.uk/Topics/Disabled-Solicitors/Guides/A-guide-to-disability-terminology-and-language">lawsociety.org.uk</a><span class="note">round 3</span></span></li>
+          <li><span><b>PDA studies 2025</b> · Curtis &amp; Izett; Worthington &amp; Bennett</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><span class="note">search snippets; links not recorded · round 4</span></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup block">
+        <h3><span class="st block"><svg class="icon"><use href="#i-block"/></svg>Blocked</span> 8 pages</h3>
+        <p>The page did not load; nothing from it is used.</p>
+        <ul class="slist">
+          <li><span><b>Gaver 2012, full PDF</b></span><span class="s-meta"><span class="note">server address not found</span><a href="https://eprints-gro.gold.ac.uk/14818/7/WHAT%20SHOULD%20WE%20EXPECT%20AAM.pdf">eprints-gro.gold.ac.uk</a></span></li>
+          <li><span><b>Neustaedter, Sengers 2012, PDF copy</b></span><span class="s-meta"><span class="note">refused (403)</span><a href="https://core.ac.uk/download/56379355.pdf">core.ac.uk</a></span></li>
+          <li><span><b>Candy 2006, copy on academia.edu</b></span><span class="s-meta"><span class="note">refused (403); read at the original site instead</span><a href="https://www.academia.edu/14195938/Practice_Based_Research_A_Guide">academia.edu</a></span></li>
+          <li><span><b>Lancaster research-through-game-design paper 2019, PDF</b></span><span class="s-meta"><span class="note">PDF gave no usable text</span><a href="https://eprints.lancs.ac.uk/131465/1/RTD_2019_RTBGD.pdf">eprints.lancs.ac.uk</a></span></li>
+          <li><span><b>Microsoft Inclusive Design Guidebook, PDF</b></span><span class="s-meta"><span class="note">not found (404) · round 4</span><a href="https://inclusive.microsoft.design/tools-and-activities/InclusiveDesignGuidebook.pdf">inclusive.microsoft.design</a></span></li>
+          <li><span><b>Review of Holmes's "Mismatch"</b></span><span class="s-meta"><span class="note">not found (404) · round 4</span><a href="https://www.outervoice.net/home/mismatch">outervoice.net</a></span></li>
+          <li><span><b>Wobbrock et al. 2022, ability-based design follow-up, PDF</b></span><span class="s-meta"><span class="note">PDF came back as raw code; saved copy not opened · round 4</span><a href="https://faculty.washington.edu/wobbrock/pubs/taccess-22.pdf">faculty.washington.edu</a></span></li>
+          <li><span><b>Wilson 2017, UDL and the concept of disability, Disability Studies Quarterly</b></span><span class="s-meta"><span class="note">bot protection page (access denied) · round 3</span><a href="https://dsq-sds.org/article/id/341">dsq-sds.org</a></span></li>
+        </ul>
+      </div>
+
+      <details class="inner">
+        <summary><svg class="icon"><use href="#i-search"/></svg>Searches typed (17 + 7 + 4 + 12)</summary>
+        <ol>
+          <li>research through design thesis &quot;design proposition&quot; OR &quot;design hypothesis&quot; OR &quot;design conjecture&quot; how to formulate</li>
+          <li>autobiographical design research questions first-person Neustaedter Sengers</li>
+          <li>practice-based research creative practice research questions formulating Candy Edmonds</li>
+          <li>Gaver &quot;What should we expect from research through design&quot; annotated portfolios</li>
+          <li>Koskinen constructive design research &quot;research question&quot; &quot;hypothesis&quot; lab field showroom</li>
+          <li>research through game design research questions iterative prototypes methodology paper</li>
+          <li>Khaled Barr &quot;Method for Design Materialization&quot; game design version control research through design</li>
+          <li>autistic ADHD researcher first-person account formulating research questions neurodivergent PhD scoping self-directed research</li>
+          <li>&quot;how might we&quot; versus research question design research problem statement difference reframing</li>
+          <li>Zimmerman Forlizzi Evenson &quot;Research through design as a method for interaction design research in HCI&quot; contribution criteria process invention relevance extensibility</li>
+          <li>Candy &quot;Practice Based Research: A Guide&quot; CCS report pdf research questions practice-led</li>
+          <li>Pippin Barr &quot;In Praise of Shadows&quot; reflections prototypes traces of design github repository research through game design</li>
+          <li>L&#246;wgren &quot;annotated portfolios and other forms of intermediate-level knowledge&quot; Interactions 2013</li>
+          <li>dyslexia PDA pathological demand avoidance neurodivergent designer research diary keeping notes first-person account</li>
+          <li>pathological demand avoidance autistic adults lived experience qualitative study autonomy demands self-directed work</li>
+          <li>Koskinen Krogh &quot;drifting&quot; constructive design research &quot;research question&quot; changes during project design experiments</li>
+          <li>Stolterman &quot;Nature of design practice and implications for interaction design research&quot; OR &quot;design research&quot; &quot;research question&quot; formulating well-formed designerly</li>
+          <li>Round 2: autobiographical design study duration &quot;weeks&quot; &quot;months&quot; first-person research through design long-term self-use findings</li>
+          <li>Round 2: ADHD adults self-imposed deadlines planning buffer time planning fallacy study</li>
+          <li>Round 2: time-boxing design research scope creep fixed-length iterations research through design</li>
+          <li>Round 2: PhD thesis planning buffer contingency time milestones Gantt chart advice &quot;contingency&quot; doctoral research schedule</li>
+          <li>Round 2: autistic adults deadlines self-set goals planning lived experience executive function study qualitative time management</li>
+          <li>Round 2: Gaver &quot;What should we expect from research through design&quot; OR &quot;Living with Light Touch&quot; autoethnography duration months long-term use</li>
+          <li>Round 2: master's thesis design research project timeline weeks iterations &quot;research through design&quot; student thesis methodology time frame sprints</li>
+          <li>Round 3 (me): social model of disability language guide &quot;disabled people&quot; &quot;access needs&quot; identity-first person-first terms</li>
+          <li>Round 3 (me): Nick Walker neurodiversity basic terms definitions neurominority neurotypical neurodivergent</li>
+          <li>Round 3 (me): social model language &quot;disabled people&quot; means disabled by society not impairment &quot;people who experience disability&quot; OR &quot;access needs&quot; terminology guide</li>
+          <li>Round 3 (me): reframing disability as mismatch between person and environment inclusive design learning &quot;mismatch&quot; OR &quot;learner variability&quot; OR &quot;ability-based design&quot; barriers in the environment not the learner</li>
+          <li>Round 4: CAST UDL &quot;learner variability&quot; &quot;barriers&quot; in the design of the learning environment not the learner</li>
+          <li>Round 4: Kat Holmes Mismatch How Inclusion Shapes Design definition mismatch persona spectrum permanent temporary situational</li>
+          <li>Round 4: Milton double empathy problem 2012 &quot;On the ontological status of autism&quot; open access</li>
+          <li>Round 4: Todd Rose End of Average cockpit Air Force Gilbert Daniel design for the individual jaggedness</li>
+          <li>Round 4: Wobbrock ability-based design concept and principles ability not disability; design justice Costanza-Chock principles</li>
+          <li>Round 4: autistic ADHD dyslexic author argues access barriers are design failure not deficit double empathy mismatch learning environment</li>
+          <li>Round 4: critical disability studies introduction Goodley ableism normate impairment disability social model critique</li>
+          <li>Round 4: critique of &quot;mismatch&quot; framing disability design impairment effects pain social model critique inclusive design</li>
+          <li>Round 4: dyslexic adult first-person &quot;dyslexia&quot; mismatch between learner and education system design not deficit study dyslexic researcher</li>
+          <li>Round 4: life-centered design OR more-than-human design non-human animals living beings HCI critique human-centered design</li>
+          <li>Round 4: pathological demand avoidance autistic researchers lived experience environment demands accommodate &quot;PDA&quot; neurodivergent participatory study</li>
+          <li>Round 4: universal design vs inclusive design vs design for all differences history Mace Clarkson Keates EIDD Stockholm Declaration</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-abc"/></svg>Glossary</span><span class="sum-text"><b>Special words on this page.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <dl class="gloss">
+        <dt>Design thesis</dt><dd>Anna's word for the main claim a design project sets out to explore. No source here uses it as a fixed term.</dd>
+        <dt id="g-rtd">RtD (research through design)</dt><dd>Research where making things is the way of finding things out.</dd>
+        <dt id="g-preferred">Preferred state</dt><dd>A description of how things could be better, and why; the made thing shows it.</dd>
+        <dt>Practice-based / practice-led</dt><dd>Research built on making. Practice-based: the made thing is the main result. Practice-led: new understanding of the making is the main result.</dd>
+        <dt>Constructive design research</dt><dd>Another name for research where building things is central; close to RtD.</dd>
+        <dt id="g-drift">Drifting</dt><dd>A design project moving away from its first question, on purpose, towards what the making shows.</dd>
+        <dt>Artefact</dt><dd>A made thing in a design project: a prototype, a sketch, a game.</dd>
+        <dt id="g-portfolio">Annotated portfolio</dt><dd>A collection of made things with short notes on what each one taught.</dd>
+        <dt id="g-first">First-person research</dt><dd>Research where the researcher's own experience is the data.</dd>
+        <dt id="g-auto">Autoethnography</dt><dd>Writing about your own experience and looking at it the way a researcher looks at a culture.</dd>
+        <dt id="g-autobio">Autobiographical design</dt><dd>Designing and building something for yourself, using it for real, and learning from that use.</dd>
+        <dt>Interpretive step</dt><dd>Going back over an account to say what it means beyond your own case.</dd>
+        <dt id="g-hmw">How might we</dt><dd>A question form from design thinking ("How might we …?") that turns a found need into a challenge to come up with ideas for.</dd>
+        <dt>HCI (human-computer interaction)</dt><dd>The research field about how people use computers.</dd>
+        <dt>CHI, DIS, DRS, DiGRA</dt><dd>Research conferences: CHI and DIS (people and computers, design of interactive systems), DRS (Design Research Society), DiGRA (Digital Games Research Association).</dd>
+        <dt id="g-ahrb">AHRB</dt><dd>Arts and Humanities Research Board, a former UK research funder.</dd>
+        <dt id="g-commit">Commit</dt><dd>One saved step in a Git repository, with a short message saying what changed.</dd>
+        <dt>Playtest</dt><dd>A session where someone plays an unfinished game to see how it works.</dd>
+        <dt id="g-pda">PDA</dt><dd>"Persistent drive for autonomy" (also called pathological demand avoidance): a strong need for control over one's own actions; demands, even self-set ones, can block.</dd>
+        <dt>Doctoral</dt><dd>About a PhD, the highest university degree, earned through a long research project.</dd>
+        <dt>Abstract</dt><dd>The short summary at the top of a research paper.</dd>
+        <dt>Search snippet</dt><dd>The few lines a search engine shows under each result.</dd>
+        <dt>Second-hand</dt><dd>A page that reports someone else's study instead of being the study itself.</dd>
+        <dt>Saved copy</dt><dd>When the web reader showed a PDF as raw code, the helper opened the PDF file the reader had saved on this PC.</dd>
+        <dt>Repository</dt><dd>Two meanings here: a university's online archive of papers, or a project folder tracked with Git (a repo).</dd>
+        <dt>Preprint, arXiv</dt><dd>A paper shared before other researchers have checked it; arXiv is a free online archive for them.</dd>
+        <dt>403</dt><dd>Web error code: the site refused the request.</dd>
+        <dt id="g-milestone">Milestone</dt><dd>A point in a plan where a named piece of work is finished, often with a date.</dd>
+        <dt id="g-gantt">Gantt chart</dt><dd>A plan drawn as bars on a timeline, one bar per piece of work.</dd>
+        <dt>Buffer, contingency</dt><dd>Extra time kept free in a plan for things that take longer or go wrong.</dd>
+        <dt id="g-timebox">Time box</dt><dd>A fixed stretch of time with its own small result; when work doesn't fit, less gets done, the time stays.</dd>
+        <dt id="g-moscow">MoSCoW</dt><dd>A way to rank work: Must have, Should have, Could have, Won't have this time.</dd>
+        <dt>Deployment</dt><dd>Putting a made thing into real use for a while, to see what happens.</dd>
+        <dt>Field study</dt><dd>A study done in people's real settings instead of a lab.</dd>
+        <dt>Prospective memory</dt><dd>Remembering to do something later, such as a planned task.</dd>
+        <dt>Mismatch</dt><dd>A gap between what a person needs and how something was designed; it depends on the situation.</dd>
+        <dt>Medical model</dt><dd>The view that the problem sits in a person's body or mind, to be fixed or treated.</dd>
+        <dt>Social model</dt><dd>The view that barriers in society, not a person's body or mind, block equal participation.</dd>
+        <dt>Human rights model</dt><dd>The view that difference is part of human diversity, and that people have a right to support on an equal basis.</dd>
+        <dt>Impairment</dt><dd>In the social model: the trait of a person's body or mind, as opposed to the barrier.</dd>
+        <dt>Critical disability studies</dt><dd>Research that questions the idea of "normal" itself and looks at power, culture, history and how disability meets race, gender and class.</dd>
+        <dt>Ableism</dt><dd>A system that treats one kind of body and mind as the standard and ranks people against it.</dd>
+        <dt>Normate</dt><dd>Garland-Thomson's word for the imagined "standard" person that designs and rules are built around.</dd>
+        <dt>Intersectional</dt><dd>Looking at how several parts of who someone is (for example disability, race, gender) act together.</dd>
+        <dt>Ability-based design</dt><dd>Designing systems that adapt to what people can do, instead of demanding fixed abilities.</dd>
+        <dt>Design justice</dt><dd>An approach that gives those most affected by a design the most say in it.</dd>
+        <dt>Universal design, inclusive design, design for all</dt><dd>Regional names (US, UK, Europe) for designing for the full range of people.</dd>
+        <dt>UDL (Universal Design for Learning)</dt><dd>A framework for planning teaching for learners' differences from the start.</dd>
+        <dt>Curb-cut effect</dt><dd>When something built for one group (like a lowered kerb) helps many others too.</dd>
+        <dt>COGA</dt><dd>The W3C task force on cognitive and learning accessibility, and its guide.</dd>
+        <dt>W3C</dt><dd>World Wide Web Consortium, the group that writes web standards.</dd>
+        <dt>Double empathy problem</dt><dd>Milton's idea that misunderstanding between autistic and non-autistic people runs both ways.</dd>
+        <dt>More-than-human design</dt><dd>Design research that doesn't put humans alone at the centre; animals, plants and things count too.</dd>
+        <dt>Neurodiversity paradigm</dt><dd>Walker's view that variation in minds is natural, that one "normal" mind is a fiction, and that power plays a part.</dd>
+        <dt>Workshop proposal</dt><dd>A short paper that invites researchers to a meeting on a topic; it summarises others' work but isn't a study itself.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <footer>
+    <span><b>Where it came from:</b> three research helpers (a second Claude in the background, smaller model) looked up sources on 15.11.2026 and 16.11.2026; round 3 was my own lookup. Together: 29 read, 55 seen only as an abstract, record page or search snippet, and 8 did not load (all listed under <a href="#sources">Sources</a>). I read its report and its records, fixed the statuses, and wrote this page. Explanations are AI-drafted. I checked what each source gave, not each claim against the full text.</span>
+    <span><b>What it does not do:</b> no wording of Anna's thesis; no ranking of findings; no plan or dates; findings aren't held against Anna's sentence (that's E5, Anna's call). The open questions are a menu.</span>
+    <span><b>What else changed:</b> version 4 (16.11.2026) adds Q7 and its sources; version 3 added Q6; version 2 changed only the Q5 title wording. Versions 1–3 carry signposts to this page. Earlier: #28 and #19 moved to "On the bench" on the board, with one log line each. Nothing in the repo.</span>
+  </footer>
+</main>
