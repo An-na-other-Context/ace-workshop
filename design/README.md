@@ -35,18 +35,18 @@ Fonts: the boards use Nunito, a rounded plain font (Anna's pick, 14.11.2026). Yo
 
 ## Colour legend
 
-The boards are dark by default: background `#1f2326`, text `#f1ece2`, no outlines. Rename or recolour freely.
+The boards are dark by default, in warm colours (Dark B, Anna's pick 19.11.2026): background `#25221f`, text `#f1ece2`, no outlines. Rename or recolour freely.
 
 | Colour | Meaning | Shade on the dark boards |
 |---|---|---|
-| Green | Idea | `#2e6a47` |
-| Blue | Question | `#285a86` |
-| Violet | Decision | `#523f94` |
-| Teal | Research note | `#2a6b5e` |
-| Yellow | Where I stopped | `#7d6418` |
-| Grey | Voice or video note (file in `media/`) | `#3d454a` |
+| Green (moss) | Idea | `#3f5a2e` |
+| Blue | Question | `#34536e` |
+| Violet (mauve) | Decision | `#574672` |
+| Teal | Research note | `#2f5d54` |
+| Yellow (ochre) | Where I stopped | `#75602a` |
+| Grey (warm) | Voice or video note (file in `media/`) | `#4a453f` |
 
-On the design-cycle boards, two more: dark grey `#30373c` = a card to fill in, bright teal `#4fae94` = chosen or ticked.
+On the design-cycle boards, two more: warm grey `#36322e` = a card to fill in, light moss `#9fb58a` = chosen or ticked.
 
 **Ladders** (light to deep, so you can see where you are without reading):
 
@@ -59,6 +59,7 @@ No red or orange, by design.
 
 - The starter layout, the note cards and these READMEs were made by Claude (AI) on 14.11.2026: structure only, no design content.
 - The dark restyle of the start map and the note cards, and the phase libraries, were made by Claude (AI) on 15.11.2026, in the board look Anna (@annaothercrow) set; the start map's shapes, positions and arrows are unchanged.
+- The warm recolour of every board, library and the catalogue (colours B "Tuned to Dark B", Anna's pick) was made by Claude (AI) on 19.11.2026: colours only; shapes, text and positions are unchanged.
 - Everything on the boards is made by people (see [CONTRIBUTING.md](../CONTRIBUTING.md)), except research notes that say "AI draft": Claude drafts those (dashed teal cards with a link to the research record), and the arrows from them are drawn by people.
 - Licence of the board content: CC BY-SA 4.0 ([LICENSE-CONTENT.txt](../LICENSE-CONTENT.txt)).
 
