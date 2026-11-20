@@ -1,6 +1,6 @@
 # research
 
-The research behind finished cards on the [ACE Workshop board](https://github.com/orgs/An-na-other-Context/projects/1): for each card, the latest research page and a note on what was decided and why. Part of [ai-assisted/](../../README.md).
+The research behind finished cards on the [ACE Workshop board](https://github.com/orgs/An-na-other-Context/projects/1), and research for the project's tools: for each, the latest research page and a note on what was decided and why. Part of [ai-assisted/](../../README.md).
 
 > **Made by AI.** The research pages and notes here were written by Claude, an AI assistant made by Anthropic, with research helpers (other Claude instances) looking up sources online. Every research page lists each source with what was actually read, seen only as a summary, or blocked. The decisions are annaothercrow's.
 
@@ -21,6 +21,7 @@ One folder per finished card, named `YYYY-MM-DD-<card>/`:
 | #4 Research: emulating a real workshop on screen | [2026-11-14-workshop-on-screen/](2026-11-14-workshop-on-screen/decision.md) | 14.11.2026 |
 | #5 Research: dive down, climb back up | [2026-11-14-dive-and-climb/](2026-11-14-dive-and-climb/decision.md) | 14.11.2026 |
 | #28 Research: wording a design thesis and its research questions (with #19 Overview: in one sentence) | [2026-11-16-thesis-wording/](2026-11-16-thesis-wording/decision.md) | 16.11.2026, in Review |
+| No card · Hierarchy and flow: cards, pages and chat replies (tools) | [2026-11-20-hierarchy-flow/](2026-11-20-hierarchy-flow/decision.md) | 20.11.2026, a trial |
 
 ## Learner profiles
 

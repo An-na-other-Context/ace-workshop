@@ -1,0 +1,544 @@
+<title>Hierarchy and flow</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!-- anna-look v1 (19.11.2026): Anna's reading look, ON by default. A link ending in #plain shows the plain look (for sharing).
+     Paste this whole block at the very top of a page, right after <title> and the viewport-fit meta. Build the page only from the
+     tokens below: --bg --panel --raise --text --muted --line --accent --on-accent --open --on-open --font --mono.
+     Publish the font files with the page (see SKILL.md: copy them from the Reading look kit). No red or orange. -->
+<style>
+@font-face { font-family: "DC"; src: local("Dyslexic Close"), url("fonts/DyslexicClose-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "DC"; src: local("Dyslexic Close Bold"), url("fonts/DyslexicClose-Bold.otf") format("opentype"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "DC"; src: local("Dyslexic Close Italic"), url("fonts/DyslexicClose-Italic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: "DC"; src: local("Dyslexic Close Bold Italic"), url("fonts/DyslexicClose-BoldItalic.otf") format("opentype"); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: "ODM"; src: local("OpenDyslexicMono"), local("OpenDyslexic Mono"), url("fonts/OpenDyslexicMono-Regular.otf") format("opentype"); font-weight: 400; font-style: normal; font-display: swap; }
+
+/* Plain look (#plain): calm neutrals, system font, light or dark like the viewer's app */
+:root {
+  --bg: #f6f5f2; --panel: #ffffff; --raise: #efede8; --text: #1f2326; --muted: #5b6066; --line: #d6d3cc;
+  --accent: #3f5a2e; --on-accent: #ffffff; --open: #6b4a72; --on-open: #ffffff;
+  --font: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, Consolas, "Cascadia Mono", monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #1d1f21; --panel: #26292c; --raise: #2f3337; --text: #ecebe8; --muted: #a9adb1; --line: #3d4246; --accent: #9fb58a; --on-accent: #1d1f21; --open: #c2a3c9; --on-open: #1d1f21; color-scheme: dark; }
+}
+:root[data-theme="dark"] { --bg: #1d1f21; --panel: #26292c; --raise: #2f3337; --text: #ecebe8; --muted: #a9adb1; --line: #3d4246; --accent: #9fb58a; --on-accent: #1d1f21; --open: #c2a3c9; --on-open: #1d1f21; color-scheme: dark; }
+
+/* Reading look (default): Dyslexic Close + OpenDyslexicMono; Light B in light mode, Dark B in dark mode */
+:root.look-warm {
+  --bg: #e2c8a9; --panel: #edd1b1; --raise: #f4e3cf; --text: #1f2326; --muted: #5a5248; --line: #b39a7f;
+  --accent: #3f5a2e; --on-accent: #f6ead9; --open: #6b4a72; --on-open: #f6ead9;
+  --font: "DC", "Dyslexic Close", "OpenDyslexic", Verdana, sans-serif;
+  --mono: "ODM", "OpenDyslexicMono", "OpenDyslexic Mono", Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root.look-warm:not([data-theme="light"]) { --bg: #36322e; --panel: #25221f; --raise: #2c2925; --text: #f1ece2; --muted: #b3a998; --line: #5a544c; --accent: #9fb58a; --on-accent: #25221f; --open: #c2a3c9; --on-open: #25221f; color-scheme: dark; }
+}
+:root.look-warm[data-theme="dark"] { --bg: #36322e; --panel: #25221f; --raise: #2c2925; --text: #f1ece2; --muted: #b3a998; --line: #5a544c; --accent: #9fb58a; --on-accent: #25221f; --open: #c2a3c9; --on-open: #25221f; color-scheme: dark; }
+
+body { background: var(--bg); color: var(--text); font-family: var(--font); }
+code, pre, kbd, samp { font-family: var(--mono); }
+
+/* The switch: bottom right, out of the way of headings */
+.look-toggle {
+  position: fixed; z-index: 50;
+  bottom: calc(10px + env(safe-area-inset-bottom, 0px)); right: max(10px, env(safe-area-inset-right, 0px));
+  font: 700 .85rem/1.4 var(--font); color: var(--text); background: var(--panel);
+  border: 2px solid var(--line); border-radius: 999px; padding: 4px 12px; cursor: pointer;
+}
+.look-toggle:hover { border-color: var(--accent); }
+.look-toggle:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+.look-toggle b { color: var(--accent); }
+
+/* Detail switch (trial, 20.11.2026): "short" hides everything marked class="detail". Remembered per browser. */
+:root.look-short .detail { display: none !important; }
+.detail-toggle { bottom: calc(48px + env(safe-area-inset-bottom, 0px)); }
+</style>
+<script>
+/* On unless the link ends in #plain. The switch writes #plain or #warm, so Share > Copy link keeps the choice. */
+(function () {
+  var root = document.documentElement;
+  function warm() { return location.hash !== "#plain"; }
+  function paint() {
+    root.classList.toggle("look-warm", warm());
+    var b = document.getElementById("look-toggle");
+    if (b) { b.setAttribute("aria-pressed", String(warm())); b.innerHTML = "Reading look: <b>" + (warm() ? "warm" : "plain") + "</b>"; }
+  }
+  paint();
+  window.addEventListener("hashchange", paint);
+  document.addEventListener("DOMContentLoaded", function () {
+    var b = document.getElementById("look-toggle");
+    if (!b) return;
+    b.addEventListener("click", function () { location.hash = warm() ? "plain" : "warm"; paint(); });
+    paint();
+  });
+})();
+/* Detail switch: full (default) or short. Stored in this browser only; works without storage too. */
+(function () {
+  var root = document.documentElement, key = "anna-look-detail";
+  function read() { try { return localStorage.getItem(key) === "short"; } catch (e) { return false; } }
+  var short = read();
+  function paint() {
+    root.classList.toggle("look-short", short);
+    var b = document.getElementById("detail-toggle");
+    if (b) { b.setAttribute("aria-pressed", String(short)); b.innerHTML = "Detail: <b>" + (short ? "short" : "full") + "</b>"; }
+  }
+  paint();
+  document.addEventListener("DOMContentLoaded", function () {
+    var b = document.getElementById("detail-toggle");
+    if (!b) return;
+    if (!document.querySelector(".detail")) { b.hidden = true; root.classList.remove("look-short"); return; }
+    b.addEventListener("click", function () { short = !short; try { localStorage.setItem(key, short ? "short" : "full"); } catch (e) {} paint(); });
+    paint();
+  });
+})();
+</script>
+<button id="look-toggle" class="look-toggle" type="button" aria-pressed="true" title="Switch between the warm reading look and a plain look (for sharing)">Reading look: <b>warm</b></button>
+<button id="detail-toggle" class="look-toggle detail-toggle" type="button" aria-pressed="false" title="Show the short view (main points only) or the full view (everything)">Detail: <b>full</b></button>
+<!-- /anna-look -->
+<style>
+/* Research page (skill research-page). Summary on top, sections folded, every finding numbered
+   so Anna can pick by number. Calm colours, no red or orange. Source status: green read,
+   ochre summary only, slate blocked. Page colours and fonts come from the anna-look block. */
+:root {
+  --surface: var(--panel); --fg: var(--text); --soft: var(--raise);
+  --font-body: var(--font); --font-code: var(--mono);
+  --s-review: #1d5e96; --s-study: #1f7a4d; --s-lived: #8a3d8f; --s-example: #10756f; --s-guide: #5d6470; --s-theory: #4b5a8a; --s-opinion: #7a6a2a; --s-mine: #6c3fb0;
+  --c-q1: #2a5fb0; --c-q2: #10756f; --c-q3: #8a3d8f; --c-q4: #4b5a8a; --c-gap: #217a45; --c-meta: #5d6470;
+  --st-read: #1f7a4d; --st-sum: #7a5c00; --st-block: #4a525c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-theory: #a9b6e6; --s-opinion: #d9c98a; --s-mine: #b597ec;
+    --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-q4: #a9b6e6; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+    --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --s-review: #8dbbe6; --s-study: #7fd1a0; --s-lived: #e0a3e4; --s-example: #6fd0c7; --s-guide: #b0b7c1; --s-theory: #a9b6e6; --s-opinion: #d9c98a; --s-mine: #b597ec;
+  --c-q1: #86aef0; --c-q2: #6fd0c7; --c-q3: #e0a3e4; --c-q4: #a9b6e6; --c-gap: #7ccf98; --c-meta: #b0b7c1;
+  --st-read: #7fd1a0; --st-sum: #e6c766; --st-block: #b9c0c9;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.7; }
+.page { max-width: 960px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 32px 64px; display: flex; flex-direction: column; gap: 26px; }
+h1, h2, h3 { margin: 0; line-height: 1.25; text-wrap: balance; }
+h1 { font-size: 2.1rem; } h2 { font-size: 1.35rem; } h3 { font-size: 1.08rem; color: var(--c); }
+p { margin: 0; max-width: 68ch; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+.icon { width: 1.05em; height: 1.05em; flex: none; vertical-align: -0.15em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.eyebrow { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+.head { display: flex; flex-direction: column; gap: 10px; }
+.lede { font-size: 1.15rem; }
+.do { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; background: var(--raise); border: 2px solid var(--accent); border-radius: 10px; padding: 10px 14px; font-weight: 700; }
+.do .n { display: inline-flex; align-items: center; justify-content: center; width: 1.5em; height: 1.5em; border-radius: 50%; background: var(--accent); color: var(--on-accent); font-size: 0.85rem; margin-right: 4px; }
+.src { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; line-height: 1.3; padding: 1px 8px; border-radius: 999px; border: 1.5px solid currentColor; text-decoration: none; white-space: nowrap; vertical-align: 0.1em; }
+.src.review { color: var(--s-review); } .src.study { color: var(--s-study); } .src.lived { color: var(--s-lived); } .src.example { color: var(--s-example); } .src.guide { color: var(--s-guide); } .src.theory { color: var(--s-theory); } .src.opinion { color: var(--s-opinion); }
+.src.mine { color: var(--s-mine); border-style: dashed; }
+.thin { font-size: 0.8rem; color: var(--muted); font-style: italic; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 14px; font-size: 0.9rem; color: var(--muted); }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.points { display: grid; gap: 12px; }
+.point { display: grid; grid-template-columns: 2.2em minmax(0, 1fr); gap: 12px; align-items: start; }
+.point .mark { width: 2.2em; height: 2.2em; border-radius: 8px; display: grid; place-items: center; background: var(--soft); color: var(--accent); }
+.point b { display: block; }
+details.sec { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; }
+details.sec > summary { list-style: none; cursor: pointer; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; padding: 16px 20px; }
+details.sec > summary::-webkit-details-marker { display: none; }
+.tag { display: inline-flex; align-items: center; gap: 6px; background: var(--c); color: var(--surface); font-weight: 700; font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 3px 10px; border-radius: 6px; }
+.sum-text { flex: 1 1 260px; min-width: 0; } .sum-text b { color: var(--c); }
+.chev { color: var(--muted); } details.sec[open] .chev { transform: rotate(90deg); }
+.body { border-top: 1px solid var(--line); padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 16px; }
+ol.findings { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+ol.findings > li { display: grid; grid-template-columns: 3.2em minmax(0, 1fr); gap: 10px; align-items: start; }
+.fid { font-family: var(--font-code); font-size: 0.85rem; font-weight: 700; color: var(--c); border: 1.5px solid var(--c); border-radius: 6px; text-align: center; padding: 1px 0; }
+.ftext { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.ftext b { color: var(--fg); }
+.bar { font-size: 0.95rem; border-left: 3px solid var(--open); padding-left: 10px; }
+.bar i { font-style: normal; font-weight: 700; }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 620px; font-size: 0.95rem; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+dl.gloss { display: grid; grid-template-columns: minmax(8em, max-content) minmax(0, 1fr); gap: 8px 18px; margin: 0; }
+dl.gloss dt { font-weight: 700; } dl.gloss dd { margin: 0; max-width: 68ch; }
+.st { display: inline-flex; align-items: center; gap: 4px; font-size: 0.76rem; font-weight: 700; font-style: normal; line-height: 1.3; padding: 1px 8px; border-radius: 999px; color: var(--surface); background: var(--st); white-space: nowrap; vertical-align: 0.1em; }
+.read { --st: var(--st-read); } .sum { --st: var(--st-sum); } .block { --st: var(--st-block); }
+.counts { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; }
+.sgroup { display: flex; flex-direction: column; gap: 10px; }
+.body .sgroup > h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; color: var(--fg); }
+.sgroup > p { color: var(--muted); font-size: 0.92rem; }
+ul.slist { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+ul.slist > li { border-left: 4px solid var(--st); padding: 2px 0 2px 12px; display: flex; flex-direction: column; gap: 3px; min-width: 0; overflow-wrap: anywhere; }
+.s-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 0.88rem; }
+.used { font-family: var(--font-code); font-size: 0.78rem; font-weight: 700; background: var(--soft); border: 1px solid var(--line); border-radius: 6px; padding: 0 6px; }
+.unused { font-size: 0.85rem; font-style: italic; color: var(--muted); }
+.note { font-size: 0.85rem; color: var(--muted); }
+details.inner { border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+details.inner > summary { cursor: pointer; padding: 10px 14px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+details.inner > ol { margin: 0; padding: 0 14px 14px 2.6em; display: grid; gap: 4px; font-size: 0.92rem; overflow-wrap: anywhere; }
+.places { display: grid; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); gap: 12px; }
+.place { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.place h3 { color: var(--fg); }
+.place ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 4px; font-size: 0.95rem; }
+.tension { border: 2px dashed var(--s-mine); border-radius: 10px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+footer { font-size: 0.92rem; color: var(--muted); border-top: 1px solid var(--line); padding-top: 16px; display: grid; gap: 6px; }
+footer b { color: var(--fg); }
+@media (max-width: 640px) {
+  h1 { font-size: 1.7rem; }
+  dl.gloss { grid-template-columns: minmax(0, 1fr); gap: 2px 0; } dl.gloss dd { margin-bottom: 8px; }
+  details.sec > summary, .body, .summary { padding-left: 14px; padding-right: 14px; }
+}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dot" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/></symbol>
+  <symbol id="i-gap" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 0 1 5 .5c0 1.7-2.5 2-2.5 4M12 17.5v.01"/></symbol>
+  <symbol id="i-scale" viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7a3 3 0 0 0 6 0zM19 7l-3 7a3 3 0 0 0 6 0zM8 21h8"/></symbol>
+  <symbol id="i-abc" viewBox="0 0 24 24"><path d="M3 17l3.5-10L10 17M4.2 13.5h4.6M13 7v10h3.5a2.5 2.5 0 0 0 0-5H13h3a2.5 2.5 0 0 0 0-5z"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l3 3 5-6"/></symbol>
+  <symbol id="i-half" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
+  <symbol id="i-block" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M5.6 5.6l12.8 12.8"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16.5" cy="9" r="2.5"/><path d="M3 19c0-3 2.2-5 5-5s5 2 5 5M13.5 19c0-2.4 1.4-4 3-4s3.5 1.6 3.5 4"/></symbol>
+  <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12M11 11V4.5a1.5 1.5 0 0 1 3 0V12M14 11.5V6a1.5 1.5 0 0 1 3 0v8a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3 14.5a1.5 1.5 0 0 1 2.4-1.8L8 15"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></symbol>
+  <symbol id="i-text" viewBox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h10M4 18h7"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M4 11l8-6 8 6v8H4z"/><path d="M10 19v-5h4v5"/></symbol>
+</svg>
+
+<main class="page">
+  <header class="head">
+    <span class="eyebrow">ACE Workshop · research, depth 2: what others tried</span>
+    <h1>Hierarchy and flow</h1>
+    <p class="thin">Version 2, 20.11.2026: adds the short / full switch (bottom right; "short" hides the findings folds). Otherwise the same as version 1.</p>
+    <p class="lede">Which visual hierarchy and flow choices reduce barriers in cards, pages and chat replies. Each finding names the barrier in the design, like the boxes on a page from a private project. Findings are numbered so you can pick by number.</p>
+    <p class="thin">Repo copy (20.11.2026): "you" and "your" about the learner now point to the <a href="../learner-profiles/annaothercrow.md">learner profile</a>; a private project is named only as "a private project". Findings, sources and numbers are unchanged.</p>
+    <div class="do"><svg class="icon"><use href="#i-hand"/></svg> Do: <span><span class="n">1</span>read "In short"</span><span><span class="n">2</span>open any fold</span><span><span class="n">3</span>see what was picked: <a href="decision.md">decision note</a></span></div>
+    <div class="legend">
+      <span class="src study">Study</span><span class="src lived">Lived</span><span class="src example">Example</span><span class="src guide">Guideline</span><span class="src theory">Theory</span><span class="src review">Review</span><span class="src opinion">Opinion</span><span class="src mine">Mine</span>
+    </div>
+    <div class="legend counts">
+      <span class="st read"><svg class="icon"><use href="#i-ok"/></svg>read</span><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span><span class="st block"><svg class="icon"><use href="#i-block"/></svg>blocked</span>
+      <span class="thin">= what the helper got from a source. Findings without a mark were read. Full list under <a href="#sources">Sources</a>.</span>
+    </div>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <h2>In short</h2>
+    <div class="points">
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Less, one at a time.</b>The read sources agree: one step or question at a time, about five choices at most, minimal design, clear headings, a short main path (F1, F17, F20, F21, F25).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Icons beside words, not more icons.</b>Nothing found says more icons, colour or emphasis help. COGA: a familiar icon next to its text, not too many. Autistic students preferred text over visuals (F1, F19). This pulls against the learner's "more symbols" trial rule; see the tension box.</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Say what it's for, and how big.</b>Open with the purpose; give each step its why and rough size (F2, F15, F23).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>The setting adjusts, not the reader.</b>Neurodivergent authors: let people set density and detail; skip and pause must keep you included (F8, F9, F10).</div></div>
+      <div class="point"><span class="mark"><svg class="icon"><use href="#i-dot"/></svg></span><div><b>Demand pressure: untested.</b>No study tests action bars, badges or counters with PDA readers. PDA guidance favours choice, possibility lists, fewer demands; declarative wording helps some and burdens others (F35–F38).</div></div>
+    </div>
+    <p class="thin">Thin direct evidence: one co-design study with autistic students was read in part; most hierarchy advice comes from guidelines, not from tests with these readers (F7).</p>
+  </section>
+
+  <section class="summary" aria-label="What this means">
+    <h2>What it could mean, by place</h2>
+    <p class="thin">My reading of the findings, not decided. Numbers point to the findings below.</p>
+    <div class="places">
+      <div class="place"><h3><svg class="icon"><use href="#i-grid"/></svg> Cards</h3><ul>
+        <li>One step, purpose on top (F15, F25)</li>
+        <li>Why + rough size in one line (F2, F23)</li>
+        <li>≤ 5 choices; extras behind a labelled fold (F20, F26)</li>
+        <li>Icons only beside words (F19)</li>
+        <li>Skip and Pause as real options (F9)</li>
+      </ul></div>
+      <div class="place"><h3><svg class="icon"><use href="#i-text"/></svg> Pages</h3><ul>
+        <li>Key information first; headings that chunk (F29, F15)</li>
+        <li>Left-aligned, line 50–75 characters, spacing 1.5 (F29)</li>
+        <li>Fold only what some readers need; say what's inside (F26)</li>
+        <li>Few statuses; done items plain (F27)</li>
+        <li>No italics, underline or all caps for emphasis (F28)</li>
+      </ul></div>
+      <div class="place"><h3><svg class="icon"><use href="#i-chat"/></svg> Chat replies</h3><ul>
+        <li>Answer or action first (F34)</li>
+        <li>Headings and steps, not bullets everywhere (F31, F33)</li>
+        <li>Fewer hedges; brief, then the action (F31)</li>
+        <li>Offer a format choice (F33)</li>
+      </ul></div>
+    </div>
+    <div class="tension">
+      <b>Tension with the trial rules from 20.11 (mine)</b>
+      <ul style="margin:0;padding-left:1.2rem;display:grid;gap:4px">
+        <li><b>"More symbols and graphics"</b> (the <a href="../learner-profiles/annaothercrow.md">learner's</a> test-card note) vs F1, F19: text first, icons beside words, few. Could fit as icons that label, never decorate. The learner's own preference counts, as with dyslexia fonts (F30).</li>
+        <li><b>Do bar "Do: ① tap ② write ③ Send"</b> is imperative; F35, F36 point to choice and possibility wording. Untested either way (E1).</li>
+        <li><b>Explanations folded closed</b> fits F26 only for what some readers need; what most need stays open.</li>
+      </ul>
+    </div>
+  </section>
+
+  <details class="sec detail" style="--c: var(--c-q1)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-people"/></svg>Q1 · Similar traits</span><span class="sum-text"><b>What research with autistic, ADHD and dyslexic people shows.</b> F1–F7</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F1</span><span class="ftext"><span><b>Autistic students want minimal design, text over visuals, logical hierarchy, clear navigation, no motion or sound, and a way to personalise.</b> Images only where words can't show it. 280 survey answers, 16 case studies, 3 co-design workshops. <a class="src study" href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">Study</a></span><span class="bar"><i>Barrier:</i> busy, decorative or moving layouts the reader has to filter. <i>Change:</i> text first, decoration only if it carries meaning, a personalise control.</span></span></li>
+        <li><span class="fid">F2</span><span class="ftext"><span><b>Unclear "why" and "how much time" block starting a task.</b> Same study. <a class="src study" href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">Study</a></span><span class="bar"><i>Barrier:</i> a step shown without purpose or size. <i>Change:</i> one line with the why and a rough size.</span></span></li>
+        <li><span class="fid">F3</span><span class="ftext"><span><b>Complex interfaces hurt performance and choice-making; how a control links to the task must be explicit.</b> Earlier studies (Grynszpan 2008, Biju 2013), second-hand via the same paper. <a class="src study" href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">Study</a></span><span class="bar"><i>Barrier:</i> buttons whose effect isn't stated. <i>Change:</i> each button says what it does.</span></span></li>
+        <li><span class="fid">F4</span><span class="ftext"><span><b>For ADHD adults, task tools assume steady self-regulation and linear time; nonlinear attention should be accommodated.</b> 22 interviews, 20 people in concept sessions. <a class="src study" href="https://arxiv.org/abs/2603.17258">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span><span class="bar"><i>Barrier:</i> one fixed order. <i>Change:</i> flexible order, skip and come back.</span></span></li>
+        <li><span class="fid">F5</span><span class="ftext"><span><b>Dyslexic readers: font size mattered more than line spacing; larger text and wider letter spacing sped reading.</b> Rello and colleagues, 2013 and 2017. <a class="src study" href="https://repositori.upf.edu/items/e0ca6f40-a0fa-490f-9d03-53d043270deb">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span><span class="bar"><i>Barrier:</i> small, tight text. <i>Change:</i> size and spacing before other aids.</span></span></li>
+        <li><span class="fid">F6</span><span class="ftext"><span><b>Dyslexic web searchers preferred headings and bullets over long blocks.</b> Cited in the LaMPost paper. <a class="src study" href="https://cacm.acm.org/research-highlights/lampost-ai-writing-assistance-for-adults-with-dyslexia-using-large-language-models">Study</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></span></li>
+        <li><span class="fid">F7</span><span class="ftext"><span><b>Gap: no study found on size and weight, icons with or without words, density or folded sections with ADHD, autistic or PDA adults.</b> The helper's searches of ACM conference work (SIGACCESS / ASSETS, CHI) turned up none of these.</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q2)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Q2 · Affirming and co-design</span><span class="sum-text"><b>Neurodiversity-affirming design, critical disability studies, co-design and participatory design.</b> F8–F14</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F8</span><span class="ftext"><span><b>Disability as friction between a trait and a setting; access works when the setting adapts.</b> A neurodivergent author's lived-experience paper, ASSETS 2024 (first part read). <a class="src lived" href="https://arxiv.org/html/2408.04500v2">Lived</a></span><span class="bar"><i>Barrier:</i> fixed demands of the tool. <i>Change:</i> the tool adapts.</span></span></li>
+        <li><span class="fid">F9</span><span class="ftext"><span><b>Being offered to skip isn't access unless another way keeps you included. Routine apps felt too rigid; tools should follow daily energy; clutter calls for adjustable sensory settings.</b> Same paper; no concrete layout rules. <a class="src lived" href="https://arxiv.org/html/2408.04500v2">Lived</a></span><span class="bar"><i>Barrier:</i> token skip, fixed density. <i>Change:</i> skip or pause that keeps you in; reader-set density.</span></span></li>
+        <li><span class="fid">F10</span><span class="ftext"><span><b>Most ADHD technology is built to "mitigate" behaviour by neurotypical standards, and rarely with ADHD people.</b> Neurodivergent researchers, CHI 2022. <a class="src review" href="https://dare.uva.nl/id/b5158a6b-ee52-48a7-b4be-772d430bad4a">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span><span class="bar"><i>Barrier:</i> success measured as conforming. <i>Change:</i> judge by whether the reader can do it their way.</span></span></li>
+        <li><span class="fid">F11</span><span class="ftext"><span><b>84 social-computing papers, mostly medical framing; the review argues for grounding in critical disability theory.</b> <a class="src review" href="https://www.arxiv.org/pdf/2410.15527">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></span></li>
+        <li><span class="fid">F12</span><span class="ftext"><span><b>Co-design: offer activities as optional, open invitations; treat participants as experts; a deficit focus is itself a barrier.</b> Martin 2015, second-hand via the autistic-students paper. <a class="src study" href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">Study</a></span></span></li>
+        <li><span class="fid">F13</span><span class="ftext"><span><b>Co-design and participatory design work exists but wasn't read: ADHD children and carers (CHI 2023), a review of design with autistic adults (2023), and a scoping review where most studies lacked neurodivergent input and personalisation kept coming up.</b> <a class="src study" href="https://discovery.ucl.ac.uk/10172363/1/Children%20w%20ADHD%20an%20their%20careeco-syst-Stefanidi%20et%20al%20author_copy.pdf">Study</a> <a class="src review" href="https://link.springer.com/article/10.1007/s10803-023-06015-5">Review</a> <a class="src review" href="https://eprints.whiterose.ac.uk/id/eprint/235690/1/AscopingreviewofinclusiveandadaptivehumanAIinteractiondesignforneurodivergentusers1.pdf">Review</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></span></li>
+        <li><span class="fid">F14</span><span class="ftext"><span><b>An audit of AI replies counts conformity as no success, and checks that replies don't push users to mask.</b> Preprint, no human readers. <a class="src study" href="https://arxiv.org/pdf/2605.00113">Study</a></span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q3)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-grid"/></svg>Q3 · COGA</span><span class="sum-text"><b>W3C's guide to cognitive accessibility: patterns for hierarchy and flow.</b> About two thirds read. F15–F24</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p class="thin">Read through the web reader's summaries in three parts; the last third (the end of 4.8 and 4.9, adaptation) wasn't read in detail. Source for all: <a class="src guide" href="https://www.w3.org/TR/coga-usable/">Guideline</a></p>
+      <ol class="findings">
+        <li><span class="fid">F15</span><span class="ftext"><span><b>Make the purpose clear (4.2.1) and the structure clear (4.3.3), so people can find their place again after a distraction.</b></span><span class="bar"><i>Barrier:</i> a panel that doesn't say what it is. <i>Change:</i> open with its purpose.</span></span></li>
+        <li><span class="fid">F16</span><span class="ftext"><span><b>Show where you are (4.2.4): done, current, still to come.</b> Known from the overview table only.</span></span></li>
+        <li><span class="fid">F17</span><span class="ftext"><span><b>Separate each instruction (4.4.9): one step each, even obvious ones; numbered lists; if-then tables for conditions.</b></span></span></li>
+        <li><span class="fid">F18</span><span class="ftext"><span><b>Make important actions easy to find (4.3.4), visible without scrolling or hunting.</b></span></span></li>
+        <li><span class="fid">F19</span><span class="ftext"><span><b>Icons (4.2.7, 4.2.5): a familiar icon beside the content it describes, one meaning each, not too many; controls named in words.</b></span><span class="bar"><i>Barrier:</i> icons that stand alone or decorate. <i>Change:</i> icon + word, few icons.</span></span></li>
+        <li><span class="fid">F20</span><span class="ftext"><span><b>Avoid too much content (4.6.3): about five main choices per screen; extras behind a clear "more".</b></span></span></li>
+        <li><span class="fid">F21</span><span class="ftext"><span><b>Keep the critical path short (4.6.2): only the steps needed; optional ones moved out of the main path.</b></span></span></li>
+        <li><span class="fid">F22</span><span class="ftext"><span><b>Limit interruptions (4.6.1): no pop-ups, alerts or moving content unless the person starts them; offer a pause.</b></span></span></li>
+        <li><span class="fid">F23</span><span class="ftext"><span><b>Help people prepare (4.6.4): time needed, what's needed, an overview of steps, and clear "in progress" and "done".</b></span></span></li>
+        <li><span class="fid">F24</span><span class="ftext"><span><b>Not relying on memory (4.7), help (4.8), going back and undo (4.5), adapting the interface (4.9).</b> Names and aims from the overview table only. COGA doesn't cover demand wording; "avoid time pressure" (4.5.9) is closest.</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q4)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-grid"/></svg>Q4 · Design systems</span><span class="sum-text"><b>GOV.UK and the Home Office posters: patterns in daily use.</b> F25–F28</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F25</span><span class="ftext"><span><b>Start with one question per page; group questions only when research shows it helps.</b> No study cited on the page. <a class="src example" href="https://design-system.service.gov.uk/patterns/question-pages/">Example</a></span><span class="bar"><i>Barrier:</i> several asks on one screen. <i>Change:</i> one ask per card.</span></span></li>
+        <li><span class="fid">F26</span><span class="ftext"><span><b>Fold only what some people need; never hide what most need. Some people avoid the fold link, thinking it leaves the page.</b> General users, not neurodivergent-specific. <a class="src example" href="https://design-system.service.gov.uk/components/details/">Example</a></span><span class="bar"><i>Barrier:</i> unclear what a fold does. <i>Change:</i> the fold label says what's inside.</span></span></li>
+        <li><span class="fid">F27</span><span class="ftext"><span><b>Task lists: few statuses (each one more to remember); done items plain so open ones stand out; red only for errors.</b> <a class="src example" href="https://design-system.service.gov.uk/patterns/complete-multiple-tasks/">Example</a></span></span></li>
+        <li><span class="fid">F28</span><span class="ftext"><span><b>Home Office posters.</b> Autism: simple, consistent layouts, plain words, bullets, no walls of text, buttons that say what they do. Dyslexia: left-align, no italics, underline or all caps, not too much in one place, remind people instead of making them remember, let them change text and background. Advice can conflict, so test. No ADHD poster. <a class="src guide" href="https://accessibility.blog.gov.uk/2016/09/02/dos-and-donts-on-designing-for-accessibility/">Guideline</a></span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q1)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-text"/></svg>Q5 · Dyslexia guides</span><span class="sum-text"><b>Layout values for text.</b> F29–F30</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F29</span><span class="ftext"><span><b>Dyslexia Scotland's values:</b> letter and word spacing +30–35%; line spacing 1.5; lines 50–75 characters; left-aligned, not justified; headings about 1.5× per level; sentences up to 25 words; paragraphs up to 5 lines; key information first; tinted background; contrast at least 4.5:1. <a class="src guide" href="https://dyslexiascotland.org.uk/dyslexia-friendly-typed-formats">Guideline</a></span><span class="bar"><i>Barrier:</i> dense, justified, tight text. <i>Change:</i> these values on pages.</span></span></li>
+        <li><span class="fid">F30</span><span class="ftext"><span><b>Specialist dyslexia fonts show no consistent benefit in research; use one if the reader likes it.</b> Same guide. The learner's choice of Dyslexic Close stands on this. <a class="src guide" href="https://dyslexiascotland.org.uk/dyslexia-friendly-typed-formats">Guideline</a></span></span></li>
+      </ol>
+      <p class="thin">The British Dyslexia Association's own guide didn't load (404).</p>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q2)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-chat"/></svg>Q6 · Chat replies</span><span class="sum-text"><b>Formatting text answers.</b> F31–F34</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F31</span><span class="ftext"><span><b>An audit of 576 AI replies: told about neurodivergent readers, replies got 22% longer, with more headings and finer steps; bullet density stayed the same; hedging fell by over 75%; about one emoji per reply.</b> Rules used: headings or numbered steps instead of long paragraphs; start with the easiest step; brief acknowledgement, then the action. Not tested with readers. <a class="src study" href="https://arxiv.org/pdf/2605.00113">Study</a></span><span class="bar"><i>Barrier:</i> dense paragraphs. <i>Change:</i> structure by headings and steps, not by more bullets.</span></span></li>
+        <li><span class="fid">F32</span><span class="ftext"><span><b>People write their own custom prompts because default AI replies are dense and neurotypical.</b> A 2025 analysis of 61 Reddit groups, second-hand via the audit. <a class="src study" href="https://arxiv.org/pdf/2605.00113">Study</a></span></span></li>
+        <li><span class="fid">F33</span><span class="ftext"><span><b>Complaints about over-bulleted replies; advice to offer a choice of format (bullets, table, prose).</b> <a class="src opinion" href="https://community.openai.com/t/excessive-bullet-point-formatting-issue-in-chatgpt-responses/1097391">Opinion</a> <a class="src opinion" href="https://buttondown.com/access-ability/archive/adapting-chatgpt-to-meet-neurodivergent">Opinion</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></span></li>
+        <li><span class="fid">F34</span><span class="ftext"><span><b>Lead with the answer or action:</b> key information first (F29), important actions easy to find (F18). No test with chat.</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q3)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-hand"/></svg>Q7 · Demand pressure</span><span class="sum-text"><b>Can "what to do" emphasis add pressure?</b> F35–F38</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ol class="findings">
+        <li><span class="fid">F35</span><span class="ftext"><span><b>Direct commands can trigger avoidance because they feel like no choice; observations leave room.</b> Caveats: some people prefer commands, since declarative wording asks them to work out the answer; make room for "no"; "let's" spreads the demand. Written for parents. <a class="src guide" href="https://pdanorthamerica.org/wp-content/uploads/2024/01/Declarative-Language-PDA.pdf">Guideline</a></span><span class="bar"><i>Barrier:</i> each step framed as an order. <i>Change:</i> say what the step is; offer, don't command.</span></span></li>
+        <li><span class="fid">F36</span><span class="ftext"><span><b>For adults: "possibility" lists instead of rigid to-dos, a real option not to, fewer demands per day.</b> Not a study; notes PDA is contested. <a class="src guide" href="https://www.simplypsychology.com/articles/pda-in-adults">Guideline</a></span></span></li>
+        <li><span class="fid">F37</span><span class="ftext"><span><b>Adult accounts: your own to-dos can trigger avoidance; notifications and deadlines feel like a constant low threat.</b> <a class="src lived" href="https://www.brainzmagazine.com/post/protecting-my-autonomy-and-understanding-pda-in-late-identified-neurodivergent-adults">Lived</a> <a class="src opinion" href="https://www.prosperhealth.io/blog/how-to-manage-pda">Opinion</a> <a class="src opinion" href="https://www.aol.com/articles/pathological-demand-avoidance-label-really-074521673.html">Opinion</a> <a class="src guide" href="https://www.pdasociety.org.uk/pda2025staging/wp-content/uploads/2025/07/Self-help-coping-strategies-and-therapies-for-adult-PDAers.pdf">Guideline</a> <span class="st sum"><svg class="icon"><use href="#i-half"/></svg>summary only</span></span></span></li>
+        <li><span class="fid">F38</span><span class="ftext"><span><b>Gap: no study tests action bars, red badges or counters with PDA readers.</b> That they add pressure is plausible, not shown.</span></span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-q4)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-home"/></svg>Fits a private project</span><span class="sum-text"><b>What could carry over to a private project's open cards.</b> Mine; nothing changed there.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <ul style="margin:0;padding-left:1.2rem;display:grid;gap:6px">
+        <li><b>Flows:</b> one question per screen (F25), a short main path with optional branches moved out (F21), "where you are" in each flow (F16), personalising in the onboarding (F1, F9). <span class="src mine">Mine</span></li>
+        <li><b>Reading barriers:</b> Dyslexia Scotland's values as settings (F29); font by the reader's choice (F30). <span class="src mine">Mine</span></li>
+        <li><b>Wording without demand pressure:</b> F35–F37 as starting points; no tested pattern yet (F38). <span class="src mine">Mine</span></li>
+        <li><b>Step lists:</b> steps as possibilities, skippable and movable (F36, F9); few statuses (F27). <span class="src mine">Mine</span></li>
+      </ul>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-gap)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-gap"/></svg>Open questions</span><span class="sum-text"><b>Gaps that could become the learner's experiments</b> (depth 3). 6, none chosen.</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Collected from what the sources leave open. A menu, nothing decided.</p>
+      <ol class="findings">
+        <li><span class="fid">E1</span><span class="ftext">A card with the "Do:" line vs one with a neutral "Step: …" or "One option: …" line. Which feels easier to start, which feels like pressure? (F35–F38)</span></li>
+        <li><span class="fid">E2</span><span class="ftext">Folds open vs closed on pages: what gets missed, what feels lighter? (F26)</span></li>
+        <li><span class="fid">E3</span><span class="ftext">The same chat reply as prose, as steps, and with headings. (F31, F33)</span></li>
+        <li><span class="fid">E4</span><span class="ftext">Skip and Pause the same size as Send vs smaller. (F9, F18)</span></li>
+        <li><span class="fid">E5</span><span class="ftext">A card with the progress row vs without. (F16, F23)</span></li>
+        <li><span class="fid">E6</span><span class="ftext">A "short / full" switch the reader sets, on cards and pages. (F1, F9, F24)</span></li>
+      </ol>
+    </div>
+  </details>
+
+  <details class="sec detail" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-scale"/></svg>Disagreements</span><span class="sum-text"><b>Where sources point different ways.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <div class="scroll"><table>
+        <thead><tr><th>Question</th><th>One side</th><th>Other side</th><th>How they fit</th></tr></thead>
+        <tbody>
+          <tr><td>Icons and graphics</td><td>The learner's wish for more symbols and graphics (20.11)</td><td>Text over visuals, icons beside words, few (F1, F19)</td><td>Preferences differ; icons that label, never decorate. The learner's counts (F30 logic). Mine.</td></tr>
+          <tr><td>Bullets</td><td>Dyslexic readers preferred bullets (F6); Home Office: bullets (F28)</td><td>Complaints about over-bulleting (F33); adapted replies added headings, not bullets (F31)</td><td>Bullets inside headed steps, not everywhere.</td></tr>
+          <tr><td>Declarative wording</td><td>Leaves room to choose (F35, F36)</td><td>Adds a "work it out" demand for some (F35)</td><td>Neither works for everyone; worth testing (E1).</td></tr>
+          <tr><td>Dyslexia fonts</td><td>No consistent benefit in research (F30)</td><td>The reader's own choice (F30)</td><td>Follow the reader.</td></tr>
+          <tr><td>Contrast</td><td>Bright contrast helps low vision (F28)</td><td>It can bother some autistic readers (F28)</td><td>Let the reader set it.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <details class="sec" id="sources" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-link"/></svg>Sources</span><span class="sum-text"><b>Every source, and what the helper actually got from it.</b> 12 read · 22 summary only · 5 blocked</span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <p>Checked against the research helper's own records from 20.11.2026: every page it opened and every search it ran. Each source is listed once. <span class="used">F1</span> = the finding that uses it. "Read" means the web reader loaded the page and handed back a summary made by an AI, or the helper read a saved PDF.</p>
+
+      <div class="sgroup read">
+        <h3><span class="st read"><svg class="icon"><use href="#i-ok"/></svg>Read</span> 12 sources</h3>
+        <p>The helper opened the linked page or PDF.</p>
+        <ul class="slist">
+          <li><span><b>Fabri &amp; Andrews 2016</b> · "Human-Centered Design with Autistic University Students: Interface, Interaction and Information Preferences", <i>Leeds Beckett repository</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F1</span><span class="used">F2</span><span class="used">F3</span><span class="used">F12</span><a href="https://eprints.leedsbeckett.ac.uk/id/eprint/2538/6/Human-Centered%20Design%20with%20Autistic%20University%20Students%20-%20Interface%2C%20Interaction%20and%20Information%20Preferences.pdf">eprints.leedsbeckett.ac.uk</a><span class="note">PDF read from a saved copy, pages 1–6 of 10; workshop results only as summarised in the abstract · F3, F12 second-hand</span></span></li>
+          <li><span><b>ASSETS 2024 paper</b> (author not recorded) · "I Am Human, Just Like You: What Intersectional, Neurodivergent Lived Experiences Bring to Accessibility Research", <i>arXiv</i></span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F8</span><span class="used">F9</span><a href="https://arxiv.org/html/2408.04500v2">arxiv.org</a><span class="note">first part only; the design implications section was cut off</span></span></li>
+          <li><span><b>Gupta &amp; Buryi 2026</b> · "How Frontier LLMs Adapt to Neurodivergence Context", <i>arXiv preprint</i></span><span class="s-meta"><span class="src study">Study</span><span class="used">F14</span><span class="used">F31</span><span class="used">F32</span><a href="https://arxiv.org/pdf/2605.00113">arxiv.org</a><span class="note">PDF read from a saved copy, pages 1–8 · F32 second-hand</span></span></li>
+          <li><span><b>W3C COGA Task Force</b> · "Making Content Usable for People with Cognitive and Learning Disabilities"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F15–F24</span><a href="https://www.w3.org/TR/coga-usable/">w3.org</a><span class="note">about two thirds, in three parts; last third not read in detail</span></span></li>
+          <li><span><b>GOV.UK Design System</b> · "Question pages"</span><span class="s-meta"><span class="src example">Example</span><span class="used">F25</span><a href="https://design-system.service.gov.uk/patterns/question-pages/">design-system.service.gov.uk</a></span></li>
+          <li><span><b>GOV.UK Design System</b> · "Details" component</span><span class="s-meta"><span class="src example">Example</span><span class="used">F26</span><a href="https://design-system.service.gov.uk/components/details/">design-system.service.gov.uk</a></span></li>
+          <li><span><b>GOV.UK Design System</b> · "Complete multiple tasks" (task list)</span><span class="s-meta"><span class="src example">Example</span><span class="used">F27</span><a href="https://design-system.service.gov.uk/patterns/complete-multiple-tasks/">design-system.service.gov.uk</a></span></li>
+          <li><span><b>UK Home Office 2016</b> · "Dos and don'ts on designing for accessibility", <i>Accessibility in government blog</i></span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F28</span><a href="https://accessibility.blog.gov.uk/2016/09/02/dos-and-donts-on-designing-for-accessibility/">accessibility.blog.gov.uk</a></span></li>
+          <li><span><b>Dyslexia Scotland</b> · "Dyslexia-friendly typed formats"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F29</span><span class="used">F30</span><a href="https://dyslexiascotland.org.uk/dyslexia-friendly-typed-formats">dyslexiascotland.org.uk</a></span></li>
+          <li><span><b>PDA North America 2024</b> · "Declarative Language", handout</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F35</span><a href="https://pdanorthamerica.org/wp-content/uploads/2024/01/Declarative-Language-PDA.pdf">pdanorthamerica.org</a><span class="note">PDF read from a saved copy</span></span></li>
+          <li><span><b>Simply Psychology</b> · "PDA in adults"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F36</span><a href="https://www.simplypsychology.com/articles/pda-in-adults">simplypsychology.com</a></span></li>
+          <li><span><b>PDA Society</b> · adult self-help page</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://www.pdasociety.org.uk/?p=3418">pdasociety.org.uk</a><span class="note">gave only a definition</span></span></li>
+        </ul>
+      </div>
+
+      <div class="sgroup sum">
+        <h3><span class="st sum"><svg class="icon"><use href="#i-half"/></svg>Summary only</span> 22 sources</h3>
+        <p>The helper saw only an abstract or a search-result snippet, not the source itself. Findings that use them carry the same mark.</p>
+        <ul class="slist">
+          <li><span><b>Chen, Meng &amp; Nie 2026</b> · "Not Just Me and My To-Do List": task management for adults with ADHD, CSCW</span><span class="s-meta"><span class="src study">Study</span><span class="used">F4</span><a href="https://arxiv.org/abs/2603.17258">arxiv.org</a><span class="note">abstract page only</span></span></li>
+          <li><span><b>Rello &amp; Baeza-Yates 2017</b> · "How to present more readable text for people with dyslexia"; Rello et al. CHI 2013 named in the same snippets</span><span class="s-meta"><span class="src study">Study</span><span class="used">F5</span><a href="https://repositori.upf.edu/items/e0ca6f40-a0fa-490f-9d03-53d043270deb">repositori.upf.edu</a></span></li>
+          <li><span><b>Communications of the ACM</b> · "LaMPost: AI writing assistance for adults with dyslexia"</span><span class="s-meta"><span class="src study">Study</span><span class="used">F6</span><a href="https://cacm.acm.org/research-highlights/lampost-ai-writing-assistance-for-adults-with-dyslexia-using-large-language-models">cacm.acm.org</a></span></li>
+          <li><span><b>Spiel et al. 2022</b> · "ADHD and Technology Research: Investigated by Neurodivergent Readers", CHI</span><span class="s-meta"><span class="src review">Review</span><span class="used">F10</span><a href="https://dare.uva.nl/id/b5158a6b-ee52-48a7-b4be-772d430bad4a">dare.uva.nl</a></span></li>
+          <li><span><b>2024 review</b> · "Who Puts the 'Social' in 'Social Computing'?: Using a Neurodiversity Framing"</span><span class="s-meta"><span class="src review">Review</span><span class="used">F11</span><a href="https://www.arxiv.org/pdf/2410.15527">arxiv.org</a></span></li>
+          <li><span><b>Stefanidi et al. 2023</b> · co-design with children with ADHD and their carers, CHI</span><span class="s-meta"><span class="src study">Study</span><span class="used">F13</span><a href="https://discovery.ucl.ac.uk/10172363/1/Children%20w%20ADHD%20an%20their%20careeco-syst-Stefanidi%20et%20al%20author_copy.pdf">discovery.ucl.ac.uk</a></span></li>
+          <li><span><b>Journal of Autism and Developmental Disorders 2023</b> · review of participatory design with autistic adults</span><span class="s-meta"><span class="src review">Review</span><span class="used">F13</span><a href="https://link.springer.com/article/10.1007/s10803-023-06015-5">link.springer.com</a></span></li>
+          <li><span><b>White Rose repository</b> · "A scoping review of inclusive and adaptive human-AI interaction design for neurodivergent users"</span><span class="s-meta"><span class="src review">Review</span><span class="used">F13</span><a href="https://eprints.whiterose.ac.uk/id/eprint/235690/1/AscopingreviewofinclusiveandadaptivehumanAIinteractiondesignforneurodivergentusers1.pdf">eprints.whiterose.ac.uk</a></span></li>
+          <li><span><b>OpenAI community forum</b> · "Excessive bullet point formatting issue in ChatGPT responses"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F33</span><a href="https://community.openai.com/t/excessive-bullet-point-formatting-issue-in-chatgpt-responses/1097391">community.openai.com</a></span></li>
+          <li><span><b>Access*Ability newsletter</b> · "Adapting ChatGPT to meet neurodivergent needs"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F33</span><a href="https://buttondown.com/access-ability/archive/adapting-chatgpt-to-meet-neurodivergent">buttondown.com</a></span></li>
+          <li><span><b>Brainz Magazine</b> · "Protecting my autonomy: understanding PDA in late-identified neurodivergent adults"</span><span class="s-meta"><span class="src lived">Lived</span><span class="used">F37</span><a href="https://www.brainzmagazine.com/post/protecting-my-autonomy-and-understanding-pda-in-late-identified-neurodivergent-adults">brainzmagazine.com</a></span></li>
+          <li><span><b>Prosper Health</b> · "How to manage PDA"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F37</span><a href="https://www.prosperhealth.io/blog/how-to-manage-pda">prosperhealth.io</a></span></li>
+          <li><span><b>AOL</b> · article on the PDA label in adults</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="used">F37</span><a href="https://www.aol.com/articles/pathological-demand-avoidance-label-really-074521673.html">aol.com</a></span></li>
+          <li><span><b>PDA Society 2025</b> · "Self-help, coping strategies and therapies for adult PDAers" (staging copy)</span><span class="s-meta"><span class="src guide">Guideline</span><span class="used">F37</span><a href="https://www.pdasociety.org.uk/pda2025staging/wp-content/uploads/2025/07/Self-help-coping-strategies-and-therapies-for-adult-PDAers.pdf">pdasociety.org.uk</a></span></li>
+          <li><span><b>Wigan Council</b> · "Dyslexia Style Guide"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://www.wigan.gov.uk/Docs/PDF/Business/Professionals/SEN/HEFA/Dyslexia-Style-Guide.pdf">wigan.gov.uk</a></span></li>
+          <li><span><b>Queen Mary University of London 2019</b> · "Guidelines for inclusive writing and formatting"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://dds.qmul.ac.uk/media/disability-and-dyslexia-service-/documents/Guidelines-for-inclusive-writing-and-formatting-of-documents-and-presentations-v7-12-12-2019.pdf">dds.qmul.ac.uk</a></span></li>
+          <li><span><b>Ako Aotearoa 2023</b> · "Dyslexia Friendly Style Guide"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://ako.ac.nz/assets/Knowledge-centre/ALNACC-Resources/Dyslexia-resources/230907-Dyslexia-Friendly-Style-Guide.pdf">ako.ac.nz</a></span></li>
+          <li><span><b>Ulster University</b> · "Best practice: accessible content"</span><span class="s-meta"><span class="src guide">Guideline</span><span class="unused">not used on this page</span><a href="https://www.ulster.ac.uk/accessibility-standards/creating-and-improving-accessible-content">ulster.ac.uk</a></span></li>
+          <li><span><b>Built In</b> · "Autism designs: how to build inclusive products"</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://builtin.com/articles/autism-designs">builtin.com</a></span></li>
+          <li><span><b>University of St Andrews 2019</b> · "Designing for users on the autistic spectrum", blog</span><span class="s-meta"><span class="src opinion">Opinion</span><span class="unused">not used on this page</span><a href="https://digitalcommunications.wp.st-andrews.ac.uk/2019/07/08/designing-for-users-on-the-autistic-spectrum/">st-andrews.ac.uk</a></span></li>
+          <li><span><b>National Autistic Society community</b> · "Navigating websites, preferences in design styles", forum thread</span><span class="s-meta"><span class="src lived">Lived</span><span class="unused">not used on this page</span><a href="https://community.autism.org.uk/f/miscellaneous-and-chat/39191/navigating-websites-preferences-in-design-styles">community.autism.org.uk</a></span></li>
+          <li><span><b>De Los Rios Perez 2020</b> · PhD thesis, Curtin University</span><span class="s-meta"><span class="src study">Study</span><span class="unused">not used on this page</span><a href="https://espace.curtin.edu.au/bitstream/20.500.11937/80127/1/De%20Los%20Rios%20Perez%20C%202020.pdf">espace.curtin.edu.au</a></span></li>
+        </ul>
+        <p class="note">Not listed as a source: a claim that long checklists cause "task paralysis" for ADHD adults, from a snippet the helper couldn't trace to a paper. Not used.</p>
+      </div>
+
+      <div class="sgroup block">
+        <h3><span class="st block"><svg class="icon"><use href="#i-block"/></svg>Blocked</span> 5 pages</h3>
+        <p>The page did not load; nothing from it is used.</p>
+        <ul class="slist">
+          <li><span><b>British Dyslexia Association</b> · dyslexia-friendly style guide</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://www.bdadyslexia.org.uk/advice/employers/creating-a-dyslexia-friendly-workplace/dyslexia-friendly-style-guide">bdadyslexia.org.uk</a></span></li>
+          <li><span><b>UCL</b> · paper on participatory design and neurodiversity</span><span class="s-meta"><span class="note">refused (403)</span><a href="https://discovery-pp.ucl.ac.uk/id/eprint/10021568/1/PD_and_Neurodiversity_Author_Copy.pdf">discovery-pp.ucl.ac.uk</a></span></li>
+          <li><span><b>NHS digital service manual</b> · cognitive accessibility</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://service-manual.nhs.uk/accessibility/cognitive">service-manual.nhs.uk</a></span></li>
+          <li><span><b>GOV.UK Service Manual</b> · designing for different browsers (a wrong guess)</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://www.gov.uk/service-manual/design/designing-for-different-browsers-and-devices">gov.uk</a></span></li>
+          <li><span><b>GOV.UK Service Manual</b> · understanding disabilities and impairments</span><span class="s-meta"><span class="note">not found (404)</span><a href="https://www.gov.uk/service-manual/helping-people-to-use-your-service/understanding-disabilities-and-impairments-user-needs">gov.uk</a></span></li>
+        </ul>
+      </div>
+
+      <details class="inner">
+        <summary><svg class="icon"><use href="#i-search"/></svg>Searches the helper typed (10)</summary>
+        <ol>
+          <li>PDA pathological demand avoidance interface design imperative language demands study autistic</li>
+          <li>ASSETS paper ADHD adults task management app design visual clutter notifications study</li>
+          <li>British Dyslexia Association style guide layout line length headings spacing</li>
+          <li>neurodivergent participatory design co-design interfaces findings customisation density autistic ADHD CHI</li>
+          <li>autistic adults web design preferences study layout clutter navigation icons first-person</li>
+          <li>PDA demand avoidance apps reminders to-do lists &quot;demand&quot; wording declarative language adults PDAers</li>
+          <li>LLM chatbot responses formatting ADHD autistic dyslexic users bullet points length study</li>
+          <li>Spiel &quot;Agency of Autistic Children in Technology Research&quot; OR &quot;neurodiversity-affirming&quot; HCI critical reflection deficit framing design technology ADHD Spiel Frauenberger</li>
+          <li>dyslexia readability study line length spacing Rello Baeza-Yates ACM ASSETS layout fonts</li>
+          <li>PDA adult first-person lived experience apps notifications demands &quot;to-do&quot; avoidance autonomy blog</li>
+        </ol>
+      </details>
+    </div>
+  </details>
+
+  <details class="sec" style="--c: var(--c-meta)">
+    <summary><span class="tag"><svg class="icon"><use href="#i-abc"/></svg>Glossary</span><span class="sum-text"><b>Special words on this page.</b></span><svg class="icon chev"><use href="#i-chev"/></svg></summary>
+    <div class="body">
+      <dl class="gloss">
+        <dt>Visual hierarchy</dt><dd>What the eye sees first, second and third, set by size, weight, position and spacing.</dd>
+        <dt>Flow</dt><dd>The order in which you read and do things on a card, page or reply.</dd>
+        <dt>Barrier in the design</dt><dd>What a reader has to make up for themselves because the design doesn't do it (as on a page from a private project).</dd>
+        <dt>COGA</dt><dd>Cognitive and Learning Disabilities Accessibility: a W3C guide on making content usable for people with cognitive and learning differences.</dd>
+        <dt>W3C</dt><dd>The group that writes web standards.</dd>
+        <dt>GOV.UK Design System</dt><dd>The UK government's shared set of tested page parts and patterns.</dd>
+        <dt>Home Office posters</dt><dd>Do-and-don't posters from a UK government department, one per group of users.</dd>
+        <dt>SIGACCESS, ASSETS</dt><dd>The computing society's accessibility group and its yearly research conference.</dd>
+        <dt>CHI, CSCW</dt><dd>Large research conferences on how people use computers, and on computers in group and social work.</dd>
+        <dt>Neurodiversity-affirming</dt><dd>Treating different kinds of minds as natural variation, not as faults to fix.</dd>
+        <dt>Critical disability studies</dt><dd>Research that questions the idea of one "normal" body and mind, and who sets it.</dd>
+        <dt>Co-design, participatory design</dt><dd>Designing together with the people who will use the thing, as experts on their own experience.</dd>
+        <dt>Masking</dt><dd>Hiding your own ways of thinking or acting to fit in.</dd>
+        <dt>PDA</dt><dd>Pathological demand avoidance, or persistent drive for autonomy: demands, even wanted ones, can trigger avoidance.</dd>
+        <dt>Declarative wording</dt><dd>Describing ("the bins go out tonight") instead of instructing ("take the bins out").</dd>
+        <dt>Fold</dt><dd>A section that opens and closes; also called details or progressive disclosure.</dd>
+        <dt>Critical path</dt><dd>The steps you can't skip to finish a task.</dd>
+        <dt>Audit (of AI replies)</dt><dd>Measuring many replies from AI models, without people reading them.</dd>
+        <dt>Hedging</dt><dd>Softening words like "might", "perhaps", "it seems".</dd>
+        <dt>Contrast 4.5:1</dt><dd>How much darker the text is than its background; 4.5 to 1 is the usual minimum for body text.</dd>
+        <dt>Abstract</dt><dd>The short summary at the top of a research paper.</dd>
+        <dt>Search snippet</dt><dd>The few lines a search engine shows under each result.</dd>
+        <dt>Second-hand</dt><dd>A page that reports someone else's study instead of being the study itself.</dd>
+        <dt>Saved copy</dt><dd>When the web reader showed a PDF as raw code, the helper opened the PDF file the reader had saved on this PC.</dd>
+        <dt>Repository</dt><dd>A university's online archive of papers.</dd>
+        <dt>Preprint, arXiv</dt><dd>A paper shared before other researchers have checked it; arXiv is a free online archive for them.</dd>
+        <dt>403, 404</dt><dd>Web error codes: 403 = the site refused the request, 404 = the page wasn't found.</dd>
+      </dl>
+    </div>
+  </details>
+
+  <footer>
+    <span><b>Where it came from:</b> a research helper (a second Claude in the background) looked up sources on 20.11.2026. It opened 12, saw 22 only as an abstract or search snippet, and 5 did not load (all listed under <a href="#sources">Sources</a>). I read its report and its records, and wrote this page. Explanations are AI-drafted.</span>
+    <span><b>What it does not do:</b> no rules changed yet; the "by place" list and the tension box are my reading, and the open questions are a menu.</span>
+    <span><b>What else changed:</b> nothing yet. Made by Claude (AI) for Anna (@annaothercrow).</span>
+  </footer>
+</main>
